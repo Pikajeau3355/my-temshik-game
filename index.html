@@ -19,7 +19,12 @@
             margin: 0; background: var(--bg); color: #ffffff;
             font-family: 'Manrope', sans-serif; overflow: hidden;
             height: 100vh; display: flex; flex-direction: column;
+            transition: background 0.2s; /* Для ефекту облави */
         }
+
+        /* Ефект поліцейської облави */
+        .police-raid { background: #4b0000 !important; animation: blink 0.3s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
         .profile-header {
             padding: 50px 20px 20px;
@@ -71,6 +76,7 @@
             background: var(--primary); color: white; border: none; padding: 10px 16px;
             border-radius: 12px; font-weight: 700; font-size: 12px;
         }
+        .btn-crime { background: var(--danger); }
         .btn:disabled { opacity: 0.3; }
 
         .nav {
@@ -110,8 +116,12 @@
 
     <div class="viewport">
         <div id="tab-work" class="tab active">
-            <div class="section-title">🚀 Швидкі гроші</div>
+            <div class="section-title">🚀 Білі схеми</div>
             <div id="temki-list"></div>
+
+            <div class="section-title">🚨 Тіньові схеми (Ризик!)</div>
+            <div id="crime-list"></div>
+
             <div class="section-title">🍕 Відновити сили</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <button class="btn" style="background:var(--card-bg)" onclick="eat(50, 20)">☕️ Еспресо (50₴)</button>
@@ -153,8 +163,6 @@
         let xp = Number(localStorage.getItem('xp')) || 0;
         let btcPrice = 3800000;
         let priceHistory = [3800000, 3780000, 3810000];
-        
-        // Список активів для пасивного доходу
         let myAssets = JSON.parse(localStorage.getItem('myAssets')) || { farm: 0, bot: 0, office: 0 };
 
         const assetsData = [
@@ -163,10 +171,14 @@
             { id: 'office', name: "Офіс в центрі", cost: 500000, income: 800, desc: "+800 ₴/сек" }
         ];
 
-        const temki = [
+        const whiteTemki = [
             { id: 1, name: "Дроп на Пром", cost: 200, min: 40, max: 200, energy: 15, xp: 10 },
-            { id: 2, name: "Перепродаж iPhone", cost: 15000, min: 1500, max: 6000, energy: 30, xp: 50 },
-            { id: 3, name: "Крипто-арбітраж", cost: 80000, min: -5000, max: 25000, energy: 45, xp: 150 }
+            { id: 2, name: "Перепродаж iPhone", cost: 15000, min: 1500, max: 6000, energy: 30, xp: 50 }
+        ];
+
+        const crimeTemki = [
+            { id: 101, name: "Фішинг мамонтів", cost: 2000, min: 4000, max: 12000, energy: 40, xp: 120, chance: 0.65 },
+            { id: 102, name: "Злам бази даних", cost: 25000, min: 50000, max: 180000, energy: 60, xp: 600, chance: 0.45 }
         ];
 
         function save() {
@@ -182,16 +194,14 @@
             document.getElementById('energy-val').textContent = Math.floor(energy) + '%';
             document.getElementById('energy-bar').style.width = energy + '%';
             
-            // Рахуємо пасивний дохід
             let totalPassive = (myAssets.bot * 5) + (myAssets.farm * 60) + (myAssets.office * 800);
             document.getElementById('passive-val').textContent = `+${totalPassive} ₴/сек`;
 
-            // Оновлення рангу
-            let level = Math.floor(xp / 500) + 1;
+            let level = Math.floor(xp / 1000) + 1;
             document.getElementById('user-rank').textContent = `Рівень ${level} • ${level > 5 ? 'Магнат' : 'Темщик'}`;
 
-            // Списки
             renderTemki();
+            renderCrime();
             renderAssets();
             save();
         }
@@ -199,10 +209,21 @@
         function renderTemki() {
             const list = document.getElementById('temki-list');
             list.innerHTML = '';
-            temki.forEach(t => {
+            whiteTemki.forEach(t => {
                 list.innerHTML += `<div class="card">
                     <div class="card-info"><h3>${t.name}</h3><p>${t.cost.toLocaleString()} ₴ | -${t.energy}⚡</p></div>
-                    <button class="btn" onclick="work(${t.id})" ${(money < t.cost || energy < t.energy) ? 'disabled' : ''}>Ворватись</button>
+                    <button class="btn" onclick="work(${t.id})" ${(money < t.cost || energy < t.energy) ? 'disabled' : ''}>ВОРВАТИСЬ</button>
+                </div>`;
+            });
+        }
+
+        function renderCrime() {
+            const list = document.getElementById('crime-list');
+            list.innerHTML = '';
+            crimeTemki.forEach(t => {
+                list.innerHTML += `<div class="card">
+                    <div class="card-info"><h3>${t.name}</h3><p>${t.cost.toLocaleString()} ₴ | Ризик!</p></div>
+                    <button class="btn btn-crime" onclick="doCrime(${t.id})" ${(money < t.cost || energy < t.energy) ? 'disabled' : ''}>РИЗИКНУТИ</button>
                 </div>`;
             });
         }
@@ -220,37 +241,45 @@
         }
 
         function work(id) {
-            const t = temki.find(x => x.id === id);
+            const t = whiteTemki.find(x => x.id === id);
             energy -= t.energy; money -= t.cost; xp += t.xp;
             let profit = Math.floor(Math.random() * (t.max - t.min + 1)) + t.min;
             money += (t.cost + profit);
-            addLog(profit >= 0 ? `+${profit} ₴` : `${profit} ₴`, profit >= 0 ? 'var(--success)' : 'var(--danger)');
+            addLog(`+${profit} ₴: Біла схема успішна`, 'var(--success)');
+            updateUI();
+        }
+
+        function doCrime(id) {
+            const t = crimeTemki.find(x => x.id === id);
+            energy -= t.energy; money -= t.cost;
+
+            if (Math.random() < t.chance) {
+                let profit = Math.floor(Math.random() * (t.max - t.min + 1)) + t.min;
+                money += (t.cost + profit);
+                xp += t.xp;
+                addLog(`ДЖЕКПОТ: +${profit} ₴`, 'var(--gold)');
+                tg.HapticFeedback.notificationOccurred('success');
+            } else {
+                let fine = Math.floor(money * 0.25);
+                money -= fine;
+                document.body.classList.add('police-raid');
+                setTimeout(() => document.body.classList.remove('police-raid'), 600);
+                addLog(`ОБЛАВА! Штраф: -${fine} ₴`, 'var(--danger)');
+                tg.HapticFeedback.notificationOccurred('error');
+            }
             updateUI();
         }
 
         function buyAsset(id, cost) {
-            if(money >= cost) {
-                money -= cost;
-                myAssets[id]++;
-                updateUI();
-                addLog(`Придбано актив! Дохід зріс.`, 'var(--gold)');
-            }
+            if(money >= cost) { money -= cost; myAssets[id]++; updateUI(); addLog(`Актив придбано!`, 'var(--gold)'); }
         }
 
-        // ПАСИВНИЙ ДОХІД ТА ЕНЕРГІЯ (щосекунди)
         setInterval(() => {
             let income = (myAssets.bot * 5) + (myAssets.farm * 60) + (myAssets.office * 800);
-            if(income > 0) {
-                money += income;
-                updateUI();
-            }
-            if(energy < 100) {
-                energy = Math.min(100, energy + 0.2);
-                updateUI();
-            }
+            if(income > 0) { money += income; updateUI(); }
+            if(energy < 100) { energy = Math.min(100, energy + 0.3); updateUI(); }
         }, 1000);
 
-        // БІРЖА
         setInterval(() => {
             btcPrice += (Math.random() - 0.5) * 50000;
             priceHistory.push(btcPrice); if(priceHistory.length > 15) priceHistory.shift();
@@ -293,6 +322,12 @@
                 if(i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
             });
             ctx.stroke();
+        }
+
+        const user = tg.initDataUnsafe?.user;
+        if(user) {
+            document.getElementById('user-name').textContent = user.first_name;
+            document.getElementById('user-avatar').textContent = user.first_name.charAt(0).toUpperCase();
         }
 
         updateUI();
