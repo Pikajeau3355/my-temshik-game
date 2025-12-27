@@ -59,7 +59,20 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        let money = 500; let exp = 0; let ownedItems = [];
+        // --- СИСТЕМА ЗБЕРЕЖЕННЯ ---
+        // Завантажуємо дані або ставимо дефолтні
+        let money = Number(localStorage.getItem('money')) || 500;
+        let exp = Number(localStorage.getItem('exp')) || 0;
+        let ownedItems = JSON.parse(localStorage.getItem('ownedItems')) || [];
+
+        function saveGame() {
+            localStorage.setItem('money', money);
+            localStorage.setItem('exp', exp);
+            localStorage.setItem('ownedItems', JSON.stringify(ownedItems));
+        }
+
+        // Встановлюємо колір кнопки Telegram (опціонально)
+        tg.MainButton.setText('ЗБЕРЕЖЕНО').hide();
 
         if (tg.initDataUnsafe.user) {
             document.getElementById('user-greeting').textContent = `Суєтолог: ${tg.initDataUnsafe.user.first_name}`;
@@ -67,19 +80,32 @@
 
         const temki = [
             { id: 1, name: "Дропшипінг", cost: 300, min: 20, max: 150, risk: 0.1, rank: 0 },
-            { id: 2, name: "iPhone з США", cost: 10000, min: 1000, max: 3000, risk: 0.15, rank: 200 },
-            { id: 3, name: "Арбітраж", cost: 50000, min: -10000, max: 20000, risk: 0.25, rank: 1000 }
+            { id: 2, name: "iPhone з США", cost: 10000, min: 1000, max: 3500, risk: 0.18, rank: 200 },
+            { id: 3, name: "Арбітраж", cost: 60000, min: -10000, max: 25000, risk: 0.28, rank: 1200 },
+            { id: 4, name: "Крипто-Офіс", cost: 450000, min: -50000, max: 120000, risk: 0.35, rank: 5000 }
         ];
 
         const shop = [
-            { id: 'lanos', name: "Ланос", cost: 20000, bonus: "-50% податків" },
-            { id: 'bmw', name: "BMW M5", cost: 150000, bonus: "+20% профіту" }
+            { id: 'lanos', name: "Ланос", cost: 25000, bonus: "-50% податків" },
+            { id: 'bmw', name: "BMW M5", cost: 200000, bonus: "+20% профіту" },
+            { id: 'office', name: "Офіс IQ", cost: 1500000, bonus: "X2 досвіду" }
         ];
 
         function updateUI() {
             document.getElementById('balance').textContent = Math.floor(money).toLocaleString() + ' ₴';
             document.getElementById('exp').textContent = exp;
             
+            // Оновлюємо ранг
+            const ranks = [
+                { min: 0, name: "Новачок з ОЛХ" },
+                { min: 400, name: "Суєтолог" },
+                { min: 2500, name: "Бос Созвонів" },
+                { min: 10000, name: "Крипто-Барон" }
+            ];
+            let rName = ranks[0].name;
+            for (let r of ranks) { if (exp >= r.min) rName = r.name; }
+            document.getElementById('rank').textContent = rName;
+
             const tList = document.getElementById('temki-list');
             tList.innerHTML = '';
             temki.forEach(t => {
@@ -92,9 +118,11 @@
             sList.innerHTML = '';
             shop.forEach(item => {
                 const isOwned = ownedItems.includes(item.id);
-                sList.innerHTML += `<div class="card"><div class="info"><h3>${item.name}</h3><p style="color:var(--gold)">${isOwned?'КУПЛЕНО':item.bonus}</p></div>
-                <button class="btn" style="background:var(--gold)" onclick="buyItem('${item.id}')" ${money<item.cost||isOwned?'disabled':''}>${isOwned?'✔️':item.cost+' ₴'}</button></div>`;
+                sList.innerHTML += `<div class="card"><div class="info"><h3>${item.name}</h3><p style="color:var(--gold)">${isOwned?'АКТИВ ПРИДБАНО':item.bonus}</p></div>
+                <button class="btn" style="background:var(--gold)" onclick="buyItem('${item.id}')" ${money<item.cost||isOwned?'disabled':''}>${isOwned?'✔️':item.cost.toLocaleString()+' ₴'}</button></div>`;
             });
+            
+            saveGame(); // Зберігаємо після кожної дії
         }
 
         function work(id) {
@@ -102,12 +130,14 @@
             const t = temki.find(i => i.id === id);
             money -= t.cost;
             if (Math.random() < t.risk) {
-                addLog(`> [СКАМ] ${t.name}. -${t.cost} ₴`, '#ef4444');
+                addLog(`> СКАМ: ${t.name}. -${t.cost} ₴`, '#ef4444');
             } else {
                 let p = Math.floor(Math.random() * (t.max - t.min + 1)) + t.min;
                 if(ownedItems.includes('bmw')) p = Math.floor(p * 1.2);
-                money += (t.cost + p); exp += 15;
-                addLog(`> [ПРОФІТ] ${t.name}: +${p} ₴`, '#10b981');
+                money += (t.cost + p); 
+                let gainXP = ownedItems.includes('office') ? 30 : 15;
+                exp += gainXP;
+                addLog(`> ПРОФІТ: +${p} ₴ (+${gainXP} XP)`, '#10b981');
             }
             updateUI();
         }
@@ -117,7 +147,7 @@
             if (money >= item.cost && !ownedItems.includes(id)) {
                 money -= item.cost;
                 ownedItems.push(id);
-                addLog(`> [МАЙНО] Куплено: ${item.name}`, 'var(--gold)');
+                addLog(`> КУПЛЕНО: ${item.name}`, 'var(--gold)');
                 updateUI();
             }
         }
@@ -131,3 +161,4 @@
     </script>
 </body>
 </html>
+
