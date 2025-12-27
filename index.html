@@ -19,73 +19,78 @@
             margin: 0; background: var(--bg); color: #ffffff;
             font-family: 'Manrope', sans-serif; overflow: hidden;
             height: 100vh; display: flex; flex-direction: column;
-            transition: background 0.2s;
+            transition: background 0.2s; /* Для ефекту облави */
         }
 
+        /* Ефект поліцейської облави */
         .police-raid { background: #4b0000 !important; animation: blink 0.3s infinite; }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
         .profile-header {
-            padding: 50px 20px 10px;
+            padding: 50px 20px 20px;
             background: linear-gradient(180deg, rgba(93, 95, 239, 0.1) 0%, rgba(11, 12, 16, 0) 100%);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
         .avatar { 
-            width: 40px; height: 40px; background: var(--primary); 
-            border-radius: 12px; display: flex; align-items: center; 
-            justify-content: center; font-size: 18px; font-weight: 800;
+            width: 45px; height: 45px; background: var(--primary); 
+            border-radius: 15px; display: flex; align-items: center; 
+            justify-content: center; font-size: 20px; font-weight: 800;
+            box-shadow: 0 4px 15px rgba(93, 95, 239, 0.4);
         }
-        .user-text h2 { margin: 0; font-size: 14px; font-weight: 800; }
-        .user-text p { margin: 2px 0 0; font-size: 10px; color: var(--accent); font-weight: 600; }
+        .user-text h2 { margin: 0; font-size: 16px; font-weight: 800; }
+        .user-text p { margin: 2px 0 0; font-size: 11px; color: var(--accent); font-weight: 600; text-transform: uppercase; }
 
         .balance-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(10px);
-            border-radius: 20px; padding: 15px;
+            border-radius: 24px; padding: 20px;
             border: 1px solid rgba(255,255,255,0.08);
-            text-align: center;
+            text-align: center; margin-bottom: 10px;
         }
-        .bal-amount { font-size: 28px; font-weight: 800; }
-        .passive-income { font-size: 11px; color: var(--success); margin-top: 5px; font-weight: 700; }
+        .bal-label { font-size: 10px; color: #828282; font-weight: 700; letter-spacing: 1px; }
+        .bal-amount { font-size: 32px; font-weight: 800; }
+        .passive-income { font-size: 12px; color: var(--success); margin-top: 5px; font-weight: 700; }
 
-        .energy-section { margin-top: 10px; }
-        .energy-bar-outer { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+        .energy-section { margin-top: 15px; }
+        .energy-header { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; margin-bottom: 6px; }
+        .energy-bar-outer { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
         .energy-bar-inner { height: 100%; background: linear-gradient(90deg, var(--energy-color), var(--primary)); width: 100%; transition: 0.3s; }
 
-        .viewport { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 120px; }
+        .viewport { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; }
         .tab { display: none; }
         .tab.active { display: block; }
 
-        .section-title { font-size: 11px; font-weight: 800; color: #666; margin: 15px 0 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .section-title { font-size: 12px; font-weight: 800; color: #666; margin: 20px 0 12px; text-transform: uppercase; letter-spacing: 1.5px; }
 
         .card {
-            background: var(--card-bg); border-radius: 18px; padding: 14px;
-            margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.03);
+            background: var(--card-bg); border-radius: 20px; padding: 16px;
+            margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03);
             display: flex; justify-content: space-between; align-items: center;
         }
-        .card-info h3 { margin: 0; font-size: 13px; font-weight: 700; }
-        .card-info p { margin: 3px 0 0; font-size: 10px; color: #828282; }
-        .privilege { color: var(--gold); font-weight: 700; font-size: 9px; text-transform: uppercase; margin-top: 4px; }
+        .card-info h3 { margin: 0; font-size: 14px; font-weight: 700; }
+        .card-info p { margin: 4px 0 0; font-size: 11px; color: #828282; }
 
         .btn {
-            background: var(--primary); color: white; border: none; padding: 8px 14px;
-            border-radius: 10px; font-weight: 700; font-size: 11px;
+            background: var(--primary); color: white; border: none; padding: 10px 16px;
+            border-radius: 12px; font-weight: 700; font-size: 12px;
         }
         .btn-crime { background: var(--danger); }
-        .btn:disabled { opacity: 0.2; }
+        .btn:disabled { opacity: 0.3; }
 
         .nav {
-            position: fixed; bottom: 20px; left: 15px; right: 15px;
-            background: rgba(28, 29, 38, 0.95); border-radius: 20px; height: 65px; 
-            display: flex; justify-content: space-around; align-items: center;
+            position: fixed; bottom: 25px; left: 20px; right: 20px;
+            background: rgba(28, 29, 38, 0.95); border-radius: 24px; height: 75px; 
+            display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.08);
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 9px; font-weight: 700; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 10px; font-weight: 700; }
         .nav-item.active { color: var(--primary); }
         
-        .log { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 10px; font-size: 10px; height: 60px; overflow-y: auto; }
-        .log-item { margin-bottom: 4px; padding-left: 6px; border-left: 2px solid var(--primary); }
+        .log { background: rgba(0,0,0,0.2); border-radius: 15px; padding: 12px; font-size: 11px; height: 80px; overflow-y: auto; }
+        .log-item { margin-bottom: 5px; padding-left: 8px; border-left: 2px solid var(--primary); }
+        
+        canvas { width: 100%; height: 100px; }
     </style>
 </head>
 <body>
@@ -94,14 +99,16 @@
         <div class="user-info">
             <div class="avatar" id="user-avatar">?</div>
             <div class="user-text">
-                <h2 id="user-name">Завантаження...</h2>
-                <p id="user-rank">Рівень 1</p>
+                <h2 id="user-name">Темщик</h2>
+                <p id="user-rank">Рівень 1 • Новачок</p>
             </div>
         </div>
         <div class="balance-card">
+            <div class="bal-label">ТВІЙ БАЛАНС</div>
             <div class="bal-amount" id="balance">0<span>₴</span></div>
-            <div id="passive-val" class="passive-income">+0 ₴/сек</div>
+            <div class="passive-income" id="passive-val">+0 ₴/сек</div>
             <div class="energy-section">
+                <div class="energy-header"><span>ЕНЕРГІЯ</span><span id="energy-val">100%</span></div>
                 <div class="energy-bar-outer"><div class="energy-bar-inner" id="energy-bar"></div></div>
             </div>
         </div>
@@ -109,73 +116,69 @@
 
     <div class="viewport">
         <div id="tab-work" class="tab active">
-            <div class="section-title">💸 Темки</div>
+            <div class="section-title">🚀 Білі схеми</div>
             <div id="temki-list"></div>
-            <div class="section-title">🚨 Тіньові схеми</div>
+
+            <div class="section-title">🚨 Тіньові схеми (Ризик!)</div>
             <div id="crime-list"></div>
-            <div class="section-title">📊 Журнал</div>
+
+            <div class="section-title">🍕 Відновити сили</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button class="btn" style="background:var(--card-bg)" onclick="eat(50, 20)">☕️ Еспресо (50₴)</button>
+                <button class="btn" style="background:var(--card-bg)" onclick="eat(150, 60)">🌯 Шаурма (150₴)</button>
+            </div>
+            <div class="section-title">📑 Журнал</div>
             <div class="log" id="terminal"></div>
         </div>
 
         <div id="tab-crypto" class="tab">
-            <div class="section-title">📈 Біржа BTC</div>
-            <div class="balance-card" style="background: var(--card-bg); margin-bottom: 15px;">
-                <div id="btc-price" style="font-size:22px; font-weight:800; color:var(--success);">₴ 0</div>
-                <canvas id="cryptoChart" style="width:100%; height:80px;"></canvas>
+            <div class="section-title">📈 Bitcoin Live</div>
+            <div class="balance-card" style="background: var(--card-bg);">
+                <div id="btc-price" style="font-size:24px; font-weight:800; color:var(--success);">₴ 0</div>
+                <canvas id="cryptoChart"></canvas>
             </div>
-            <button class="btn" style="width:100%; margin-bottom:10px; background:var(--gold); color:#000" onclick="tradeBtc('all_buy')">КУПИТИ НА ВСІ</button>
-            <button class="btn" style="width:100%; background:#fff; color:#000" onclick="tradeBtc('all_sell')">ПРОДАТИ ВСЕ</button>
+            <button class="btn" style="width:100%; background:var(--gold); color:#000; margin-bottom:10px;" onclick="tradeBtc('all_buy')">КУПИТИ BTC НА ВСЕ</button>
+            <button class="btn" style="width:100%; background:#fff; color:#000" onclick="tradeBtc('all_sell')">ПРОДАТИ ВЕСЬ BTC</button>
         </div>
 
         <div id="tab-shop" class="tab">
-            <div class="section-title">💎 Магазин Статусу (Машини)</div>
-            <div id="garage-list"></div>
-            <div class="section-title">🏢 Бізнес-активи</div>
+            <div class="section-title">🏢 Пасивний дохід (Бізнес)</div>
             <div id="assets-list"></div>
         </div>
     </div>
 
     <nav class="nav">
-        <div class="nav-item active" onclick="showTab('work', this)"><span>💰</span>Схеми</div>
+        <div class="nav-item active" onclick="showTab('work', this)"><span>💸</span>Темки</div>
         <div class="nav-item" onclick="showTab('crypto', this)"><span>📊</span>Біржа</div>
-        <div class="nav-item" onclick="showTab('shop', this)"><span>🏎️</span>Магазин</div>
+        <div class="nav-item" onclick="showTab('shop', this)"><span>🏢</span>Активи</div>
     </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        let money = Number(localStorage.getItem('money')) || 5000;
+        let money = Number(localStorage.getItem('money')) || 1000;
         let btcCount = Number(localStorage.getItem('btcCount')) || 0;
         let energy = Number(localStorage.getItem('energy')) || 100;
         let xp = Number(localStorage.getItem('xp')) || 0;
         let btcPrice = 3800000;
-        let priceHistory = [3800000, 3790000];
-        
-        // Сховище покупок
-        let myAssets = JSON.parse(localStorage.getItem('myAssets')) || { bot: 0, farm: 0, office: 0 };
-        let myGarage = JSON.parse(localStorage.getItem('myGarage')) || [];
+        let priceHistory = [3800000, 3780000, 3810000];
+        let myAssets = JSON.parse(localStorage.getItem('myAssets')) || { farm: 0, bot: 0, office: 0 };
 
         const assetsData = [
-            { id: 'bot', name: "ТГ Бот", cost: 8000, income: 15 },
-            { id: 'farm', name: "Ферма", cost: 60000, income: 150 }
-        ];
-
-        const carsData = [
-            { id: 'lanos', name: "Daewoo Lanos", cost: 120000, priv: "⚡ Енергія +10%", bonus: "energyRate", val: 0.1 },
-            { id: 'camry', name: "Toyota Camry 70", cost: 1200000, priv: "🛡️ Ризик -15%", bonus: "safeRate", val: 0.15 },
-            { id: 'bmw', name: "BMW M5 F90", cost: 4500000, priv: "📈 Досвід +30%", bonus: "xpRate", val: 0.3 },
-            { id: 'porsche', name: "Porsche 911 GT3", cost: 12000000, priv: "👑 Статус Магната", bonus: "all", val: 0.5 }
+            { id: 'bot', name: "ТГ Бот-обмінник", cost: 5000, income: 5, desc: "+5 ₴/сек" },
+            { id: 'farm', name: "Майнінг ферма", cost: 50000, income: 60, desc: "+60 ₴/сек" },
+            { id: 'office', name: "Офіс в центрі", cost: 500000, income: 800, desc: "+800 ₴/сек" }
         ];
 
         const whiteTemki = [
-            { id: 1, name: "Дроп на Пром", cost: 500, min: 100, max: 400, energy: 15, xp: 20 },
-            { id: 2, name: "Перепродаж техніки", cost: 20000, min: 2000, max: 8000, energy: 25, xp: 60 }
+            { id: 1, name: "Дроп на Пром", cost: 200, min: 40, max: 200, energy: 15, xp: 10 },
+            { id: 2, name: "Перепродаж iPhone", cost: 15000, min: 1500, max: 6000, energy: 30, xp: 50 }
         ];
 
         const crimeTemki = [
-            { id: 101, name: "Фішинг мамонтів", cost: 5000, min: 8000, max: 25000, energy: 40, xp: 150, chance: 0.6 },
-            { id: 102, name: "Злам мережі", cost: 50000, min: 100000, max: 400000, energy: 60, xp: 800, chance: 0.4 }
+            { id: 101, name: "Фішинг мамонтів", cost: 2000, min: 4000, max: 12000, energy: 40, xp: 120, chance: 0.65 },
+            { id: 102, name: "Злам бази даних", cost: 25000, min: 50000, max: 180000, energy: 60, xp: 600, chance: 0.45 }
         ];
 
         function save() {
@@ -184,60 +187,54 @@
             localStorage.setItem('energy', energy);
             localStorage.setItem('xp', xp);
             localStorage.setItem('myAssets', JSON.stringify(myAssets));
-            localStorage.setItem('myGarage', JSON.stringify(myGarage));
         }
 
         function updateUI() {
             document.getElementById('balance').innerHTML = Math.floor(money).toLocaleString() + '<span>₴</span>';
+            document.getElementById('energy-val').textContent = Math.floor(energy) + '%';
             document.getElementById('energy-bar').style.width = energy + '%';
             
-            let level = Math.floor(xp / 1000) + 1;
-            document.getElementById('user-rank').textContent = `Рівень ${level} • ${level > 10 ? 'Бос' : 'Темщик'}`;
-            
-            let totalPassive = (myAssets.bot * 15) + (myAssets.farm * 150);
+            let totalPassive = (myAssets.bot * 5) + (myAssets.farm * 60) + (myAssets.office * 800);
             document.getElementById('passive-val').textContent = `+${totalPassive} ₴/сек`;
 
-            renderWork();
-            renderShop();
+            let level = Math.floor(xp / 1000) + 1;
+            document.getElementById('user-rank').textContent = `Рівень ${level} • ${level > 5 ? 'Магнат' : 'Темщик'}`;
+
+            renderTemki();
+            renderCrime();
+            renderAssets();
             save();
         }
 
-        function renderWork() {
-            const wList = document.getElementById('temki-list');
-            wList.innerHTML = '';
+        function renderTemki() {
+            const list = document.getElementById('temki-list');
+            list.innerHTML = '';
             whiteTemki.forEach(t => {
-                wList.innerHTML += `<div class="card">
-                    <div class="card-info"><h3>${t.name}</h3><p>${t.cost} ₴ | -${t.energy}⚡</p></div>
-                    <button class="btn" onclick="work(${t.id})" ${money < t.cost || energy < t.energy ? 'disabled' : ''}>ВОРВАТИСЬ</button>
-                </div>`;
-            });
-
-            const cList = document.getElementById('crime-list');
-            cList.innerHTML = '';
-            crimeTemki.forEach(t => {
-                cList.innerHTML += `<div class="card">
-                    <div class="card-info"><h3>${t.name}</h3><p>Ризик! | -${t.energy}⚡</p></div>
-                    <button class="btn btn-crime" onclick="doCrime(${t.id})" ${money < t.cost || energy < t.energy ? 'disabled' : ''}>РИЗИК</button>
+                list.innerHTML += `<div class="card">
+                    <div class="card-info"><h3>${t.name}</h3><p>${t.cost.toLocaleString()} ₴ | -${t.energy}⚡</p></div>
+                    <button class="btn" onclick="work(${t.id})" ${(money < t.cost || energy < t.energy) ? 'disabled' : ''}>ВОРВАТИСЬ</button>
                 </div>`;
             });
         }
 
-        function renderShop() {
-            const gList = document.getElementById('garage-list');
-            gList.innerHTML = '';
-            carsData.forEach(c => {
-                let bought = myGarage.includes(c.id);
-                gList.innerHTML += `<div class="card">
-                    <div class="card-info"><h3>${c.name}</h3><p class="privilege">${c.priv}</p><p>${c.cost.toLocaleString()} ₴</p></div>
-                    <button class="btn" onclick="buyCar('${c.id}', ${c.cost})" ${money < c.cost || bought ? 'disabled' : ''}>${bought ? 'КУПЛЕНО' : 'КУПИТИ'}</button>
+        function renderCrime() {
+            const list = document.getElementById('crime-list');
+            list.innerHTML = '';
+            crimeTemki.forEach(t => {
+                list.innerHTML += `<div class="card">
+                    <div class="card-info"><h3>${t.name}</h3><p>${t.cost.toLocaleString()} ₴ | Ризик!</p></div>
+                    <button class="btn btn-crime" onclick="doCrime(${t.id})" ${(money < t.cost || energy < t.energy) ? 'disabled' : ''}>РИЗИКНУТИ</button>
                 </div>`;
             });
+        }
 
-            const aList = document.getElementById('assets-list');
-            aList.innerHTML = '';
+        function renderAssets() {
+            const list = document.getElementById('assets-list');
+            list.innerHTML = '';
             assetsData.forEach(a => {
-                aList.innerHTML += `<div class="card">
-                    <div class="card-info"><h3>${a.name} (${myAssets[a.id]})</h3><p>+${a.income} ₴/сек | ${a.cost} ₴</p></div>
+                let count = myAssets[a.id];
+                list.innerHTML += `<div class="card">
+                    <div class="card-info"><h3>${a.name} (${count})</h3><p>${a.cost.toLocaleString()} ₴ | ${a.desc}</p></div>
                     <button class="btn" onclick="buyAsset('${a.id}', ${a.cost})" ${money < a.cost ? 'disabled' : ''}>КУПИТИ</button>
                 </div>`;
             });
@@ -245,82 +242,60 @@
 
         function work(id) {
             const t = whiteTemki.find(x => x.id === id);
-            energy -= t.energy; money -= t.cost;
-            let bonusXP = myGarage.includes('bmw') ? 1.3 : 1;
-            xp += (t.xp * bonusXP);
+            energy -= t.energy; money -= t.cost; xp += t.xp;
             let profit = Math.floor(Math.random() * (t.max - t.min + 1)) + t.min;
             money += (t.cost + profit);
-            addLog(`+${profit} ₴: Успіх!`, 'var(--success)');
+            addLog(`+${profit} ₴: Біла схема успішна`, 'var(--success)');
             updateUI();
         }
 
         function doCrime(id) {
             const t = crimeTemki.find(x => x.id === id);
             energy -= t.energy; money -= t.cost;
-            
-            let safeBonus = myGarage.includes('camry') ? 0.15 : 0;
-            if (Math.random() < (t.chance + safeBonus)) {
+
+            if (Math.random() < t.chance) {
                 let profit = Math.floor(Math.random() * (t.max - t.min + 1)) + t.min;
                 money += (t.cost + profit);
                 xp += t.xp;
                 addLog(`ДЖЕКПОТ: +${profit} ₴`, 'var(--gold)');
+                tg.HapticFeedback.notificationOccurred('success');
             } else {
-                let fine = Math.floor(money * 0.2);
+                let fine = Math.floor(money * 0.25);
                 money -= fine;
                 document.body.classList.add('police-raid');
-                setTimeout(() => document.body.classList.remove('police-raid'), 500);
+                setTimeout(() => document.body.classList.remove('police-raid'), 600);
                 addLog(`ОБЛАВА! Штраф: -${fine} ₴`, 'var(--danger)');
+                tg.HapticFeedback.notificationOccurred('error');
             }
             updateUI();
         }
 
-        function buyCar(id, cost) {
-            if(money >= cost && !myGarage.includes(id)) {
-                money -= cost;
-                myGarage.push(id);
-                updateUI();
-                addLog(`Придбано нове авто! Статус підвищено.`, 'var(--gold)');
-            }
-        }
-
         function buyAsset(id, cost) {
-            if(money >= cost) { money -= cost; myAssets[id]++; updateUI(); }
+            if(money >= cost) { money -= cost; myAssets[id]++; updateUI(); addLog(`Актив придбано!`, 'var(--gold)'); }
         }
 
-        // Пасив та Енергія
         setInterval(() => {
-            let income = (myAssets.bot * 15) + (myAssets.farm * 150);
+            let income = (myAssets.bot * 5) + (myAssets.farm * 60) + (myAssets.office * 800);
             if(income > 0) { money += income; updateUI(); }
-            
-            let regSpeed = myGarage.includes('lanos') ? 0.8 : 0.5;
-            if(energy < 100) { energy = Math.min(100, energy + regSpeed); updateUI(); }
+            if(energy < 100) { energy = Math.min(100, energy + 0.3); updateUI(); }
         }, 1000);
 
-        // Біржа
         setInterval(() => {
-            btcPrice += (Math.random() - 0.5) * 60000;
+            btcPrice += (Math.random() - 0.5) * 50000;
             priceHistory.push(btcPrice); if(priceHistory.length > 15) priceHistory.shift();
-            document.getElementById('btc-price').textContent = '₴ ' + Math.floor(btcPrice).toLocaleString();
+            const el = document.getElementById('btc-price');
+            if(el) el.textContent = '₴ ' + Math.floor(btcPrice).toLocaleString();
             drawChart();
         }, 3000);
-
-        function drawChart() {
-            const canvas = document.getElementById('cryptoChart'); if(!canvas) return;
-            const ctx = canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height);
-            const min = Math.min(...priceHistory), max = Math.max(...priceHistory), range = max - min || 1;
-            ctx.beginPath(); ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 3;
-            priceHistory.forEach((p, i) => {
-                const x = (i / (priceHistory.length - 1)) * canvas.width;
-                const y = canvas.height - ((p - min) / range) * (canvas.height - 10) - 5;
-                if(i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-            });
-            ctx.stroke();
-        }
 
         function tradeBtc(type) {
             if(type === 'all_buy' && money > 0) { btcCount += money / btcPrice; money = 0; }
             else if(type === 'all_sell' && btcCount > 0) { money += btcCount * btcPrice; btcCount = 0; }
             updateUI();
+        }
+
+        function eat(cost, val) {
+            if(money >= cost && energy < 100) { money -= cost; energy = Math.min(100, energy + val); updateUI(); }
         }
 
         function showTab(name, el) {
@@ -336,9 +311,24 @@
             l.insertAdjacentHTML('afterbegin', `<div class="log-item" style="border-left-color:${col}">${msg}</div>`);
         }
 
+        function drawChart() {
+            const canvas = document.getElementById('cryptoChart'); if(!canvas) return;
+            const ctx = canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height);
+            const min = Math.min(...priceHistory), max = Math.max(...priceHistory), range = max - min || 1;
+            ctx.beginPath(); ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 3;
+            priceHistory.forEach((p, i) => {
+                const x = (i / (priceHistory.length - 1)) * canvas.width;
+                const y = canvas.height - ((p - min) / range) * (canvas.height - 20) - 10;
+                if(i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+        }
+
         const user = tg.initDataUnsafe?.user;
-        document.getElementById('user-name').textContent = user ? user.first_name : "Гравець";
-        document.getElementById('user-avatar').textContent = user ? user.first_name[0] : "👤";
+        if(user) {
+            document.getElementById('user-name').textContent = user.first_name;
+            document.getElementById('user-avatar').textContent = user.first_name.charAt(0).toUpperCase();
+        }
 
         updateUI();
     </script>
