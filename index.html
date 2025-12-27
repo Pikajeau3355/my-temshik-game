@@ -3,185 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Temshik Elite</title>
+<title>Temshik Elite v3</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap');
 
 :root{
---bg:#0b0c10;
---card:#1c1d26;
---primary:#5d5fef;
---gold:#ffcf52;
---success:#4ade80;
---danger:#f87171;
+--bg:#0b0c10;--card:#1c1d26;--primary:#5d5fef;
+--gold:#ffcf52;--success:#4ade80;--danger:#f87171;
 }
 
 *{box-sizing:border-box}
-
 body{
-margin:0;
-font-family:Manrope,sans-serif;
-background:var(--bg);
-color:#fff;
-height:100vh;
-display:flex;
-flex-direction:column;
-overflow:hidden;
+margin:0;font-family:Manrope,sans-serif;background:var(--bg);
+color:#fff;height:100vh;display:flex;flex-direction:column;overflow:hidden;
 }
 
-.profile-header{
-padding:45px 20px 15px;
+.header{padding:40px 20px 15px}
+.user{display:flex;gap:12px;align-items:center}
+.avatar{width:44px;height:44px;border-radius:14px;background:var(--primary);
+display:flex;align-items:center;justify-content:center;font-weight:800}
+
+.card-main{
+margin-top:14px;background:rgba(255,255,255,.04);
+border-radius:24px;padding:18px;border:1px solid rgba(255,255,255,.08)
 }
 
-.user-info{
-display:flex;
-gap:12px;
-align-items:center;
-}
+.bal{font-size:34px;font-weight:800;margin:6px 0}
+.small{font-size:11px;color:#aaa;font-weight:700}
 
-.avatar{
-width:44px;height:44px;
-border-radius:14px;
-background:var(--primary);
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:800;
-}
-
-.balance-card{
-margin-top:15px;
-background:rgba(255,255,255,0.04);
-border-radius:24px;
-padding:20px;
-border:1px solid rgba(255,255,255,0.08);
-}
-
-.bal-label{
-font-size:11px;
-letter-spacing:1px;
-color:#aaa;
-font-weight:700;
-}
-
-.bal-amount{
-font-size:34px;
-font-weight:800;
-margin:4px 0 12px;
-}
-
-.energy-section{margin-top:10px}
-
-.energy-header{
-display:flex;
-justify-content:space-between;
-font-size:11px;
-font-weight:700;
-}
-
-.bar{
-height:8px;
-border-radius:8px;
-background:rgba(255,255,255,0.1);
-overflow:hidden;
-margin-top:6px;
-}
-
-.bar-inner{
-height:100%;
-transition:.3s;
-}
-
+.bar{height:8px;border-radius:8px;background:rgba(255,255,255,.1);overflow:hidden}
+.fill{height:100%;transition:.3s}
 .energy{background:linear-gradient(90deg,#00f2ff,var(--primary))}
 .rep{background:linear-gradient(90deg,#facc15,#f97316)}
 
-.viewport{
-flex:1;
-overflow-y:auto;
-padding:20px;
-padding-bottom:120px;
-}
+.viewport{flex:1;overflow-y:auto;padding:20px;padding-bottom:130px}
+.tab{display:none}
+.tab.active{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1}}
 
-.tab{display:none;animation:fade .25s}
-.tab.active{display:block}
-
-@keyframes fade{
-from{opacity:0;transform:translateY(15px)}
-to{opacity:1;transform:none}
-}
-
-.section-title{
-font-size:12px;
-font-weight:800;
-color:#777;
-margin:20px 0 10px;
-}
+.section{font-size:12px;font-weight:800;color:#777;margin:18px 0 10px}
 
 .card{
-background:var(--card);
-border-radius:20px;
-padding:16px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:12px;
-border:1px solid rgba(255,255,255,0.04);
+background:var(--card);border-radius:20px;padding:15px;
+display:flex;justify-content:space-between;align-items:center;margin-bottom:10px
 }
 
-.card-info h3{margin:0;font-size:15px}
-.card-info p{margin:4px 0 0;font-size:12px;color:#aaa}
+.card h3{margin:0;font-size:15px}
+.card p{margin:4px 0 0;font-size:12px;color:#aaa}
 
 .btn{
-background:var(--primary);
-border:none;
-color:#fff;
-padding:10px 16px;
-border-radius:14px;
-font-weight:700;
+background:var(--primary);border:none;color:#fff;
+padding:10px 16px;border-radius:14px;font-weight:700
 }
-
-.btn.alt{background:var(--gold);color:#000}
-
+.btn.gold{background:var(--gold);color:#000}
 .btn:disabled{opacity:.4}
 
 .log{
-background:rgba(0,0,0,.25);
-border-radius:16px;
-padding:12px;
-font-size:11px;
-height:120px;
-overflow-y:auto;
+background:rgba(0,0,0,.25);border-radius:16px;padding:12px;
+font-size:11px;height:130px;overflow-y:auto
 }
-
-.log-item{
-margin-bottom:6px;
-padding-left:8px;
-border-left:3px solid var(--primary);
-}
+.log div{margin-bottom:6px;border-left:3px solid var(--primary);padding-left:8px}
 
 .nav{
-position:fixed;
-bottom:20px;
-left:20px;
-right:20px;
-height:72px;
-border-radius:26px;
-background:rgba(28,29,38,.95);
-display:flex;
-justify-content:space-around;
-align-items:center;
-backdrop-filter:blur(15px);
+position:fixed;bottom:20px;left:20px;right:20px;height:72px;
+border-radius:26px;background:rgba(28,29,38,.95);
+display:flex;justify-content:space-around;align-items:center
 }
-
-.nav-item{
-font-size:10px;
-font-weight:700;
-color:#666;
-text-align:center;
-}
-
+.nav-item{font-size:10px;font-weight:700;color:#666;text-align:center}
 .nav-item.active{color:var(--primary)}
 .nav-icon{font-size:22px}
 </style>
@@ -189,176 +79,217 @@ text-align:center;
 
 <body>
 
-<div class="profile-header">
-  <div class="user-info">
+<div class="header">
+  <div class="user">
     <div class="avatar" id="avatar">Т</div>
     <div>
       <strong id="name">Темщик</strong><br>
-      <small id="levelName">Новачок</small>
+      <small id="lvlName">Новачок</small>
     </div>
   </div>
 
-  <div class="balance-card">
-    <div class="bal-label">КАПІТАЛ</div>
-    <div class="bal-amount" id="money">0 ₴</div>
+  <div class="card-main">
+    <div class="small">КАПІТАЛ</div>
+    <div class="bal" id="money">0 ₴</div>
 
-    <div class="energy-section">
-      <div class="energy-header"><span>ЕНЕРГІЯ</span><span id="energyVal">100%</span></div>
-      <div class="bar"><div class="bar-inner energy" id="energyBar"></div></div>
-    </div>
+    <div class="small">ЕНЕРГІЯ <span id="energyVal"></span></div>
+    <div class="bar"><div class="fill energy" id="energyBar"></div></div>
 
-    <div class="energy-section">
-      <div class="energy-header"><span>РЕПУТАЦІЯ</span><span id="repVal">0</span></div>
-      <div class="bar"><div class="bar-inner rep" id="repBar"></div></div>
-    </div>
+    <div class="small" style="margin-top:8px">РЕПУТАЦІЯ <span id="repVal"></span></div>
+    <div class="bar"><div class="fill rep" id="repBar"></div></div>
   </div>
 </div>
 
 <div class="viewport">
 
 <div id="tab-work" class="tab active">
-  <div class="section-title">🚀 СХЕМИ</div>
+  <div class="section">🚀 СХЕМИ</div>
   <div id="schemeList"></div>
-
-  <div class="section-title">📜 ЖУРНАЛ</div>
+  <div class="section">📜 ЖУРНАЛ</div>
   <div class="log" id="log"></div>
 </div>
 
 <div id="tab-food" class="tab">
-  <div class="section-title">☕ ВІДНОВЛЕННЯ ЕНЕРГІЇ</div>
+  <div class="section">☕ ВІДНОВЛЕННЯ</div>
   <div id="foodList"></div>
 </div>
 
 <div id="tab-assets" class="tab">
-  <div class="section-title">📦 АКТИВИ</div>
-  <div class="card"><p style="color:#777">Поки що недоступно</p></div>
+  <div class="section">💼 АКТИВИ</div>
+  <div id="assetList"></div>
+</div>
+
+<div id="tab-ach" class="tab">
+  <div class="section">🏆 ДОСЯГНЕННЯ</div>
+  <div id="achList"></div>
+</div>
+
+<div id="tab-rank" class="tab">
+  <div class="section">🌍 РЕЙТИНГ</div>
+  <div id="rankList"></div>
 </div>
 
 </div>
 
 <nav class="nav">
-  <div class="nav-item active" onclick="showTab('work',this)">
-    <div class="nav-icon">💸</div>Темки
-  </div>
-  <div class="nav-item" onclick="showTab('food',this)">
-    <div class="nav-icon">☕</div>Їжа
-  </div>
-  <div class="nav-item" onclick="showTab('assets',this)">
-    <div class="nav-icon">📦</div>Активи
-  </div>
+  <div class="nav-item active" onclick="tab('work',this)"><div class="nav-icon">💸</div>Темки</div>
+  <div class="nav-item" onclick="tab('food',this)"><div class="nav-icon">☕</div>Їжа</div>
+  <div class="nav-item" onclick="tab('assets',this)"><div class="nav-icon">💼</div>Активи</div>
+  <div class="nav-item" onclick="tab('ach',this)"><div class="nav-icon">🏆</div>Трофеї</div>
+  <div class="nav-item" onclick="tab('rank',this)"><div class="nav-icon">🌍</div>ТОП</div>
 </nav>
 
 <script>
 const tg=window.Telegram.WebApp;tg.expand();
+const uid=tg.initDataUnsafe?.user?.id||Math.floor(Math.random()*1e6);
+name.textContent=tg.initDataUnsafe?.user?.first_name||'Темщик';
+avatar.textContent=name.textContent[0];
 
-let state=JSON.parse(localStorage.getItem('state'))||{
-money:1000,energy:100,rep:10,level:0
+let S=JSON.parse(localStorage.getItem('S'+uid))||{
+money:1000,energy:100,rep:10,level:0,
+assets:[],ach:{},protect:0
 };
 
 const levels=[
-{name:"Новачок",rep:0},
-{name:"Шнирь",rep:30},
-{name:"Мутний",rep:80},
-{name:"Авторитет",rep:150},
-{name:"Легенда",rep:300}
+{n:"Новачок",r:0},{n:"Шнирь",r:30},{n:"Мутний",r:80},
+{n:"Авторитет",r:150},{n:"Легенда",r:300}
 ];
 
 const schemes=[
-{name:"OLX дроп",cost:200,min:-100,max:300,energy:15,risk:.2,rep:3},
-{name:"Фейк магазин",cost:3000,min:-1500,max:6000,energy:30,risk:.35,rep:7},
-{name:"Крипто скам",cost:12000,min:-6000,max:20000,energy:45,risk:.5,rep:12}
+{n:"OLX дроп",c:200,min:-100,max:300,e:15,r:.2,rep:3},
+{n:"Фейк магазин",c:3000,min:-1500,max:6000,e:30,r:.35,rep:7},
+{n:"Крипто скам",c:12000,min:-6000,max:20000,e:45,r:.5,rep:12}
 ];
 
 const food=[
-{name:"☕ Еспресо",cost:50,energy:15},
-{name:"🥤 Енергетик",cost:120,energy:30},
-{name:"🌯 Шаурма",cost:250,energy:60}
+{n:"☕ Кава",c:50,e:15},
+{n:"🥤 Енергетик",c:120,e:30},
+{n:"🌯 Шаурма",c:250,e:60}
 ];
 
-function save(){localStorage.setItem('state',JSON.stringify(state));}
+const assets=[
+{n:"VPN",c:2000,inc:20},
+{n:"SIM-сітка",c:8000,inc:60},
+{n:"Дроп-мережа",c:20000,inc:150}
+];
 
-function log(msg,color){
-logDiv.insertAdjacentHTML('afterbegin',
-`<div class="log-item" style="border-color:${color}">${msg}</div>`);
+const achListDef=[
+{id:'first',t:"Перший плюс"},
+{id:'rich',t:"100k капіталу"},
+{id:'rep',t:"Репутація 100+"}
+];
+
+function save(){localStorage.setItem('S'+uid,JSON.stringify(S));}
+
+function log(m,col='var(--primary)'){
+logDiv.insertAdjacentHTML('afterbegin',`<div style="border-color:${col}">${m}</div>`);
 }
 
-function checkLevel(){
-for(let i=levels.length-1;i>=0;i--){
-if(state.rep>=levels[i].rep){state.level=i;break;}
-}
+function levelCheck(){
+for(let i=levels.length-1;i>=0;i--)if(S.rep>=levels[i].r){S.level=i;break;}
 }
 
-function runScheme(i){
+function scheme(i){
 let s=schemes[i];
-if(state.energy<s.energy||state.money<s.cost)return;
-state.energy-=s.energy;
-state.money-=s.cost;
-if(Math.random()<s.risk){
-state.rep=Math.max(0,state.rep-5);
-state.money+=s.cost+s.min;
-log(`❌ Кидок ${s.min} ₴`,'var(--danger)');
+if(S.energy<s.e||S.money<s.c)return;
+S.energy-=s.e;S.money-=s.c;
+
+if(Math.random()<.1 && S.protect==0){
+S.money-=500;S.rep=Math.max(0,S.rep-10);
+log("🚨 Маски-шоу! -500 ₴",'var(--danger)');
+}
+
+let jackpot=Math.random()<.05;
+let fail=Math.random()<s.r;
+
+if(fail){
+S.money+=s.c+s.min;
+log("❌ Кидок "+s.min+" ₴",'var(--danger)');
 }else{
 let p=Math.floor(Math.random()*(s.max-s.min+1))+s.min;
-state.rep+=s.rep;
-state.money+=s.cost+p;
-log(`💰 Плюс ${p} ₴`,'var(--success)');
+if(jackpot){p*=5;log("🎰 ДЖЕКПОТ x5!",'var(--gold)')}
+S.money+=s.c+p;S.rep+=s.rep;
+log("💰 +"+p+" ₴",'var(--success)');
 }
-checkLevel();update();
+
+randomEvent();
+levelCheck();update();
+}
+
+function randomEvent(){
+let r=Math.random();
+if(r<.05){S.protect=3;log("🤝 Криша на 3 ходи")}
+if(r>.95){S.money-=300;log("💣 Втрачено дроп -300 ₴",'var(--danger)')}
 }
 
 function eat(i){
 let f=food[i];
-if(state.money<f.cost||state.energy>=100)return;
-state.money-=f.cost;
-state.energy=Math.min(100,state.energy+f.energy);
-log(`⚡ +${f.energy}% енергії`,'var(--primary)');
+if(S.money<f.c||S.energy>=100)return;
+S.money-=f.c;S.energy=Math.min(100,S.energy+f.e);
+log("⚡ +"+f.e+"% енергії");
 update();
 }
 
+function buyAsset(i){
+let a=assets[i];
+if(S.money<a.c||S.assets.includes(i))return;
+S.money-=a.c;S.assets.push(i);
+log("💼 Куплено "+a.n,'var(--gold)');
+update();
+}
+
+setInterval(()=>{
+let inc=0;
+S.assets.forEach(i=>inc+=assets[i].inc);
+if(inc>0){S.money+=inc;log("📈 Пасив +"+inc+" ₴")}
+update();
+},60000);
+
 function update(){
-money.textContent=state.money.toLocaleString()+" ₴";
-energyVal.textContent=Math.floor(state.energy)+"%";
-energyBar.style.width=state.energy+"%";
-repVal.textContent=state.rep;
-repBar.style.width=Math.min(100,state.rep/3)+"%";
-levelName.textContent=levels[state.level].name;
+money.textContent=S.money.toLocaleString()+" ₴";
+energyVal.textContent=Math.floor(S.energy)+"%";
+energyBar.style.width=S.energy+"%";
+repVal.textContent=S.rep;
+repBar.style.width=Math.min(100,S.rep/3)+"%";
+lvlName.textContent=levels[S.level].n;
 
 schemeList.innerHTML='';
-schemes.forEach((s,i)=>{
-schemeList.innerHTML+=`
+schemes.forEach((s,i)=>schemeList.innerHTML+=`
 <div class="card">
-<div class="card-info">
-<h3>${s.name}</h3>
-<p>Ризик ${(s.risk*100).toFixed(0)}% | -${s.energy}⚡</p>
-</div>
-<button class="btn" onclick="runScheme(${i})"
-${state.energy<s.energy||state.money<s.cost?'disabled':''}>Крутити</button>
-</div>`;
-});
+<div><h3>${s.n}</h3><p>Ризик ${(s.r*100).toFixed(0)}%</p></div>
+<button class="btn" onclick="scheme(${i})">Крутити</button>
+</div>`);
 
 foodList.innerHTML='';
-food.forEach((f,i)=>{
-foodList.innerHTML+=`
+food.forEach((f,i)=>foodList.innerHTML+=`
 <div class="card">
-<div class="card-info">
-<h3>${f.name}</h3>
-<p>${f.cost} ₴ | +${f.energy}%</p>
-</div>
-<button class="btn alt" onclick="eat(${i})"
-${state.money<f.cost||state.energy>=100?'disabled':''}>Купити</button>
-</div>`;
-});
+<div><h3>${f.n}</h3><p>${f.c} ₴ | +${f.e}%</p></div>
+<button class="btn gold" onclick="eat(${i})">Купити</button>
+</div>`);
+
+assetList.innerHTML='';
+assets.forEach((a,i)=>assetList.innerHTML+=`
+<div class="card">
+<div><h3>${a.n}</h3><p>${a.c} ₴ | +${a.inc}/хв</p></div>
+<button class="btn" onclick="buyAsset(${i})"
+${S.assets.includes(i)?'disabled':''}>${S.assets.includes(i)?'Є':'Купити'}</button>
+</div>`);
+
+achList.innerHTML='';
+achListDef.forEach(a=>achList.innerHTML+=`
+<div class="card"><h3>${a.t}</h3></div>`);
+
 save();
 }
 
-function showTab(name,el){
+function tab(n,e){
 document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-document.getElementById('tab-'+name).classList.add('active');
-el.classList.add('active');
+document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+document.getElementById('tab-'+n).classList.add('active');
+e.classList.add('active');
 }
 
-setInterval(()=>{if(state.energy<100){state.energy+=0.4;update();}},4000);
+setInterval(()=>{if(S.energy<100){S.energy+=0.4;update()}},4000);
 update();
 </script>
 
