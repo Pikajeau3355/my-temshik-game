@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>UA Temshik Elite</title>
+<title>Temshik Elite</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
@@ -18,6 +18,8 @@
 --danger:#f87171;
 }
 
+*{box-sizing:border-box}
+
 body{
 margin:0;
 font-family:Manrope,sans-serif;
@@ -26,16 +28,17 @@ color:#fff;
 height:100vh;
 display:flex;
 flex-direction:column;
+overflow:hidden;
 }
 
 .profile-header{
-padding:45px 20px 20px;
+padding:45px 20px 15px;
 }
 
 .user-info{
 display:flex;
-align-items:center;
 gap:12px;
+align-items:center;
 }
 
 .avatar{
@@ -66,12 +69,10 @@ font-weight:700;
 .bal-amount{
 font-size:34px;
 font-weight:800;
-margin:4px 0 10px;
+margin:4px 0 12px;
 }
 
-.energy-section{
-margin-top:10px;
-}
+.energy-section{margin-top:10px}
 
 .energy-header{
 display:flex;
@@ -85,21 +86,30 @@ height:8px;
 border-radius:8px;
 background:rgba(255,255,255,0.1);
 overflow:hidden;
-margin-top:5px;
+margin-top:6px;
 }
 
 .bar-inner{
 height:100%;
-background:linear-gradient(90deg,#00f2ff,var(--primary));
-width:100%;
 transition:.3s;
 }
+
+.energy{background:linear-gradient(90deg,#00f2ff,var(--primary))}
+.rep{background:linear-gradient(90deg,#facc15,#f97316)}
 
 .viewport{
 flex:1;
 overflow-y:auto;
 padding:20px;
 padding-bottom:120px;
+}
+
+.tab{display:none;animation:fade .25s}
+.tab.active{display:block}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(15px)}
+to{opacity:1;transform:none}
 }
 
 .section-title{
@@ -116,20 +126,12 @@ padding:16px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:10px;
+margin-bottom:12px;
 border:1px solid rgba(255,255,255,0.04);
 }
 
-.card-info h3{
-margin:0;
-font-size:15px;
-}
-
-.card-info p{
-margin:4px 0 0;
-font-size:12px;
-color:#aaa;
-}
+.card-info h3{margin:0;font-size:15px}
+.card-info p{margin:4px 0 0;font-size:12px;color:#aaa}
 
 .btn{
 background:var(--primary);
@@ -140,16 +142,16 @@ border-radius:14px;
 font-weight:700;
 }
 
-.btn:disabled{
-opacity:.4;
-}
+.btn.alt{background:var(--gold);color:#000}
+
+.btn:disabled{opacity:.4}
 
 .log{
-background:rgba(0,0,0,0.25);
+background:rgba(0,0,0,.25);
 border-radius:16px;
 padding:12px;
 font-size:11px;
-height:110px;
+height:120px;
 overflow-y:auto;
 }
 
@@ -164,12 +166,13 @@ position:fixed;
 bottom:20px;
 left:20px;
 right:20px;
-height:70px;
-border-radius:24px;
+height:72px;
+border-radius:26px;
 background:rgba(28,29,38,.95);
 display:flex;
 justify-content:space-around;
 align-items:center;
+backdrop-filter:blur(15px);
 }
 
 .nav-item{
@@ -179,8 +182,8 @@ color:#666;
 text-align:center;
 }
 
-.nav-item.active{color:var(--primary);}
-.nav-icon{font-size:22px;}
+.nav-item.active{color:var(--primary)}
+.nav-icon{font-size:22px}
 </style>
 </head>
 
@@ -190,7 +193,7 @@ text-align:center;
   <div class="user-info">
     <div class="avatar" id="avatar">Т</div>
     <div>
-      <h3 id="name">Темщик</h3>
+      <strong id="name">Темщик</strong><br>
       <small id="levelName">Новачок</small>
     </div>
   </div>
@@ -200,22 +203,20 @@ text-align:center;
     <div class="bal-amount" id="money">0 ₴</div>
 
     <div class="energy-section">
-      <div class="energy-header">
-        <span>ЕНЕРГІЯ</span><span id="energyVal">100%</span>
-      </div>
-      <div class="bar"><div class="bar-inner" id="energyBar"></div></div>
+      <div class="energy-header"><span>ЕНЕРГІЯ</span><span id="energyVal">100%</span></div>
+      <div class="bar"><div class="bar-inner energy" id="energyBar"></div></div>
     </div>
 
     <div class="energy-section">
-      <div class="energy-header">
-        <span>РЕПУТАЦІЯ</span><span id="repVal">0</span>
-      </div>
-      <div class="bar"><div class="bar-inner" id="repBar" style="background:linear-gradient(90deg,#facc15,#f97316)"></div></div>
+      <div class="energy-header"><span>РЕПУТАЦІЯ</span><span id="repVal">0</span></div>
+      <div class="bar"><div class="bar-inner rep" id="repBar"></div></div>
     </div>
   </div>
 </div>
 
-<div class="viewport" id="tab-work">
+<div class="viewport">
+
+<div id="tab-work" class="tab active">
   <div class="section-title">🚀 СХЕМИ</div>
   <div id="schemeList"></div>
 
@@ -223,27 +224,35 @@ text-align:center;
   <div class="log" id="log"></div>
 </div>
 
+<div id="tab-food" class="tab">
+  <div class="section-title">☕ ВІДНОВЛЕННЯ ЕНЕРГІЇ</div>
+  <div id="foodList"></div>
+</div>
+
+<div id="tab-assets" class="tab">
+  <div class="section-title">📦 АКТИВИ</div>
+  <div class="card"><p style="color:#777">Поки що недоступно</p></div>
+</div>
+
+</div>
+
 <nav class="nav">
-  <div class="nav-item active">
+  <div class="nav-item active" onclick="showTab('work',this)">
     <div class="nav-icon">💸</div>Темки
+  </div>
+  <div class="nav-item" onclick="showTab('food',this)">
+    <div class="nav-icon">☕</div>Їжа
+  </div>
+  <div class="nav-item" onclick="showTab('assets',this)">
+    <div class="nav-icon">📦</div>Активи
   </div>
 </nav>
 
 <script>
-const tg = window.Telegram.WebApp;
-tg.expand();
+const tg=window.Telegram.WebApp;tg.expand();
 
-const user = tg.initDataUnsafe?.user;
-if(user){
-  name.textContent=user.first_name;
-  avatar.textContent=user.first_name[0];
-}
-
-let state = JSON.parse(localStorage.getItem('state')) || {
-  money:1000,
-  energy:100,
-  rep:10,
-  level:0
+let state=JSON.parse(localStorage.getItem('state'))||{
+money:1000,energy:100,rep:10,level:0
 };
 
 const levels=[
@@ -255,17 +264,20 @@ const levels=[
 ];
 
 const schemes=[
-{id:1,name:"OLX дроп",cost:200,min:-100,max:300,energy:15,risk:.2,rep:3},
-{id:2,name:"Фейк магазин",cost:3000,min:-1500,max:6000,energy:30,risk:.35,rep:7},
-{id:3,name:"Крипто скам",cost:12000,min:-6000,max:20000,energy:45,risk:.5,rep:12}
+{name:"OLX дроп",cost:200,min:-100,max:300,energy:15,risk:.2,rep:3},
+{name:"Фейк магазин",cost:3000,min:-1500,max:6000,energy:30,risk:.35,rep:7},
+{name:"Крипто скам",cost:12000,min:-6000,max:20000,energy:45,risk:.5,rep:12}
 ];
 
-function save(){
-localStorage.setItem('state',JSON.stringify(state));
-}
+const food=[
+{name:"☕ Еспресо",cost:50,energy:15},
+{name:"🥤 Енергетик",cost:120,energy:30},
+{name:"🌯 Шаурма",cost:250,energy:60}
+];
+
+function save(){localStorage.setItem('state',JSON.stringify(state));}
 
 function log(msg,color){
-logDiv=document.getElementById('log');
 logDiv.insertAdjacentHTML('afterbegin',
 `<div class="log-item" style="border-color:${color}">${msg}</div>`);
 }
@@ -276,26 +288,30 @@ if(state.rep>=levels[i].rep){state.level=i;break;}
 }
 }
 
-function runScheme(id){
-let s=schemes.find(x=>x.id===id);
+function runScheme(i){
+let s=schemes[i];
 if(state.energy<s.energy||state.money<s.cost)return;
-
 state.energy-=s.energy;
 state.money-=s.cost;
-
 if(Math.random()<s.risk){
 state.rep=Math.max(0,state.rep-5);
 state.money+=s.cost+s.min;
-log(`❌ Кидок ${s.min} ₴`, 'var(--danger)');
-tg.HapticFeedback.notificationOccurred('error');
+log(`❌ Кидок ${s.min} ₴`,'var(--danger)');
 }else{
-let profit=Math.floor(Math.random()*(s.max-s.min+1))+s.min;
+let p=Math.floor(Math.random()*(s.max-s.min+1))+s.min;
 state.rep+=s.rep;
-state.money+=s.cost+profit;
-log(`💰 Плюс ${profit} ₴`, 'var(--success)');
-tg.HapticFeedback.notificationOccurred('success');
+state.money+=s.cost+p;
+log(`💰 Плюс ${p} ₴`,'var(--success)');
 }
-checkLevel();
+checkLevel();update();
+}
+
+function eat(i){
+let f=food[i];
+if(state.money<f.cost||state.energy>=100)return;
+state.money-=f.cost;
+state.energy=Math.min(100,state.energy+f.energy);
+log(`⚡ +${f.energy}% енергії`,'var(--primary)');
 update();
 }
 
@@ -308,25 +324,41 @@ repBar.style.width=Math.min(100,state.rep/3)+"%";
 levelName.textContent=levels[state.level].name;
 
 schemeList.innerHTML='';
-schemes.forEach(s=>{
+schemes.forEach((s,i)=>{
 schemeList.innerHTML+=`
 <div class="card">
 <div class="card-info">
 <h3>${s.name}</h3>
 <p>Ризик ${(s.risk*100).toFixed(0)}% | -${s.energy}⚡</p>
 </div>
-<button class="btn"
-${state.energy<s.energy||state.money<s.cost?'disabled':''}
-onclick="runScheme(${s.id})">Крутити</button>
+<button class="btn" onclick="runScheme(${i})"
+${state.energy<s.energy||state.money<s.cost?'disabled':''}>Крутити</button>
+</div>`;
+});
+
+foodList.innerHTML='';
+food.forEach((f,i)=>{
+foodList.innerHTML+=`
+<div class="card">
+<div class="card-info">
+<h3>${f.name}</h3>
+<p>${f.cost} ₴ | +${f.energy}%</p>
+</div>
+<button class="btn alt" onclick="eat(${i})"
+${state.money<f.cost||state.energy>=100?'disabled':''}>Купити</button>
 </div>`;
 });
 save();
 }
 
-setInterval(()=>{
-if(state.energy<100){state.energy+=0.5;update();}
-},4000);
+function showTab(name,el){
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+document.getElementById('tab-'+name).classList.add('active');
+el.classList.add('active');
+}
 
+setInterval(()=>{if(state.energy<100){state.energy+=0.4;update();}},4000);
 update();
 </script>
 
