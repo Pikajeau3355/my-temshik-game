@@ -51,7 +51,6 @@
 
         .section-h { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         
-        /* Крипто Графік */
         .chart-box {
             background: var(--card-bg); border-radius: 22px; padding: 20px;
             margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.03);
@@ -123,11 +122,12 @@
                     <h3>Bitcoin (BTC)</h3>
                     <p>Гаманець: <span id="my-btc" style="color:#fff">0</span> BTC</p>
                 </div>
-                <button class="action-btn" onclick="tradeBtc('all')" style="background:var(--gold); color:#000; padding:8px 12px; font-size:11px;">НА ВСІ ₴</button>
             </div>
-            <div style="display:flex; gap:12px;">
-                <button class="action-btn" style="flex:1" onclick="tradeBtc('buy')">КУПИТИ (0.01)</button>
-                <button class="action-btn" style="flex:1; background:#25262b" onclick="tradeBtc('sell')">ПРОДАТИ (0.01)</button>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <button class="action-btn" onclick="tradeBtc('buy')">КУПИТИ 0.001</button>
+                <button class="action-btn" style="background:#25262b" onclick="tradeBtc('sell')">ПРОДАТИ 0.001</button>
+                <button class="action-btn" style="grid-column: span 1; background: var(--gold); color: #000;" onclick="tradeBtc('all_buy')">ВСЕ В BTC</button>
+                <button class="action-btn" style="grid-column: span 1; background: #fff; color: #000;" onclick="tradeBtc('all_sell')">ПРОДАТИ ВСЕ</button>
             </div>
         </div>
 
@@ -175,13 +175,9 @@
             const min = Math.min(...priceHistory);
             const max = Math.max(...priceHistory);
             const range = max - min || 1;
-            
             ctx.beginPath();
             ctx.strokeStyle = '#4ade80';
             ctx.lineWidth = 4;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-
             priceHistory.forEach((p, i) => {
                 const x = (i / (priceHistory.length - 1)) * canvas.width;
                 const y = canvas.height - ((p - min) / range) * (canvas.height - 20) - 10;
@@ -214,7 +210,7 @@
         function updateUI() {
             document.getElementById('balance').innerHTML = Math.floor(money).toLocaleString() + '<span>₴</span>';
             document.getElementById('exp-display').textContent = exp + ' XP';
-            document.getElementById('my-btc').textContent = btcCount.toFixed(4);
+            document.getElementById('my-btc').textContent = btcCount.toFixed(6);
             
             const ranks = ["НОВАЧОК", "СУЄТОЛОГ", "БОС", "МАГНАТ"];
             let rIdx = Math.min(Math.floor(exp / 2000), ranks.length - 1);
@@ -243,22 +239,36 @@
         }
 
         function tradeBtc(type) {
-            const amount = 0.01;
-            const cost = btcPrice * amount;
-            if(type === 'buy' && money >= cost) {
-                money -= cost; btcCount += amount;
-                addLog(`Куплено 0.01 BTC`, 'var(--success)');
-            } else if(type === 'sell' && btcCount >= amount) {
-                money += cost; btcCount -= amount;
-                addLog(`Продано 0.01 BTC`, 'var(--danger)');
-            } else if(type === 'all' && money > 0) {
-                let buyAmount = money / btcPrice;
-                btcCount += buyAmount;
-                addLog(`Всі ₴ конвертовано в ${buyAmount.toFixed(4)} BTC`, 'var(--gold)');
-                money = 0;
-            } else {
-                tg.HapticFeedback.notificationOccurred('error');
-                return;
+            const step = 0.001;
+            const cost = btcPrice * step;
+
+            if(type === 'buy') {
+                if(money >= cost) {
+                    money -= cost; btcCount += step;
+                    addLog(`Куплено ${step} BTC`, 'var(--success)');
+                } else tg.HapticFeedback.notificationOccurred('error');
+            } 
+            else if(type === 'sell') {
+                if(btcCount >= step) {
+                    money += cost; btcCount -= step;
+                    addLog(`Продано ${step} BTC`, 'var(--danger)');
+                } else tg.HapticFeedback.notificationOccurred('error');
+            }
+            else if(type === 'all_buy') {
+                if(money > 10) {
+                    let buyAmount = money / btcPrice;
+                    btcCount += buyAmount;
+                    addLog(`Всі ₴ в BTC (+${buyAmount.toFixed(5)})`, 'var(--gold)');
+                    money = 0;
+                }
+            }
+            else if(type === 'all_sell') {
+                if(btcCount > 0) {
+                    let profit = btcCount * btcPrice;
+                    money += profit;
+                    addLog(`Продано все: +${Math.floor(profit)} ₴`, '#fff');
+                    btcCount = 0;
+                }
             }
             tg.HapticFeedback.impactOccurred('medium');
             updateUI();
@@ -305,7 +315,7 @@
 
         function addLog(msg, col) {
             const l = document.getElementById('terminal');
-            l.insertAdjacentHTML('afterbegin', `<div class="log-item" style="border-color:${col}">${msg}</div>`);
+            if(l) l.insertAdjacentHTML('afterbegin', `<div class="log-item" style="border-color:${col}">${msg}</div>`);
         }
 
         updateUI();
