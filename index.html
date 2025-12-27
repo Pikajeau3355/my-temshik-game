@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>UA Temshik: Pro Edition</title>
+    <title>UA Temshik: Grand Edition</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -13,6 +13,7 @@
         :root {
             --primary: #5d5fef; --bg: #0b0c10; --card-bg: #1c1d26;
             --success: #4ade80; --danger: #f87171; --gold: #ffcf52;
+            --energy-color: #00f2ff;
         }
 
         body { 
@@ -20,107 +21,125 @@
             overflow: hidden; height: 100vh; display: flex; flex-direction: column; 
         }
 
-        /* Анімація облави */
-        .police-raid { animation: raid-blink 0.3s infinite; }
-        @keyframes raid-blink { 0% { background: var(--bg); } 50% { background: #4b0000; } }
+        /* Навчання */
+        #tutorial-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000;
+            display: flex; align-items: center; justify-content: center; padding: 25px;
+        }
+        .tutorial-card {
+            background: var(--card-bg); padding: 25px; border-radius: 30px; 
+            border: 1px solid var(--primary); text-align: center; max-width: 400px;
+        }
 
-        /* Стиль для повідомлень посередині */
+        /* Сповіщення по центру */
         #notification-container {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 1000; pointer-events: none; width: 80%; text-align: center;
+            z-index: 1500; pointer-events: none; width: 80%; text-align: center;
         }
-
         .toast {
-            background: rgba(0, 0, 0, 0.85); color: white; padding: 15px 25px;
-            border-radius: 20px; border: 1px solid var(--primary); font-weight: 800;
-            margin-bottom: 10px; box-shadow: 0 0 30px rgba(93, 95, 239, 0.4);
-            animation: slideUpFade 0.4s ease-out forwards, fadeOut 0.4s ease-in 2s forwards;
+            background: rgba(0, 0, 0, 0.9); padding: 15px 20px; border-radius: 20px;
+            border: 1px solid var(--primary); font-weight: 800; margin-bottom: 10px;
+            animation: slideUpFade 0.4s forwards, fadeOut 0.4s 2s forwards;
         }
-
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
 
-        /* Header */
-        .profile-header { padding: 50px 20px 15px; background: linear-gradient(180deg, rgba(93, 95, 239, 0.15) 0%, transparent 100%); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .user-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .avatar { width: 45px; height: 45px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; }
-        .balance-card { background: rgba(255, 255, 255, 0.03); border-radius: 24px; padding: 20px; border: 1px solid rgba(255,255,255,0.08); text-align: center; }
-        .bal-amount { font-size: 32px; font-weight: 800; }
-        .energy-bar-outer { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-top: 12px; overflow: hidden; }
-        .energy-bar-inner { height: 100%; background: #00f2ff; width: 100%; transition: 0.3s; box-shadow: 0 0 10px #00f2ff; }
+        /* Профіль */
+        .profile-header { padding: 45px 20px 15px; background: linear-gradient(180deg, rgba(93,95,239,0.1) 0%, transparent 100%); }
+        .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .avatar { width: 45px; height: 45px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; }
+        .level-badge { background: var(--gold); color: #000; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; }
+        
+        .balance-card { background: var(--card-bg); border-radius: 24px; padding: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .energy-bar-outer { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; margin: 12px 0; overflow: hidden; }
+        .energy-bar-inner { height: 100%; background: var(--energy-color); transition: 0.3s; box-shadow: 0 0 10px var(--energy-color); }
 
-        /* Tabs & List */
+        /* Контент */
         .viewport { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
         .tab { display: none; } .tab.active { display: block; }
         .section-title { font-size: 11px; font-weight: 800; color: #555; margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 1.5px; }
-        .card { background: var(--card-bg); border-radius: 20px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.02); }
-        .btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 14px; font-weight: 800; font-size: 12px; }
+        
+        .card { background: var(--card-bg); border-radius: 20px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.03); }
+        .card.locked { opacity: 0.4; filter: grayscale(1); }
+        
+        .btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 14px; font-weight: 800; font-size: 12px; transition: 0.2s; }
+        .btn:active { transform: scale(0.95); }
         .btn:disabled { background: #333; color: #666; }
 
-        .nav { position: fixed; bottom: 20px; left: 15px; right: 15px; background: rgba(28, 29, 38, 0.95); backdrop-filter: blur(10px); border-radius: 24px; height: 70px; display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.1); }
+        /* Навігація */
+        .nav { position: fixed; bottom: 20px; left: 15px; right: 15px; background: rgba(28, 29, 38, 0.95); backdrop-filter: blur(10px); border-radius: 25px; height: 70px; display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.1); }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 10px; font-weight: 700; gap: 4px; }
         .nav-item.active { color: var(--primary); }
+        .nav-item span { font-size: 20px; }
     </style>
 </head>
-<body id="main-body">
+<body>
+
+<div id="tutorial-overlay">
+    <div class="tutorial-card">
+        <h2 style="color:var(--gold); margin-top:0;">👋 Вітаємо, Темщик!</h2>
+        <p style="font-size:14px; color:#ccc; line-height:1.5;">
+            Тут ти пройдеш шлях від новачка до мільйонера.<br><br>
+            • 💰 <b>Темки:</b> твій активний дохід та XP.<br>
+            • ⚡ <b>Енергія:</b> не забувай їсти в Шопі.<br>
+            • 🏢 <b>Бізнес:</b> гроші капають самі.<br>
+            • 📈 <b>BTC:</b> купуй дешевше, продавай дорожче.
+        </p>
+        <button class="btn" style="width:100%; padding:15px;" onclick="closeTutorial()">ЗРОЗУМІЛО</button>
+    </div>
+</div>
 
 <div id="notification-container"></div>
 
 <div class="profile-header">
     <div class="user-info">
-        <div class="avatar" id="user-avatar">?</div>
-        <div class="user-text"><h2 id="user-name" style="margin:0; font-size:18px;">Завантаження...</h2><p id="user-rank" style="margin:0; font-size:11px; color:var(--gold);">Рівень 1</p></div>
+        <div class="avatar" id="u-avatar">?</div>
+        <div>
+            <div id="u-name" style="font-weight:800; font-size:16px;">Завантаження...</div>
+            <span class="level-badge" id="u-lvl">LVL 1</span>
+        </div>
+        <div style="margin-left:auto; text-align:right;">
+            <div id="u-xp" style="font-size:10px; color:#666;">XP: 0 / 1000</div>
+        </div>
     </div>
     <div class="balance-card">
-        <div class="bal-amount" id="balance">0 ₴</div>
-        <div id="passive-info" style="font-size:12px; color:var(--success); font-weight:700;">+0 ₴/сек</div>
+        <div id="balance" style="font-size:32px; font-weight:800;">0 ₴</div>
+        <div id="passive-info" style="font-size:12px; color:var(--success); font-weight:700; margin-top:5px;">+0 ₴/сек</div>
         <div class="energy-bar-outer"><div class="energy-bar-inner" id="energy-bar"></div></div>
-        <div style="font-size:10px; margin-top:5px; color:#666;" id="energy-text">100/100</div>
+        <div style="display:flex; justify-content:space-between; font-size:10px; color:#555;"><span id="energy-text">100/100</span><span>ЕНЕРГІЯ</span></div>
     </div>
 </div>
 
 <div class="viewport">
     <div id="tab-work" class="tab active">
-        <div class="section-title">💸 Темки</div>
-        <div class="card">
-            <div class="card-info"><h3>Дропшипінг</h3><p>+500 ₴ | -15⚡</p></div>
-            <button class="btn" onclick="doWork('Дроп', 500, 15)">ВОРВАТИСЬ</button>
-        </div>
-        <div class="card">
-            <div class="card-info"><h3>Перепродаж авто</h3><p>+2500 ₴ | -40⚡</p></div>
-            <button class="btn" onclick="doWork('Авто', 2500, 40)">МУТИТИ</button>
-        </div>
-        <div class="section-title">🚨 Тінь</div>
-        <div class="card">
-            <div class="card-info"><h3>Фішинг</h3><p>До 20к | Ризик 40%</p></div>
-            <button class="btn" style="background:var(--danger)" onclick="doCrime('Фішинг', 20000, 35)">РИЗИКНУТИ</button>
-        </div>
+        <div class="section-title">💸 Твої можливості</div>
+        <div id="temki-list"></div>
     </div>
 
     <div id="tab-crypto" class="tab">
-        <div class="section-title">📊 Біржа BTC</div>
+        <div class="section-title">📊 BTC / UAH</div>
         <div class="card" style="flex-direction:column; align-items:flex-start;">
             <div id="btc-price" style="font-size:26px; color:var(--success); font-weight:800;">₴ 3,800,000</div>
-            <canvas id="cryptoChart" style="width:100%; height:100px; margin-top:10px;"></canvas>
-            <p id="my-btc" style="font-size:12px; color:#aaa; margin-top:10px;">0 BTC</p>
+            <canvas id="cryptoChart" style="width:100%; height:100px; margin-top:15px;"></canvas>
+            <p id="my-btc" style="font-size:12px; color:#888; margin-top:10px;">0.000000 BTC</p>
         </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <button class="btn" style="background:var(--success)" onclick="trade('buy')">КУПИТИ (MAX)</button>
-            <button class="btn" style="background:var(--danger)" onclick="trade('sell')">ПРОДАТИ (ALL)</button>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <button class="btn" style="background:var(--success); padding:15px;" onclick="trade('buy')">КУПИТИ</button>
+            <button class="btn" style="background:var(--danger); padding:15px;" onclick="trade('sell')">ПРОДАТИ</button>
         </div>
     </div>
 
     <div id="tab-shop" class="tab">
-        <div class="section-title">🍔 Перекус</div>
+        <div class="section-title">🍔 Відновлення енергії</div>
         <div id="food-list"></div>
-        <div class="section-title">🏢 Бізнес</div>
+        <div class="section-title">🏢 Пасивний дохід</div>
         <div id="assets-list"></div>
-        <div class="section-title">🏎️ Авто</div>
+        <div class="section-title">🏎️ Автопарк</div>
         <div id="garage-list"></div>
     </div>
 
     <div id="tab-top" class="tab">
-        <div class="section-title">🏆 ТОП-10 Онлайн</div>
+        <div class="section-title">🏆 ТОП-10 Темщиків</div>
         <div id="leader-list"></div>
     </div>
 </div>
@@ -136,6 +155,7 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
+    // Firebase (твої дані)
     const firebaseConfig = {
         apiKey: "AIzaSyA1m-re7gnHR6zxSoPdy3T0_2jX3IRzgJ4",
         authDomain: "temshiki.firebaseapp.com",
@@ -148,125 +168,167 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let money = Number(localStorage.getItem('money')) || 10000;
+    // Стан гри
+    let money = Number(localStorage.getItem('money')) || 5000;
     let btc = Number(localStorage.getItem('btc')) || 0;
     let energy = Number(localStorage.getItem('energy')) || 100;
-    let btcPrice = 3800000;
-    let priceHistory = [3700000, 3800000];
+    let xp = Number(localStorage.getItem('xp')) || 0;
     let myGarage = JSON.parse(localStorage.getItem('myGarage')) || [];
     let myAssets = JSON.parse(localStorage.getItem('myAssets')) || { bot: 0, farm: 0, office: 0 };
+    let btcPrice = 3800000;
+    let priceHistory = [3700000, 3850000];
 
-    function showToast(text, color = 'white') {
-        const container = document.getElementById('notification-container');
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.style.borderColor = color;
-        toast.style.color = color;
-        toast.textContent = text;
-        container.appendChild(toast);
-        setTimeout(() => toast.remove(), 2500);
+    // Дані
+    const configTemki = [
+        { id: 't1', n: "Дропшипінг", lvl: 1, e: 15, min: 200, max: 700, risk: 0.05, xp: 50 },
+        { id: 't2', n: "Ресейл кросівок", lvl: 2, e: 25, min: 800, max: 2200, risk: 0.1, xp: 120 },
+        { id: 't3', n: "Перепродаж авто", lvl: 4, e: 40, min: 3000, max: 9000, risk: 0.2, xp: 350 },
+        { id: 't4', n: "P2P Арбітраж", lvl: 6, e: 55, min: 8000, max: 25000, risk: 0.3, xp: 800 }
+    ];
+
+    const configFood = [
+        { n: "Енергетик", c: 200, e: 25 },
+        { n: "Шаурма", c: 500, e: 60 },
+        { n: "Обід в ресторані", c: 1800, e: 100 }
+    ];
+
+    const configBiz = [
+        { id: 'bot', n: "ТГ Бот", c: 15000, i: 15 },
+        { id: 'farm', n: "Майнінг ферма", c: 160000, i: 200 },
+        { id: 'office', n: "Арбітражний офіс", c: 2500000, i: 3500 }
+    ];
+
+    function showToast(txt, clr = 'white') {
+        const c = document.getElementById('notification-container');
+        const t = document.createElement('div');
+        t.className = 'toast'; t.style.borderColor = clr; t.style.color = clr;
+        t.textContent = txt; c.appendChild(t); setTimeout(() => t.remove(), 2500);
     }
 
-    function save() {
-        localStorage.setItem('money', money);
-        localStorage.setItem('btc', btc);
-        localStorage.setItem('energy', energy);
-        localStorage.setItem('myGarage', JSON.stringify(myGarage));
-        localStorage.setItem('myAssets', JSON.stringify(myAssets));
-        const uid = tg.initDataUnsafe?.user?.id || "dev_user";
-        db.ref('users/' + uid).set({
-            name: tg.initDataUnsafe?.user?.first_name || "Темщик",
-            balance: Math.floor(money + (btc * btcPrice))
-        });
+    function closeTutorial() {
+        document.getElementById('tutorial-overlay').style.display = 'none';
+        localStorage.setItem('tutorial_done', 'true');
     }
+
+    if(localStorage.getItem('tutorial_done')) closeTutorial();
 
     function updateUI() {
+        const lvl = Math.floor(xp / 1000) + 1;
         document.getElementById('balance').textContent = Math.floor(money).toLocaleString() + ' ₴';
         document.getElementById('energy-bar').style.width = energy + '%';
         document.getElementById('energy-text').textContent = `${Math.floor(energy)}/100`;
+        document.getElementById('u-lvl').textContent = `LVL ${lvl}`;
+        document.getElementById('u-xp').textContent = `XP: ${xp} / ${lvl * 1000}`;
+        document.getElementById('u-name').textContent = tg.initDataUnsafe?.user?.first_name || "Гравець";
+        document.getElementById('u-avatar').textContent = (tg.initDataUnsafe?.user?.first_name || "T")[0].toUpperCase();
         document.getElementById('my-btc').textContent = btc.toFixed(6) + ' BTC';
-        document.getElementById('user-name').textContent = tg.initDataUnsafe?.user?.first_name || "Гравець";
-        let passive = (myAssets.bot * 15) + (myAssets.farm * 180) + (myAssets.office * 2500);
-        document.getElementById('passive-info').textContent = `+${passive.toLocaleString()} ₴/сек`;
-        renderShop();
-        save();
+        
+        const pass = (myAssets.bot*15) + (myAssets.farm*200) + (myAssets.office*3500);
+        document.getElementById('passive-info').textContent = `+${pass.toLocaleString()} ₴ / сек`;
+
+        renderAll(lvl);
+        save(lvl);
     }
 
-    function doWork(n, p, e) {
-        if(energy >= e) {
-            money += p; energy -= e;
-            showToast(`Успіх! +${p} ₴`, 'var(--success)');
-            tg.HapticFeedback.impactOccurred('medium');
-            updateUI();
-        } else { showToast("Немає енергії!", 'var(--danger)'); }
+    function renderAll(lvl) {
+        // Темки
+        let tHtml = '';
+        configTemki.forEach(t => {
+            const lock = lvl < t.lvl;
+            tHtml += `<div class="card ${lock?'locked':''}">
+                <div><b>${lock?'🔒 Рівень '+t.lvl : t.n}</b><br><small>${lock?'Недоступно':t.min+'-'+t.max+' ₴ | -'+t.e+'⚡'}</small></div>
+                <button class="btn" onclick="execTemka('${t.id}')" ${lock||energy<t.e?'disabled':''}>МУТИТИ</button>
+            </div>`;
+        });
+        document.getElementById('temki-list').innerHTML = tHtml;
+
+        // Шоп
+        let fHtml = '';
+        configFood.forEach(f => {
+            fHtml += `<div class="card">
+                <div><b>${f.n}</b><br><small>${f.c} ₴ | +${f.e}⚡</small></div>
+                <button class="btn" onclick="buyFood(${f.c},${f.e})" ${money<f.c||energy>=100?'disabled':''}>КУПИТИ</button>
+            </div>`;
+        });
+        document.getElementById('food-list').innerHTML = fHtml;
+
+        let bHtml = '';
+        configBiz.forEach(b => {
+            bHtml += `<div class="card">
+                <div><b>${b.n} (${myAssets[b.id]})</b><br><small>${b.c.toLocaleString()} ₴ | +${b.i} ₴/с</small></div>
+                <button class="btn" onclick="buyAsset('${b.id}',${b.c})" ${money<b.c?'disabled':''}>КУПИТИ</button>
+            </div>`;
+        });
+        document.getElementById('assets-list').innerHTML = bHtml;
+
+        let aHtml = '';
+        [{id:'lanos', n:'Lanos Turbo', c:150000}].forEach(a => {
+            const has = myGarage.includes(a.id);
+            aHtml += `<div class="card">
+                <div><b>${a.n}</b><br><small>${a.c.toLocaleString()} ₴ | +Реген</small></div>
+                <button class="btn" onclick="buyCar('${a.id}',${a.c})" ${has||money<a.c?'disabled':''}>${has?'КУПЛЕНО':'КУПИТИ'}</button>
+            </div>`;
+        });
+        document.getElementById('garage-list').innerHTML = aHtml;
     }
 
-    function doCrime(n, max, e) {
-        if(energy >= e) {
-            energy -= e;
-            if(Math.random() > 0.4) {
-                let p = Math.floor(Math.random() * max);
-                money += p; showToast(`Джекпот! +${p} ₴`, 'var(--gold)');
+    function execTemka(tid) {
+        const t = configTemki.find(x => x.id === tid);
+        if(energy >= t.e) {
+            energy -= t.e;
+            if(Math.random() > t.risk) {
+                const p = Math.floor(Math.random()*(t.max-t.min+1))+t.min;
+                money += p; xp += t.xp;
+                showToast(`✅ +${p} ₴ | +${t.xp} XP`, 'var(--success)');
+                tg.HapticFeedback.notificationOccurred('success');
             } else {
-                money -= Math.floor(money * 0.15);
-                document.getElementById('main-body').classList.add('police-raid');
-                setTimeout(() => document.getElementById('main-body').classList.remove('police-raid'), 1000);
-                showToast(`Облава! -15% банку`, 'var(--danger)');
+                const l = Math.floor(t.min * 1.5);
+                money = Math.max(0, money - l);
+                showToast(`❌ Провал! Втрачено ${l} ₴`, 'var(--danger)');
+                tg.HapticFeedback.notificationOccurred('error');
             }
             updateUI();
         }
     }
 
-    function renderShop() {
-        let fHtml = '';
-        [{n:"Кава", c:150, e:20}, {n:"Шаурма", c:450, e:50}, {n:"Обід", c:1500, e:100}].forEach(f => {
-            fHtml += `<div class="card"><div><b>${f.n}</b><br><small>${f.c} ₴ | +${f.e}⚡</small></div>
-            <button class="btn" onclick="buyFood(${f.c}, ${f.e})" ${money < f.c || energy >= 100 ? 'disabled' : ''}>КУПИТИ</button></div>`;
-        });
-        document.getElementById('food-list').innerHTML = fHtml;
-
-        let bHtml = '';
-        [{id:'bot', n:'ТГ Бот', c:15000, i:15}, {id:'farm', n:'Ферма', c:150000, i:180}].forEach(b => {
-            bHtml += `<div class="card"><div><b>${b.n} (${myAssets[b.id]})</b><br><small>${b.c.toLocaleString()} ₴ | +${b.i} ₴/с</small></div>
-            <button class="btn" onclick="buyAsset('${b.id}', ${b.c})">КУПИТИ</button></div>`;
-        });
-        document.getElementById('assets-list').innerHTML = bHtml;
-
-        let cHtml = '';
-        [{id:'lanos', n:'Lanos', c:150000}].forEach(c => {
-            let has = myGarage.includes(c.id);
-            cHtml += `<div class="card"><div><b>${c.n}</b><br><small>${c.c.toLocaleString()} ₴</small></div>
-            <button class="btn" onclick="buyCar('${c.id}', ${c.c})" ${has?'disabled':''}>${has?'КУПЛЕНО':'КУПИТИ'}</button></div>`;
-        });
-        document.getElementById('garage-list').innerHTML = cHtml;
-    }
-
-    function buyFood(c, e) { if(money >= c && energy < 100) { money -= c; energy = Math.min(100, energy + e); showToast("Ти поїв!", "var(--success)"); updateUI(); } }
-    function buyAsset(id, c) { if(money >= c) { money -= c; myAssets[id]++; showToast("Бізнес куплено!", "var(--success)"); updateUI(); } }
-    function buyCar(id, c) { if(money >= c) { money -= c; myGarage.push(id); showToast("Авто куплено!", "var(--success)"); updateUI(); } }
+    function buyFood(c,e) { if(money>=c && energy<100) { money-=c; energy=Math.min(100, energy+e); showToast("Смачного! +"+e+"⚡", "var(--success)"); updateUI(); } }
+    function buyAsset(id,c) { if(money>=c) { money-=c; myAssets[id]++; showToast("Бізнес куплено!", "var(--gold)"); updateUI(); } }
+    function buyCar(id,c) { if(money>=c) { money-=c; myGarage.push(id); showToast("Нове авто!", "var(--success)"); updateUI(); } }
 
     function trade(type) {
-        if(type === 'buy' && money > 100) { btc += money / btcPrice; money = 0; showToast("BTC Куплено!", "var(--success)"); }
-        else if(type === 'sell' && btc > 0) { money += btc * btcPrice; btc = 0; showToast("BTC Продано!", "var(--gold)"); }
+        if(type==='buy' && money>100) { btc+=money/btcPrice; money=0; showToast("BTC Куплено!", "var(--success)"); }
+        else if(type==='sell' && btc>0) { money+=btc*btcPrice; btc=0; showToast("BTC Продано!", "var(--gold)"); }
         updateUI();
     }
 
-    function showTab(name, el) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById('tab-' + name).classList.add('active');
-        el.classList.add('active');
-        if(name === 'top') loadTop();
-        if(name === 'crypto') setTimeout(drawChart, 100);
+    function showTab(n, el) {
+        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+        document.getElementById('tab-'+n).classList.add('active'); el.classList.add('active');
+        if(n==='top') loadTop();
+        if(n==='crypto') setTimeout(drawChart, 100);
+    }
+
+    function save(lvl) {
+        localStorage.setItem('money', money); localStorage.setItem('btc', btc);
+        localStorage.setItem('energy', energy); localStorage.setItem('xp', xp);
+        localStorage.setItem('myGarage', JSON.stringify(myGarage));
+        localStorage.setItem('myAssets', JSON.stringify(myAssets));
+        const uid = tg.initDataUnsafe?.user?.id || "dev_user";
+        db.ref('users/'+uid).set({
+            name: tg.initDataUnsafe?.user?.first_name || "Темщик",
+            balance: Math.floor(money + (btc * btcPrice)),
+            lvl: lvl
+        });
     }
 
     function loadTop() {
-        db.ref('users').orderByChild('balance').limitToLast(10).on('value', (s) => {
-            let l = document.getElementById('leader-list'); l.innerHTML = '';
-            let arr = []; s.forEach(c => { arr.push(c.val()); });
-            arr.reverse().forEach((p, i) => {
-                l.innerHTML += `<div class="leader-item"><b>#${i+1}</b> ${p.name} <span style="margin-left:auto; color:var(--success)">${p.balance.toLocaleString()} ₴</span></div>`;
+        db.ref('users').orderByChild('balance').limitToLast(10).on('value', s => {
+            let h = ''; let arr = []; s.forEach(x => arr.push(x.val()));
+            arr.reverse().forEach((p,i) => {
+                h += `<div class="card"><b>#${i+1} ${p.name}</b><span style="color:var(--success)">${p.balance.toLocaleString()} ₴</span></div>`;
             });
+            document.getElementById('leader-list').innerHTML = h;
         });
     }
 
@@ -284,8 +346,8 @@
     setInterval(() => {
         btcPrice += (Math.random()-0.5)*50000;
         priceHistory.push(btcPrice); if(priceHistory.length>20) priceHistory.shift();
-        if(energy < 100) energy = Math.min(100, energy + (myGarage.includes('lanos') ? 1.5 : 0.6));
-        money += (myAssets.bot * 15 + myAssets.farm * 180 + (myAssets.office || 0) * 2500) / 10;
+        if(energy < 100) energy = Math.min(100, energy + (myGarage.includes('lanos')?1.6:0.7));
+        money += (myAssets.bot*15 + myAssets.farm*200 + myAssets.office*3500)/10;
         updateUI();
     }, 3000);
 
