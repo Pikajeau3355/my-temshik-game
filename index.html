@@ -3,43 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>UA Temshik: Ultimate Online</title>
+    <title>UA Temshik: Pro Edition</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;700;800&display=swap');
+        
         :root {
-            --primary: #5d5fef; --accent: #a5a6f6; --gold: #ffcf52;
-            --bg: #0b0c10; --card-bg: #1c1d26;
-            --success: #4ade80; --danger: #f87171;
-            --energy-color: #00f2ff;
+            --primary: #5d5fef; --bg: #0b0c10; --card-bg: #1c1d26;
+            --success: #4ade80; --danger: #f87171; --gold: #ffcf52;
         }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Manrope', sans-serif; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        body { 
+            margin: 0; background: var(--bg); color: #fff; font-family: 'Manrope', sans-serif; 
+            overflow: hidden; height: 100vh; display: flex; flex-direction: column; 
+        }
+
+        /* Анімація облави */
         .police-raid { animation: raid-blink 0.3s infinite; }
         @keyframes raid-blink { 0% { background: var(--bg); } 50% { background: #4b0000; } }
+
+        /* Стиль для повідомлень посередині */
+        #notification-container {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 1000; pointer-events: none; width: 80%; text-align: center;
+        }
+
+        .toast {
+            background: rgba(0, 0, 0, 0.85); color: white; padding: 15px 25px;
+            border-radius: 20px; border: 1px solid var(--primary); font-weight: 800;
+            margin-bottom: 10px; box-shadow: 0 0 30px rgba(93, 95, 239, 0.4);
+            animation: slideUpFade 0.4s ease-out forwards, fadeOut 0.4s ease-in 2s forwards;
+        }
+
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
+
+        /* Header */
         .profile-header { padding: 50px 20px 15px; background: linear-gradient(180deg, rgba(93, 95, 239, 0.15) 0%, transparent 100%); border-bottom: 1px solid rgba(255,255,255,0.05); }
         .user-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .avatar { width: 50px; height: 50px; background: var(--primary); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; box-shadow: 0 0 20px rgba(93,95,239,0.4); }
+        .avatar { width: 45px; height: 45px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; }
         .balance-card { background: rgba(255, 255, 255, 0.03); border-radius: 24px; padding: 20px; border: 1px solid rgba(255,255,255,0.08); text-align: center; }
         .bal-amount { font-size: 32px; font-weight: 800; }
-        .energy-bar-outer { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        .energy-bar-inner { height: 100%; background: var(--energy-color); width: 100%; transition: 0.3s; box-shadow: 0 0 10px var(--energy-color); }
-        .viewport { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 120px; }
+        .energy-bar-outer { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-top: 12px; overflow: hidden; }
+        .energy-bar-inner { height: 100%; background: #00f2ff; width: 100%; transition: 0.3s; box-shadow: 0 0 10px #00f2ff; }
+
+        /* Tabs & List */
+        .viewport { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
         .tab { display: none; } .tab.active { display: block; }
         .section-title { font-size: 11px; font-weight: 800; color: #555; margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 1.5px; }
-        .card { background: var(--card-bg); border-radius: 20px; padding: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-between; align-items: center; }
-        .card-info h3 { margin: 0; font-size: 15px; }
-        .card-info p { margin: 4px 0 0; font-size: 12px; color: #828282; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.02); }
         .btn { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 14px; font-weight: 800; font-size: 12px; }
         .btn:disabled { background: #333; color: #666; }
-        #terminal { background: rgba(0,0,0,0.3); border-radius: 15px; padding: 12px; font-size: 11px; height: 80px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
+
         .nav { position: fixed; bottom: 20px; left: 15px; right: 15px; background: rgba(28, 29, 38, 0.95); backdrop-filter: blur(10px); border-radius: 24px; height: 70px; display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.1); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 10px; font-weight: 700; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 10px; font-weight: 700; gap: 4px; }
         .nav-item.active { color: var(--primary); }
     </style>
 </head>
 <body id="main-body">
+
+<div id="notification-container"></div>
 
 <div class="profile-header">
     <div class="user-info">
@@ -56,19 +81,18 @@
 
 <div class="viewport">
     <div id="tab-work" class="tab active">
-        <div id="terminal"></div>
-        <div class="section-title">💸 Схеми</div>
+        <div class="section-title">💸 Темки</div>
         <div class="card">
             <div class="card-info"><h3>Дропшипінг</h3><p>+500 ₴ | -15⚡</p></div>
-            <button class="btn" onclick="doWork('Дроп', 500, 15, 25)">ВОРВАТИСЬ</button>
+            <button class="btn" onclick="doWork('Дроп', 500, 15)">ВОРВАТИСЬ</button>
         </div>
         <div class="card">
             <div class="card-info"><h3>Перепродаж авто</h3><p>+2500 ₴ | -40⚡</p></div>
-            <button class="btn" onclick="doWork('Авто', 2500, 40, 80)">МУТИТИ</button>
+            <button class="btn" onclick="doWork('Авто', 2500, 40)">МУТИТИ</button>
         </div>
-        <div class="section-title">🚨 Кримінал</div>
+        <div class="section-title">🚨 Тінь</div>
         <div class="card">
-            <div class="card-info"><h3>Фішинг</h3><p>До 20к | Ризик!</p></div>
+            <div class="card-info"><h3>Фішинг</h3><p>До 20к | Ризик 40%</p></div>
             <button class="btn" style="background:var(--danger)" onclick="doCrime('Фішинг', 20000, 35)">РИЗИКНУТИ</button>
         </div>
     </div>
@@ -78,6 +102,7 @@
         <div class="card" style="flex-direction:column; align-items:flex-start;">
             <div id="btc-price" style="font-size:26px; color:var(--success); font-weight:800;">₴ 3,800,000</div>
             <canvas id="cryptoChart" style="width:100%; height:100px; margin-top:10px;"></canvas>
+            <p id="my-btc" style="font-size:12px; color:#aaa; margin-top:10px;">0 BTC</p>
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
             <button class="btn" style="background:var(--success)" onclick="trade('buy')">КУПИТИ (MAX)</button>
@@ -86,11 +111,11 @@
     </div>
 
     <div id="tab-shop" class="tab">
-        <div class="section-title">🍔 Перекус (Енергія)</div>
+        <div class="section-title">🍔 Перекус</div>
         <div id="food-list"></div>
         <div class="section-title">🏢 Бізнес</div>
         <div id="assets-list"></div>
-        <div class="section-title">🏎️ Автосалон</div>
+        <div class="section-title">🏎️ Авто</div>
         <div id="garage-list"></div>
     </div>
 
@@ -123,107 +148,57 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Завантаження стану
     let money = Number(localStorage.getItem('money')) || 10000;
     let btc = Number(localStorage.getItem('btc')) || 0;
-    let energy = Number(localStorage.getItem('energy')) || 100; // ВИПРАВЛЕНО: Енергія тепер з пам'яті
-    let xp = Number(localStorage.getItem('xp')) || 0;
+    let energy = Number(localStorage.getItem('energy')) || 100;
     let btcPrice = 3800000;
-    let priceHistory = [3750000, 3800000];
+    let priceHistory = [3700000, 3800000];
     let myGarage = JSON.parse(localStorage.getItem('myGarage')) || [];
     let myAssets = JSON.parse(localStorage.getItem('myAssets')) || { bot: 0, farm: 0, office: 0 };
 
-    const foodData = [
-        { name: "Кава з маку", cost: 150, energy: 20 },
-        { name: "Шаурма", cost: 400, energy: 50 },
-        { name: "Обід в ресторані", cost: 1500, energy: 100 }
-    ];
-
-    const bizData = [
-        { id: 'bot', name: "ТГ Бот", cost: 15000, income: 15 },
-        { id: 'farm', name: "Ферма", cost: 150000, income: 180 },
-        { id: 'office', name: "Офіс", cost: 2000000, income: 2500 }
-    ];
-
-    const carData = [
-        { id: 'lanos', name: "Lanos Turbo", cost: 150000, bonus: "+2 реген" },
-        { id: 'camry', name: "Camry 70", cost: 1200000, bonus: "-15% ризик" }
-    ];
+    function showToast(text, color = 'white') {
+        const container = document.getElementById('notification-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.style.borderColor = color;
+        toast.style.color = color;
+        toast.textContent = text;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
 
     function save() {
         localStorage.setItem('money', money);
         localStorage.setItem('btc', btc);
-        localStorage.setItem('xp', xp);
-        localStorage.setItem('energy', energy); // Зберігаємо енергію
+        localStorage.setItem('energy', energy);
         localStorage.setItem('myGarage', JSON.stringify(myGarage));
         localStorage.setItem('myAssets', JSON.stringify(myAssets));
-        
         const uid = tg.initDataUnsafe?.user?.id || "dev_user";
         db.ref('users/' + uid).set({
             name: tg.initDataUnsafe?.user?.first_name || "Темщик",
-            balance: Math.floor(money + (btc * btcPrice)),
-            lvl: Math.floor(xp / 1000) + 1
+            balance: Math.floor(money + (btc * btcPrice))
         });
-    }
-
-    function addLog(text, color = 'white') {
-        const term = document.getElementById('terminal');
-        term.insertAdjacentHTML('afterbegin', `<div style="border-left:2px solid ${color}; padding-left:8px; margin-bottom:5px; animation:fadeIn 0.3s;">${text}</div>`);
-        if(term.childNodes.length > 10) term.lastChild.remove();
     }
 
     function updateUI() {
         document.getElementById('balance').textContent = Math.floor(money).toLocaleString() + ' ₴';
         document.getElementById('energy-bar').style.width = energy + '%';
         document.getElementById('energy-text').textContent = `${Math.floor(energy)}/100`;
+        document.getElementById('my-btc').textContent = btc.toFixed(6) + ' BTC';
         document.getElementById('user-name').textContent = tg.initDataUnsafe?.user?.first_name || "Гравець";
-        
         let passive = (myAssets.bot * 15) + (myAssets.farm * 180) + (myAssets.office * 2500);
         document.getElementById('passive-info').textContent = `+${passive.toLocaleString()} ₴/сек`;
-
-        renderLists();
+        renderShop();
         save();
     }
 
-    function renderLists() {
-        // Отрисовка їжі
-        let fHtml = '';
-        foodData.forEach(f => {
-            fHtml += `<div class="card">
-                <div class="card-info"><h3>${f.name}</h3><p>${f.cost} ₴ | +${f.energy}⚡</p></div>
-                <button class="btn" onclick="buyFood(${f.cost}, ${f.energy})" ${money < f.cost || energy >= 100 ? 'disabled' : ''}>КУПИТИ</button>
-            </div>`;
-        });
-        document.getElementById('food-list').innerHTML = fHtml;
-
-        // Отрисовка бізнесу
-        let bHtml = '';
-        bizData.forEach(b => {
-            bHtml += `<div class="card">
-                <div class="card-info"><h3>${b.name} (${myAssets[b.id]})</h3><p>${b.cost.toLocaleString()} ₴ | +${b.income} ₴/с</p></div>
-                <button class="btn" onclick="buyAsset('${b.id}', ${b.cost})" ${money < b.cost ? 'disabled' : ''}>КУПИТИ</button>
-            </div>`;
-        });
-        document.getElementById('assets-list').innerHTML = bHtml;
-
-        // Отрисовка авто
-        let cHtml = '';
-        carData.forEach(c => {
-            let has = myGarage.includes(c.id);
-            cHtml += `<div class="card">
-                <div class="card-info"><h3>${c.name}</h3><p>${c.cost.toLocaleString()} ₴ | ${c.bonus}</p></div>
-                <button class="btn" onclick="buyCar('${c.id}', ${c.cost})" ${ (money < c.cost || has) ? 'disabled' : ''}>${has ? 'КУПЛЕНО' : 'КУПИТИ'}</button>
-            </div>`;
-        });
-        document.getElementById('garage-list').innerHTML = cHtml;
-    }
-
-    function doWork(n, p, e, x) {
+    function doWork(n, p, e) {
         if(energy >= e) {
-            money += p; energy -= e; xp += x;
-            addLog(`Схема ${n}: +${p} ₴`, 'var(--success)');
+            money += p; energy -= e;
+            showToast(`Успіх! +${p} ₴`, 'var(--success)');
+            tg.HapticFeedback.impactOccurred('medium');
             updateUI();
-        } else { addLog("Мало енергії!", 'var(--danger)'); }
+        } else { showToast("Немає енергії!", 'var(--danger)'); }
     }
 
     function doCrime(n, max, e) {
@@ -231,31 +206,48 @@
             energy -= e;
             if(Math.random() > 0.4) {
                 let p = Math.floor(Math.random() * max);
-                money += p; addLog(`Успіх: +${p} ₴`, 'var(--gold)');
+                money += p; showToast(`Джекпот! +${p} ₴`, 'var(--gold)');
             } else {
                 money -= Math.floor(money * 0.15);
                 document.getElementById('main-body').classList.add('police-raid');
                 setTimeout(() => document.getElementById('main-body').classList.remove('police-raid'), 1000);
-                addLog(`ОБЛАВА!`, 'var(--danger)');
+                showToast(`Облава! -15% банку`, 'var(--danger)');
             }
             updateUI();
         }
     }
 
-    function buyFood(cost, amt) {
-        if(money >= cost && energy < 100) {
-            money -= cost; energy = Math.min(100, energy + amt);
-            addLog(`Ти поїв! +${amt}⚡`, 'var(--success)');
-            updateUI();
-        }
+    function renderShop() {
+        let fHtml = '';
+        [{n:"Кава", c:150, e:20}, {n:"Шаурма", c:450, e:50}, {n:"Обід", c:1500, e:100}].forEach(f => {
+            fHtml += `<div class="card"><div><b>${f.n}</b><br><small>${f.c} ₴ | +${f.e}⚡</small></div>
+            <button class="btn" onclick="buyFood(${f.c}, ${f.e})" ${money < f.c || energy >= 100 ? 'disabled' : ''}>КУПИТИ</button></div>`;
+        });
+        document.getElementById('food-list').innerHTML = fHtml;
+
+        let bHtml = '';
+        [{id:'bot', n:'ТГ Бот', c:15000, i:15}, {id:'farm', n:'Ферма', c:150000, i:180}].forEach(b => {
+            bHtml += `<div class="card"><div><b>${b.n} (${myAssets[b.id]})</b><br><small>${b.c.toLocaleString()} ₴ | +${b.i} ₴/с</small></div>
+            <button class="btn" onclick="buyAsset('${b.id}', ${b.c})">КУПИТИ</button></div>`;
+        });
+        document.getElementById('assets-list').innerHTML = bHtml;
+
+        let cHtml = '';
+        [{id:'lanos', n:'Lanos', c:150000}].forEach(c => {
+            let has = myGarage.includes(c.id);
+            cHtml += `<div class="card"><div><b>${c.n}</b><br><small>${c.c.toLocaleString()} ₴</small></div>
+            <button class="btn" onclick="buyCar('${c.id}', ${c.c})" ${has?'disabled':''}>${has?'КУПЛЕНО':'КУПИТИ'}</button></div>`;
+        });
+        document.getElementById('garage-list').innerHTML = cHtml;
     }
 
-    function buyAsset(id, cost) { if(money >= cost) { money -= cost; myAssets[id]++; updateUI(); } }
-    function buyCar(id, cost) { if(money >= cost) { money -= cost; myGarage.push(id); updateUI(); } }
+    function buyFood(c, e) { if(money >= c && energy < 100) { money -= c; energy = Math.min(100, energy + e); showToast("Ти поїв!", "var(--success)"); updateUI(); } }
+    function buyAsset(id, c) { if(money >= c) { money -= c; myAssets[id]++; showToast("Бізнес куплено!", "var(--success)"); updateUI(); } }
+    function buyCar(id, c) { if(money >= c) { money -= c; myGarage.push(id); showToast("Авто куплено!", "var(--success)"); updateUI(); } }
 
     function trade(type) {
-        if(type === 'buy' && money > 100) { btc += money / btcPrice; money = 0; }
-        else if(type === 'sell' && btc > 0) { money += btc * btcPrice; btc = 0; }
+        if(type === 'buy' && money > 100) { btc += money / btcPrice; money = 0; showToast("BTC Куплено!", "var(--success)"); }
+        else if(type === 'sell' && btc > 0) { money += btc * btcPrice; btc = 0; showToast("BTC Продано!", "var(--gold)"); }
         updateUI();
     }
 
@@ -291,9 +283,9 @@
 
     setInterval(() => {
         btcPrice += (Math.random()-0.5)*50000;
-        priceHistory.push(btcPrice); if(priceHistory.length>25) priceHistory.shift();
+        priceHistory.push(btcPrice); if(priceHistory.length>20) priceHistory.shift();
         if(energy < 100) energy = Math.min(100, energy + (myGarage.includes('lanos') ? 1.5 : 0.6));
-        money += (myAssets.bot * 15 + myAssets.farm * 180 + myAssets.office * 2500) / 10;
+        money += (myAssets.bot * 15 + myAssets.farm * 180 + (myAssets.office || 0) * 2500) / 10;
         updateUI();
     }, 3000);
 
