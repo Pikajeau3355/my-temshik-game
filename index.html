@@ -2,163 +2,242 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>UA Temshik Elite</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@300;400;700&display=swap');
+        
         :root {
             --accent: #3b82f6; --gold: #f59e0b; --bg: #05070a;
-            --glass: rgba(23, 23, 27, 0.8); --card-border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(23, 23, 27, 0.9); --card-border: rgba(255, 255, 255, 0.08);
             --success: #10b981; --danger: #ef4444;
         }
+
         body {
             margin: 0; background: var(--bg); color: #e5e7eb; font-family: 'Raleway', sans-serif;
-            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
-            background-image: radial-gradient(circle at 50% -20%, #1e293b 0%, #05070a 80%);
+            min-height: 100vh; overflow: hidden; display: flex; flex-direction: column;
         }
-        .header { width: 100%; padding: 25px 20px; background: var(--glass); backdrop-filter: blur(15px); border-bottom: 1px solid var(--card-border); text-align: center; position: sticky; top: 0; z-index: 100; box-sizing: border-box; }
-        .balance { font-family: 'Orbitron', sans-serif; font-size: 36px; font-weight: 700; color: var(--gold); text-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
-        .status-container { display: flex; justify-content: space-around; margin-top: 15px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 20px; }
-        .stat-item { font-size: 12px; font-weight: 700; }
-        .stat-item span { color: var(--accent); display: block; font-size: 10px; text-transform: uppercase; }
-        .content { width: 100%; max-width: 440px; padding: 20px; box-sizing: border-box; }
-        .section-title { font-family: 'Orbitron', sans-serif; font-size: 14px; margin: 25px 0 15px; color: #fff; display: flex; align-items: center; }
-        .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent), transparent); margin-left: 15px; }
-        .card { background: var(--glass); border: 1px solid var(--card-border); border-radius: 20px; padding: 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .info h3 { margin: 0; font-size: 16px; color: #fff; }
-        .info p { margin: 4px 0 0; font-size: 12px; color: #94a3b8; }
-        .btn { border: none; padding: 10px 18px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-work { background: var(--accent); color: white; }
-        .btn:active { transform: scale(0.95); }
-        .btn:disabled { background: #334155 !important; opacity: 0.5; }
-        .terminal { background: rgba(0, 0, 0, 0.5); border-radius: 15px; padding: 12px; font-family: monospace; font-size: 11px; height: 100px; overflow-y: auto; border: 1px solid var(--card-border); }
-        .log-entry { margin-bottom: 5px; animation: slideIn 0.2s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* Header */
+        .header {
+            padding: 20px; background: var(--glass); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--card-border); text-align: center;
+        }
+        .balance { font-family: 'Orbitron', sans-serif; font-size: 32px; font-weight: 700; color: var(--gold); }
+        .stats-mini { display: flex; justify-content: center; gap: 15px; font-size: 12px; margin-top: 5px; color: #94a3b8; }
+
+        /* Main Content Areas */
+        .tab-content {
+            flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px;
+            display: none; animation: fadeIn 0.3s ease;
+        }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: 14px; margin-bottom: 15px; color: var(--accent); letter-spacing: 1px; }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--card-border);
+            border-radius: 16px; padding: 16px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .card h3 { margin: 0; font-size: 16px; }
+        .card p { margin: 4px 0 0; font-size: 12px; color: #94a3b8; }
+
+        /* Crypto Specific */
+        .crypto-price { font-family: 'Orbitron', sans-serif; color: var(--success); font-size: 18px; }
+
+        /* Bottom Nav */
+        .nav-bar {
+            position: fixed; bottom: 0; width: 100%; height: 70px;
+            background: var(--glass); backdrop-filter: blur(15px);
+            border-top: 1px solid var(--card-border);
+            display: flex; justify-content: space-around; align-items: center;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            color: #64748b; font-size: 10px; cursor: pointer; transition: 0.3s;
+        }
+        .nav-item.active { color: var(--accent); transform: scale(1.1); }
+        .nav-icon { font-size: 20px; margin-bottom: 4px; }
+
+        /* Buttons */
+        .btn {
+            border: none; padding: 10px 16px; border-radius: 12px;
+            font-weight: 700; cursor: pointer; color: white; background: var(--accent);
+        }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* Log */
+        .terminal {
+            background: rgba(0,0,0,0.3); border-radius: 12px; padding: 10px;
+            font-family: monospace; font-size: 11px; height: 80px; overflow-y: auto;
+        }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <div id="user-greeting" style="font-size: 12px; color: #94a3b8; margin-bottom: 5px;">Привіт, Темщик!</div>
         <div class="balance" id="balance">500 ₴</div>
-        <div class="status-container">
-            <div class="stat-item"><span>Статус</span><div id="rank">Новачок</div></div>
-            <div class="stat-item"><span>Досвід</span><div id="exp">0</div></div>
+        <div class="stats-mini">
+            <span id="rank-display">Новачок</span> • <span id="exp-display">0 XP</span>
         </div>
     </div>
-    <div class="content">
-        <div class="section-title">ГАРЯЧІ ТЕМКИ</div>
+
+    <div id="tab-temki" class="tab-content active">
+        <div class="section-title">ГАРЯЧІ ПРОПОЗИЦІЇ</div>
         <div id="temki-list"></div>
-        <div class="section-title">АКТИВИ</div>
-        <div id="shop-list"></div>
-        <div class="section-title">ЛОГ СУЄТИ</div>
+        <div class="section-title">ОСТАННЯ СУЄТА</div>
         <div class="terminal" id="terminal"></div>
     </div>
+
+    <div id="tab-crypto" class="tab-content">
+        <div class="section-title">КРИПТО-БІРЖА</div>
+        <div class="card">
+            <div class="info">
+                <h3>Bitcoin (BTC)</h3>
+                <p>Твій актив: <span id="my-btc">0</span> BTC</p>
+            </div>
+            <div class="crypto-price" id="btc-price">$65,000</div>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn" style="flex:1" onclick="buyCrypto()">Купити</button>
+            <button class="btn" style="flex:1; background:var(--danger)" onclick="sellCrypto()">Продати</button>
+        </div>
+    </div>
+
+    <div id="tab-assets" class="tab-content">
+        <div class="section-title">ТВОЯ НЕРУХОМІСТЬ ТА АВТО</div>
+        <div id="shop-list"></div>
+    </div>
+
+    <nav class="nav-bar">
+        <div class="nav-item active" onclick="showTab('temki')">
+            <span class="nav-icon">🔥</span><span>Темки</span>
+        </div>
+        <div class="nav-item" onclick="showTab('crypto')">
+            <span class="nav-icon">📊</span><span>Крипта</span>
+        </div>
+        <div class="nav-item" onclick="showTab('assets')">
+            <span class="nav-icon">🏎️</span><span>Активи</span>
+        </div>
+    </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
+        tg.enableClosingConfirmation();
 
-        // --- СИСТЕМА ЗБЕРЕЖЕННЯ ---
-        // Завантажуємо дані або ставимо дефолтні
+        // Стан гри
         let money = Number(localStorage.getItem('money')) || 500;
         let exp = Number(localStorage.getItem('exp')) || 0;
+        let btcCount = Number(localStorage.getItem('btcCount')) || 0;
+        let btcPrice = 65000;
         let ownedItems = JSON.parse(localStorage.getItem('ownedItems')) || [];
 
-        function saveGame() {
+        function save() {
             localStorage.setItem('money', money);
             localStorage.setItem('exp', exp);
+            localStorage.setItem('btcCount', btcCount);
             localStorage.setItem('ownedItems', JSON.stringify(ownedItems));
-        }
-
-        // Встановлюємо колір кнопки Telegram (опціонально)
-        tg.MainButton.setText('ЗБЕРЕЖЕНО').hide();
-
-        if (tg.initDataUnsafe.user) {
-            document.getElementById('user-greeting').textContent = `Суєтолог: ${tg.initDataUnsafe.user.first_name}`;
         }
 
         const temki = [
             { id: 1, name: "Дропшипінг", cost: 300, min: 20, max: 150, risk: 0.1, rank: 0 },
             { id: 2, name: "iPhone з США", cost: 10000, min: 1000, max: 3500, risk: 0.18, rank: 200 },
-            { id: 3, name: "Арбітраж", cost: 60000, min: -10000, max: 25000, risk: 0.28, rank: 1200 },
-            { id: 4, name: "Крипто-Офіс", cost: 450000, min: -50000, max: 120000, risk: 0.35, rank: 5000 }
+            { id: 3, name: "Арбітраж", cost: 60000, min: -10000, max: 25000, risk: 0.28, rank: 1200 }
         ];
 
         const shop = [
-            { id: 'lanos', name: "Ланос", cost: 25000, bonus: "-50% податків" },
-            { id: 'bmw', name: "BMW M5", cost: 200000, bonus: "+20% профіту" },
-            { id: 'office', name: "Офіс IQ", cost: 1500000, bonus: "X2 досвіду" }
+            { id: 'lanos', name: "Ланос (Газ)", cost: 25000, bonus: "Знижка на штрафи" },
+            { id: 'bmw', name: "BMW M5", cost: 250000, bonus: "+20% до темки" }
         ];
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            tg.HapticFeedback.selectionChanged();
+        }
 
         function updateUI() {
             document.getElementById('balance').textContent = Math.floor(money).toLocaleString() + ' ₴';
-            document.getElementById('exp').textContent = exp;
+            document.getElementById('exp-display').textContent = exp + ' XP';
+            document.getElementById('my-btc').textContent = btcCount.toFixed(4);
             
-            // Оновлюємо ранг
-            const ranks = [
-                { min: 0, name: "Новачок з ОЛХ" },
-                { min: 400, name: "Суєтолог" },
-                { min: 2500, name: "Бос Созвонів" },
-                { min: 10000, name: "Крипто-Барон" }
-            ];
-            let rName = ranks[0].name;
-            for (let r of ranks) { if (exp >= r.min) rName = r.name; }
-            document.getElementById('rank').textContent = rName;
+            // Ранги
+            const ranks = ["Новачок", "Суєтолог", "Бізнесмен", "Магнат"];
+            let rIdx = Math.min(Math.floor(exp / 1000), ranks.length - 1);
+            document.getElementById('rank-display').textContent = ranks[rIdx];
 
+            // Список темок
             const tList = document.getElementById('temki-list');
             tList.innerHTML = '';
             temki.forEach(t => {
                 const locked = exp < t.rank;
-                tList.innerHTML += `<div class="card"><div class="info"><h3>${t.name} ${locked?'🔒':''}</h3><p>${locked?'XP: '+t.rank:t.cost+' ₴'}</p></div>
-                <button class="btn btn-work" onclick="work(${t.id})" ${money<t.cost||locked?'disabled':''}>Ворватись</button></div>`;
+                tList.innerHTML += `<div class="card"><div><h3>${t.name}</h3><p>${locked ? 'XP: '+t.rank : t.cost+' ₴'}</p></div>
+                <button class="btn" onclick="work(${t.id})" ${money < t.cost || locked ? 'disabled' : ''}>Ворватись</button></div>`;
             });
 
+            // Магазин
             const sList = document.getElementById('shop-list');
             sList.innerHTML = '';
-            shop.forEach(item => {
-                const isOwned = ownedItems.includes(item.id);
-                sList.innerHTML += `<div class="card"><div class="info"><h3>${item.name}</h3><p style="color:var(--gold)">${isOwned?'АКТИВ ПРИДБАНО':item.bonus}</p></div>
-                <button class="btn" style="background:var(--gold)" onclick="buyItem('${item.id}')" ${money<item.cost||isOwned?'disabled':''}>${isOwned?'✔️':item.cost.toLocaleString()+' ₴'}</button></div>`;
+            shop.forEach(i => {
+                const owned = ownedItems.includes(i.id);
+                sList.innerHTML += `<div class="card"><div><h3>${i.name}</h3><p>${owned ? 'Вже маєш' : i.cost + ' ₴'}</p></div>
+                <button class="btn" onclick="buyItem('${i.id}')" ${money < i.cost || owned ? 'disabled' : ''}>${owned ? '✔️' : 'Купити'}</button></div>`;
             });
-            
-            saveGame(); // Зберігаємо після кожної дії
+            save();
         }
 
         function work(id) {
-            tg.HapticFeedback.impactOccurred('medium');
-            const t = temki.find(i => i.id === id);
+            const t = temki.find(x => x.id === id);
             money -= t.cost;
             if (Math.random() < t.risk) {
-                addLog(`> СКАМ: ${t.name}. -${t.cost} ₴`, '#ef4444');
+                addLog(`Скаманули на ${t.name}`, '#ef4444');
             } else {
                 let p = Math.floor(Math.random() * (t.max - t.min + 1)) + t.min;
-                if(ownedItems.includes('bmw')) p = Math.floor(p * 1.2);
-                money += (t.cost + p); 
-                let gainXP = ownedItems.includes('office') ? 30 : 15;
-                exp += gainXP;
-                addLog(`> ПРОФІТ: +${p} ₴ (+${gainXP} XP)`, '#10b981');
+                money += (t.cost + p); exp += 20;
+                addLog(`Профіт з ${t.name}: +${p} ₴`, '#10b981');
             }
+            tg.HapticFeedback.impactOccurred('medium');
             updateUI();
         }
 
-        function buyItem(id) {
-            const item = shop.find(i => i.id === id);
-            if (money >= item.cost && !ownedItems.includes(id)) {
-                money -= item.cost;
-                ownedItems.push(id);
-                addLog(`> КУПЛЕНО: ${item.name}`, 'var(--gold)');
+        function buyCrypto() {
+            let cost = btcPrice * 40; // Умовний курс до грн
+            if (money >= cost) {
+                money -= cost; btcCount += 1;
                 updateUI();
             }
         }
 
-        function addLog(txt, col) {
-            const el = document.getElementById('terminal');
-            el.insertAdjacentHTML('afterbegin', `<div class="log-entry" style="color:${col}">${txt}</div>`);
+        function sellCrypto() {
+            if (btcCount >= 1) {
+                money += btcPrice * 40; btcCount -= 1;
+                updateUI();
+            }
+        }
+
+        // Рандомна ціна крипти
+        setInterval(() => {
+            let change = (Math.random() - 0.5) * 1000;
+            btcPrice += change;
+            document.getElementById('btc-price').textContent = '$' + Math.floor(btcPrice).toLocaleString();
+            document.getElementById('btc-price').style.color = change > 0 ? 'var(--success)' : 'var(--danger)';
+        }, 3000);
+
+        function addLog(msg, col) {
+            const l = document.getElementById('terminal');
+            l.insertAdjacentHTML('afterbegin', `<div style="color:${col}; margin-bottom:4px;">> ${msg}</div>`);
         }
 
         updateUI();
     </script>
 </body>
 </html>
-
