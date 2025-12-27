@@ -21,7 +21,7 @@
             height: 100vh; display: flex; flex-direction: column;
         }
 
-        /* Новий Хедер */
+        /* Хедер профілю */
         .profile-header {
             padding: 50px 20px 20px;
             background: linear-gradient(180deg, rgba(93, 95, 239, 0.1) 0%, rgba(11, 12, 16, 0) 100%);
@@ -36,7 +36,7 @@
             box-shadow: 0 4px 15px rgba(93, 95, 239, 0.4);
         }
         .user-text h2 { margin: 0; font-size: 16px; font-weight: 800; }
-        .user-text p { margin: 2px 0 0; font-size: 11px; color: var(--accent); font-weight: 600; text-transform: uppercase; }
+        .user-text p { margin: 2px 0 0; font-size: 11px; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Картка Балансу */
         .balance-card {
@@ -50,17 +50,17 @@
         .bal-amount { font-size: 34px; font-weight: 800; letter-spacing: -1px; }
         .bal-amount span { color: var(--gold); }
 
-        /* Оновлена Енергія */
+        /* Дизайн Енергії */
         .energy-section { margin-top: 15px; }
         .energy-header { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; margin-bottom: 6px; }
         .energy-bar-outer { 
-            width: 100%; height: 8px; background: rgba(255,255,255,0.05); 
-            border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);
+            width: 100%; height: 10px; background: rgba(255,255,255,0.05); 
+            border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);
         }
         .energy-bar-inner { 
-            height: 100%; background: linear-gradient(90deg, var(--energy-color), #5d5fef); 
+            height: 100%; background: linear-gradient(90deg, var(--energy-color), var(--primary)); 
             width: 100%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
         }
 
         .viewport { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 120px; }
@@ -68,14 +68,14 @@
         .tab.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .section-title { font-size: 14px; font-weight: 800; color: #828282; margin: 25px 0 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .section-title { font-size: 13px; font-weight: 800; color: #666; margin: 25px 0 15px; text-transform: uppercase; letter-spacing: 1.5px; }
 
         .card {
-            background: var(--card-bg); border-radius: 20px; padding: 18px;
+            background: var(--card-bg); border-radius: 22px; padding: 18px;
             margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.03);
             display: flex; justify-content: space-between; align-items: center;
         }
-        .card-info h3 { margin: 0; font-size: 15px; font-weight: 700; }
+        .card-info h3 { margin: 0; font-size: 15px; font-weight: 700; color: #fff; }
         .card-info p { margin: 4px 0 0; font-size: 12px; color: #828282; }
 
         .btn {
@@ -85,18 +85,19 @@
         .btn:active { transform: scale(0.95); }
         .btn:disabled { background: #25262b; color: #555; opacity: 0.5; }
 
+        /* Навігація */
         .nav {
             position: fixed; bottom: 25px; left: 20px; right: 20px;
             background: rgba(28, 29, 38, 0.95); backdrop-filter: blur(15px);
             border-radius: 24px; height: 75px; display: flex;
             justify-content: space-around; align-items: center;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #555; font-size: 10px; font-weight: 700; transition: 0.3s; }
         .nav-item.active { color: var(--primary); }
         .nav-icon { font-size: 22px; margin-bottom: 4px; }
 
-        .log { background: rgba(0,0,0,0.2); border-radius: 18px; padding: 15px; font-size: 11px; height: 100px; overflow-y: auto; }
+        .log { background: rgba(0,0,0,0.2); border-radius: 18px; padding: 15px; font-size: 11px; height: 100px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.03); }
         .log-item { margin-bottom: 6px; padding-left: 10px; border-left: 2px solid var(--primary); color: #ccc; }
     </style>
 </head>
@@ -104,20 +105,20 @@
 
     <div class="profile-header">
         <div class="user-info">
-            <div class="avatar" id="user-avatar">?</div>
+            <div class="avatar" id="user-avatar">Т</div>
             <div class="user-text">
                 <h2 id="user-name">Темщик</h2>
-                <p id="user-rank">Elite Member</p>
+                <p id="user-rank">Елітний Учасник</p>
             </div>
         </div>
 
         <div class="balance-card">
-            <div class="bal-label">ПРИБУТОК ЗА ЧАС</div>
+            <div class="bal-label">КАПІТАЛ</div>
             <div class="bal-amount" id="balance">0<span>₴</span></div>
             
             <div class="energy-section">
                 <div class="energy-header">
-                    <span>ЕНЕРГІЯ</span>
+                    <span>РЕСУРС ЕНЕРГІЇ</span>
                     <span id="energy-val">100%</span>
                 </div>
                 <div class="energy-bar-outer">
@@ -129,47 +130,51 @@
 
     <div class="viewport">
         <div id="tab-work" class="tab active">
-            <div class="section-title">⚡️ Доступні схеми</div>
+            <div class="section-title">🚀 Актуальні темки</div>
             <div id="temki-list"></div>
             
-            <div class="section-title">🍕 Відпочинок</div>
+            <div class="section-title">🍕 Відновити сили</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                 <div class="card" style="flex-direction:column; align-items:flex-start;">
-                    <div class="card-info"><h3>☕️ Espresso</h3><p>50 ₴ | +20⚡</p></div>
-                    <button class="btn" style="width:100%; margin-top:10px;" onclick="eat(50, 20)">Пити</button>
+                    <div class="card-info"><h3>☕️ Еспресо</h3><p>50 ₴ | +20⚡</p></div>
+                    <button class="btn" style="width:100%; margin-top:10px;" onclick="eat(50, 20)">Випити</button>
                 </div>
                 <div class="card" style="flex-direction:column; align-items:flex-start;">
-                    <div class="card-info"><h3>🌯 Doner</h3><p>150 ₴ | +60⚡</p></div>
-                    <button class="btn" style="width:100%; margin-top:10px;" onclick="eat(150, 60)">Їсти</button>
+                    <div class="card-info"><h3>🌯 Шаурма</h3><p>150 ₴ | +60⚡</p></div>
+                    <button class="btn" style="width:100%; margin-top:10px;" onclick="eat(150, 60)">З'їсти</button>
                 </div>
             </div>
 
-            <div class="section-title">📑 Журнал</div>
+            <div class="section-title">📑 Журнал операцій</div>
             <div class="log" id="terminal"></div>
         </div>
 
         <div id="tab-crypto" class="tab">
-            <div class="section-title">📈 Ринок BTC</div>
+            <div class="section-title">📈 Курс Bitcoin</div>
             <div class="balance-card" style="background: var(--card-bg);">
                 <div id="btc-price" style="font-size:26px; font-weight:800; color:var(--success);">₴ 2,800,000</div>
                 <canvas id="cryptoChart" style="width:100%; height:100px; margin-top:15px;"></canvas>
             </div>
             <div class="card">
-                <div class="card-info"><h3>Твій портфель</h3><p id="my-btc">0 BTC</p></div>
+                <div class="card-info"><h3>Портфель</h3><p id="my-btc">0 BTC</p></div>
                 <button class="btn" style="background:var(--gold); color:#000" onclick="tradeBtc('all_buy')">На всі</button>
             </div>
-            <button class="btn" style="width:100%; background:#fff; color:#000" onclick="tradeBtc('all_sell')">ПРОДАТИ ВСЕ</button>
+            <button class="btn" style="width:100%; background:#fff; color:#000" onclick="tradeBtc('all_sell')">ПРОДАТИ ВЕСЬ BTC</button>
         </div>
 
         <div id="tab-shop" class="tab">
             <div class="section-title">💎 Твоє майно</div>
-            <div id="shop-list"></div>
+            <div id="shop-list">
+                <div class="card" style="justify-content: center; color: #555;">
+                    <p>Поки що немає куплених активів</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <nav class="nav">
         <div class="nav-item active" onclick="showTab('work', this)">
-            <span class="nav-icon">💸</span><span class="nav-label">Схеми</span>
+            <span class="nav-icon">💸</span><span class="nav-label">Темки</span>
         </div>
         <div class="nav-item" onclick="showTab('crypto', this)">
             <span class="nav-icon">📊</span><span class="nav-label">Біржа</span>
@@ -183,18 +188,17 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Ініціалізація юзера
+        // Ініціалізація користувача з TG
         const user = tg.initDataUnsafe?.user;
         if(user) {
             document.getElementById('user-name').textContent = user.first_name;
-            document.getElementById('user-avatar').textContent = user.first_name.charAt(0);
+            document.getElementById('user-avatar').textContent = user.first_name.charAt(0).toUpperCase();
         }
 
         let money = Number(localStorage.getItem('money')) || 1000;
         let btcCount = Number(localStorage.getItem('btcCount')) || 0;
         let energy = Number(localStorage.getItem('energy')) || 100;
         let btcPrice = 2850000;
-        let priceHistory = [2850000, 2800000, 2870000, 2840000];
 
         const temki = [
             { id: 1, name: "Дроп на Пром", cost: 200, min: 30, max: 180, energy: 15 },
@@ -228,11 +232,13 @@
         function work(id) {
             const t = temki.find(x => x.id === id);
             if(energy < t.energy) return;
+            
             energy -= t.energy;
             money -= t.cost;
             let profit = Math.floor(Math.random() * (t.max - t.min + 1)) + t.min;
             money += (t.cost + profit);
-            addLog(profit >= 0 ? `+${profit} ₴: успішна темка` : `${profit} ₴: невдача`, profit >= 0 ? 'var(--success)' : 'var(--danger)');
+            
+            addLog(profit >= 0 ? `+${profit} ₴: Успішна угода` : `${profit} ₴: Схема прогоріла`, profit >= 0 ? 'var(--success)' : 'var(--danger)');
             tg.HapticFeedback.impactOccurred('medium');
             updateUI();
         }
@@ -241,6 +247,7 @@
             if(money >= cost && energy < 100) {
                 money -= cost;
                 energy = Math.min(100, energy + val);
+                addLog(`Відновлено енергію на ${val}%`, 'var(--energy-color)');
                 tg.HapticFeedback.notificationOccurred('success');
                 updateUI();
             }
@@ -248,9 +255,14 @@
 
         function tradeBtc(type) {
             if(type === 'all_buy' && money > 0) {
-                btcCount += money / btcPrice; money = 0;
+                btcCount += money / btcPrice; 
+                addLog(`Куплено BTC на всі гроші`, 'var(--gold)');
+                money = 0;
             } else if(type === 'all_sell' && btcCount > 0) {
-                money += btcCount * btcPrice; btcCount = 0;
+                let gain = btcCount * btcPrice;
+                money += gain; 
+                addLog(`Продано все BTC: +${Math.floor(gain)} ₴`, '#fff');
+                btcCount = 0;
             }
             tg.HapticFeedback.impactOccurred('heavy');
             updateUI();
@@ -268,8 +280,8 @@
             l.insertAdjacentHTML('afterbegin', `<div class="log-item" style="border-left-color:${col}">${msg}</div>`);
         }
 
-        // Авто-відновлення
-        setInterval(() => { if(energy < 100) { energy = Math.min(100, energy + 1); updateUI(); } }, 6000);
+        // Поступове відновлення енергії
+        setInterval(() => { if(energy < 100) { energy = Math.min(100, energy + 0.5); updateUI(); } }, 4000);
 
         updateUI();
     </script>
