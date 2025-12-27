@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>UA Temshik: Ultimate Elite</title>
+    <title>UA Temshik: 25 Levels Edition</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -11,219 +11,140 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         
         :root {
-            --primary: #6366f1;
-            --primary-glow: rgba(99, 102, 241, 0.4);
-            --bg: #030712;
-            --card-bg: rgba(31, 41, 55, 0.5);
+            --primary: #6366f1; --primary-glow: rgba(99, 102, 241, 0.4);
+            --bg: #030712; --card-bg: rgba(31, 41, 55, 0.5);
             --card-border: rgba(255, 255, 255, 0.08);
-            --success: #10b981;
-            --danger: #ef4444;
-            --gold: #f59e0b;
-            --energy: #06b6d4;
+            --success: #10b981; --danger: #ef4444; --gold: #f59e0b; --energy: #06b6d4;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
         body { 
-            margin: 0; background: var(--bg); color: #f3f4f6; 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
+            margin: 0; background: var(--bg); color: #f3f4f6; font-family: 'Plus Jakarta Sans', sans-serif; 
             overflow: hidden; height: 100vh; display: flex; flex-direction: column;
             background-image: radial-gradient(circle at 50% -20%, #1e1b4b 0%, var(--bg) 80%);
         }
 
-        .bg-glow {
-            position: fixed; inset: 0;
+        .bg-glow { position: fixed; inset: 0; z-index: -1; pointer-events: none;
             background: radial-gradient(circle at 15% 25%, rgba(99, 102, 241, 0.08) 0%, transparent 35%),
                         radial-gradient(circle at 85% 75%, rgba(6, 182, 212, 0.08) 0%, transparent 35%);
-            z-index: -1; pointer-events: none;
         }
 
-        /* Навчання */
-        #tutorial-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85); 
-            backdrop-filter: blur(12px); z-index: 2000;
-            display: flex; align-items: center; justify-content: center; padding: 25px;
-        }
-        .tutorial-card {
-            background: var(--card-bg); padding: 32px; border-radius: 32px; 
-            border: 1px solid var(--card-border); text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Сповіщення */
-        #notification-container {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 1500; pointer-events: none; width: 85%;
-        }
-        .toast {
-            background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(12px);
-            padding: 18px 24px; border-radius: 24px; border: 1px solid var(--primary);
-            font-weight: 800; text-align: center; margin-bottom: 12px;
-            box-shadow: 0 10px 40px var(--primary-glow);
-            animation: toastIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, toastOut 0.5s 2s forwards;
-        }
+        /* Notifications */
+        #notification-container { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; pointer-events: none; width: 85%; }
+        .toast { background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(12px); padding: 18px 24px; border-radius: 24px; border: 1px solid var(--primary); font-weight: 800; text-align: center; margin-bottom: 12px; box-shadow: 0 10px 40px var(--primary-glow); animation: toastIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, toastOut 0.5s 2s forwards; }
         @keyframes toastIn { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
         @keyframes toastOut { to { opacity: 0; transform: scale(0.7) translateY(-30px); } }
 
-        /* Profile & Balance */
-        .header-section { padding: 55px 24px 20px; }
-        .user-meta { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
-        .avatar { 
-            width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), #818cf8);
-            border-radius: 16px; display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 20px; box-shadow: 0 8px 20px var(--primary-glow);
-        }
-        .lvl-tag { 
-            background: rgba(245, 158, 11, 0.15); color: var(--gold); 
-            padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .main-card { 
-            background: var(--card-bg); backdrop-filter: blur(16px);
-            border-radius: 32px; padding: 24px; text-align: center;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
-        }
-        .bal-val { font-size: 38px; font-weight: 800; margin: 8px 0; letter-spacing: -1px; }
+        /* Header UI */
+        .header { padding: 50px 24px 15px; flex-shrink: 0; }
+        .user-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .lvl-badge { background: rgba(245, 158, 11, 0.2); color: var(--gold); padding: 4px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; border: 1px solid rgba(245, 158, 11, 0.3); }
         
-        .progress-group { margin-top: 20px; text-align: left; }
-        .progress-header { display: flex; justify-content: space-between; font-size: 10px; font-weight: 800; color: #6b7280; margin-bottom: 6px; letter-spacing: 1px; }
-        .progress-track { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; transition: 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .main-card { background: var(--card-bg); backdrop-filter: blur(16px); border-radius: 30px; padding: 22px; text-align: center; border: 1px solid var(--card-border); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+        .money-display { font-size: 36px; font-weight: 800; margin: 4px 0; letter-spacing: -1px; }
+        .passive-income { font-size: 12px; color: var(--success); font-weight: 700; }
 
-        /* Viewport */
-        .content { flex: 1; overflow-y: auto; padding: 0 24px 130px; }
-        .tab { display: none; animation: slideUp 0.4s ease-out; }
-        .tab.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .progress-box { margin-top: 15px; text-align: left; }
+        .progress-info { display: flex; justify-content: space-between; font-size: 10px; font-weight: 800; color: #6b7280; margin-bottom: 6px; }
+        .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; transition: 0.3s; }
 
-        .label { font-size: 12px; font-weight: 800; color: #4b5563; margin: 30px 0 15px; text-transform: uppercase; letter-spacing: 2px; }
+        /* Content Area */
+        .viewport { flex: 1; overflow-y: auto; padding: 0 24px 120px; -webkit-overflow-scrolling: touch; }
+        .tab { display: none; } .tab.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .item-card { 
-            background: var(--card-bg); border-radius: 24px; padding: 20px; margin-bottom: 16px;
-            display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid var(--card-border); transition: 0.2s;
-        }
-        .item-card:active { transform: scale(0.97); background: rgba(255,255,255,0.05); }
-        .item-card.locked { opacity: 0.25; filter: grayscale(1); }
+        .section-label { font-size: 11px; font-weight: 800; color: #4b5563; margin: 25px 0 12px; text-transform: uppercase; letter-spacing: 2px; }
 
-        .btn-buy { 
-            background: linear-gradient(135deg, var(--primary), #4f46e5);
-            color: white; border: none; padding: 12px 18px; border-radius: 14px;
-            font-weight: 800; font-size: 12px; box-shadow: 0 4px 12px var(--primary-glow);
-        }
-        .btn-buy:disabled { background: #374151; box-shadow: none; color: #6b7280; }
+        .item { background: var(--card-bg); border-radius: 22px; padding: 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--card-border); transition: 0.2s; }
+        .item:active { transform: scale(0.97); }
+        .item.locked { opacity: 0.3; filter: grayscale(1); pointer-events: none; }
+
+        .item-info b { font-size: 15px; display: block; margin-bottom: 2px; }
+        .item-info small { color: #9ca3af; font-size: 11px; }
+
+        .btn { background: linear-gradient(135deg, var(--primary), #4f46e5); color: white; border: none; padding: 12px 18px; border-radius: 14px; font-weight: 800; font-size: 12px; box-shadow: 0 4px 10px var(--primary-glow); }
+        .btn:disabled { background: #1f2937; box-shadow: none; color: #4b5563; }
 
         /* Navigation */
-        .bottom-nav { 
-            position: fixed; bottom: 30px; left: 24px; right: 24px;
-            background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(24px);
-            border-radius: 28px; height: 74px; display: flex;
-            justify-content: space-around; align-items: center;
-            border: 1px solid var(--card-border); z-index: 1000;
-        }
-        .nav-link { 
-            display: flex; flex-direction: column; align-items: center; 
-            color: #6b7280; font-size: 10px; font-weight: 700; gap: 5px;
-        }
+        .nav { position: fixed; bottom: 25px; left: 24px; right: 24px; background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(20px); border-radius: 26px; height: 72px; display: flex; justify-content: space-around; align-items: center; border: 1px solid var(--card-border); z-index: 1000; }
+        .nav-link { display: flex; flex-direction: column; align-items: center; color: #6b7280; font-size: 10px; font-weight: 700; gap: 5px; }
         .nav-link.active { color: var(--primary); }
-        .nav-link span { font-size: 22px; }
-
-        /* Charts & Lists */
-        canvas { border-radius: 16px; background: rgba(0,0,0,0.2); padding: 5px; }
-        .top-row { display: flex; align-items: center; gap: 15px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .nav-link i { font-size: 20px; font-style: normal; }
     </style>
 </head>
 <body>
 
 <div class="bg-glow"></div>
-
-<div id="tutorial-overlay">
-    <div class="tutorial-card">
-        <h2 style="margin: 0 0 10px; font-size: 24px;">🏢 UA TEMSHIK</h2>
-        <p style="color: #9ca3af; font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
-            Стань найбагатшим у цій грі! Мути схеми, купуй нерухомість та інвестуй у крипту. Успіху!
-        </p>
-        <button class="btn-buy" style="width: 100%; height: 55px;" onclick="closeTutorial()">ПОЧАТИ ГРУ</button>
-    </div>
-</div>
-
 <div id="notification-container"></div>
 
-<div class="header-section">
-    <div class="user-meta">
-        <div class="avatar" id="u-avatar">?</div>
-        <div style="flex: 1;">
-            <div id="u-name" style="font-weight: 800; font-size: 16px;">...</div>
-            <span class="lvl-tag" id="u-lvl">LVL 1</span>
+<div class="header">
+    <div class="user-bar">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div id="u-avatar" style="width:38px; height:38px; background:var(--primary); border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:800; box-shadow: 0 5px 15px var(--primary-glow);">?</div>
+            <span class="lvl-badge" id="u-lvl">LVL 1</span>
         </div>
-        <div style="text-align: right;">
-            <div id="u-xp-text" style="font-size: 12px; font-weight: 800; color: var(--gold);">0 / 1000 XP</div>
-        </div>
+        <div id="u-xp" style="font-size:11px; font-weight:800; color:var(--gold);">0 / 1000 XP</div>
     </div>
-
+    
     <div class="main-card">
-        <div style="font-size: 11px; font-weight: 800; color: #6b7280; letter-spacing: 1px;">КЕШ НА РУКАХ</div>
-        <div id="balance" class="bal-val">0 ₴</div>
-        <div id="passive-info" style="font-size: 12px; font-weight: 700; color: var(--success);">+0 ₴ / сек</div>
+        <div class="money-display" id="balance">0 ₴</div>
+        <div class="passive-income" id="passive-info">+0 ₴/с</div>
         
-        <div class="progress-group">
-            <div class="progress-header"><span>ЕНЕРГІЯ</span><span id="energy-text">100%</span></div>
-            <div class="progress-track">
-                <div class="progress-fill" id="energy-bar" style="background: var(--energy); box-shadow: 0 0 15px var(--energy);"></div>
+        <div class="progress-box">
+            <div class="progress-info"><span>ЕНЕРГІЯ</span><span id="energy-text">100%</span></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="energy-fill" style="background: var(--energy); box-shadow: 0 0 10px var(--energy);"></div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="content">
+<div class="viewport">
     <div id="tab-work" class="tab active">
-        <div class="label">Активні темки</div>
+        <div class="section-label">25 Схем заробітку</div>
         <div id="temki-list"></div>
     </div>
 
     <div id="tab-crypto" class="tab">
-        <div class="label">Крипто-портфель</div>
-        <div class="item-card" style="flex-direction: column; align-items: stretch;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                <div><b style="font-size: 18px;">Bitcoin</b><br><small id="my-btc" style="color:#6b7280;">0.000000 BTC</small></div>
-                <div id="btc-price" style="color: var(--success); font-weight: 800; font-size: 18px;">₴ 0</div>
+        <div class="section-label">Трейдинг</div>
+        <div class="item" style="flex-direction: column; align-items: stretch;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                <div><b style="font-size:18px;">Bitcoin</b><br><small id="my-btc">0 BTC</small></div>
+                <div id="btc-price" style="color:var(--success); font-weight:800; font-size:18px;">₴ 0</div>
             </div>
-            <canvas id="cryptoChart"></canvas>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px;">
-                <button class="btn-buy" onclick="trade('buy')">КУПИТИ</button>
-                <button class="btn-buy" style="background: #1f2937;" onclick="trade('sell')">ПРОДАТИ</button>
+            <canvas id="cryptoChart" style="width:100%; height:90px;"></canvas>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:20px;">
+                <button class="btn" onclick="trade('buy')">КУПИТИ</button>
+                <button class="btn" style="background:#1f2937" onclick="trade('sell')">ПРОДАТИ</button>
             </div>
         </div>
     </div>
 
     <div id="tab-shop" class="tab">
-        <div class="label">Відпочинок</div>
+        <div class="section-label">Шоп</div>
         <div id="food-list"></div>
-        <div class="label">Підприємства</div>
+        <div class="section-label">Пасивні активи</div>
         <div id="assets-list"></div>
-        <div class="label">Гараж</div>
-        <div id="garage-list"></div>
     </div>
 
     <div id="tab-top" class="tab">
-        <div class="label">Рейтинг мільйонерів</div>
-        <div id="leader-list" class="item-card" style="flex-direction: column; align-items: stretch;"></div>
+        <div class="section-label">ТОП Гравців</div>
+        <div id="leader-list"></div>
     </div>
 </div>
 
-<nav class="bottom-nav">
-    <div class="nav-link active" onclick="showTab('work', this)"><span>💰</span>Темки</div>
-    <div class="nav-link" onclick="showTab('crypto', this)"><span>📈</span>Крипта</div>
-    <div class="nav-link" onclick="showTab('shop', this)"><span>🏢</span>Шоп</div>
-    <div class="nav-link" onclick="showTab('top', this)"><span>🏆</span>ТОП</div>
+<nav class="nav">
+    <div class="nav-link active" onclick="showTab('work', this)"><i>💰</i>Темки</div>
+    <div class="nav-link" onclick="showTab('crypto', this)"><i>📈</i>Біржа</div>
+    <div class="nav-link" onclick="showTab('shop', this)"><i>🏢</i>Шоп</div>
+    <div class="nav-link" onclick="showTab('top', this)"><i>🏆</i>ТОП</div>
 </nav>
 
 <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
-    tg.headerColor = "#030712";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA1m-re7gnHR6zxSoPdy3T0_2jX3IRzgJ4",
@@ -237,48 +158,62 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // Game Logic
     let money = Number(localStorage.getItem('money')) || 5000;
     let btc = Number(localStorage.getItem('btc')) || 0;
     let energy = Number(localStorage.getItem('energy')) || 100;
     let xp = Number(localStorage.getItem('xp')) || 0;
-    let myGarage = JSON.parse(localStorage.getItem('myGarage')) || [];
     let myAssets = JSON.parse(localStorage.getItem('myAssets')) || { bot: 0, farm: 0, office: 0 };
     let btcPrice = 3800000;
-    let priceHistory = Array.from({length: 15}, () => 3800000 + Math.random()*100000);
+    let priceHistory = Array.from({length:15}, () => 3800000 + (Math.random()-0.5)*100000);
 
-    const configTemki = [
-        { id: 't1', n: "Дропшипінг", lvl: 1, e: 15, min: 250, max: 850, risk: 0.05, xp: 60 },
-        { id: 't2', n: "Ресейл кросівок", lvl: 2, e: 25, min: 1000, max: 2800, risk: 0.1, xp: 140 },
-        { id: 't3', n: "Перепродаж авто", lvl: 4, e: 40, min: 4000, max: 12000, risk: 0.18, xp: 450 },
-        { id: 't4', n: "Крипто Арбітраж", lvl: 6, e: 60, min: 12000, max: 35000, risk: 0.3, xp: 1200 }
+    const temkiList = [
+        ["Дроп чохлів", 1, 10, 200, 600, 0.05, 50],
+        ["Ресейл крос", 2, 15, 800, 2000, 0.07, 100],
+        ["Продаж iPhone", 3, 20, 2500, 5500, 0.1, 160],
+        ["Трафік FB", 4, 28, 5000, 13000, 0.15, 350],
+        ["P2P Обмін", 5, 35, 9000, 25000, 0.2, 600],
+        ["Накрутка ТТ", 6, 12, 600, 1600, 0.04, 70],
+        ["Аккаунти ігор", 7, 18, 1400, 3800, 0.12, 120],
+        ["Скіни CS2", 8, 22, 2800, 7500, 0.14, 200],
+        ["Дизайн лого", 9, 14, 1000, 3000, 0.06, 90],
+        ["Продаж курсів", 10, 30, 7000, 20000, 0.18, 500],
+        ["Перегон авто", 11, 45, 18000, 50000, 0.22, 1300],
+        ["Whitelist NFT", 12, 38, 12000, 35000, 0.25, 950],
+        ["Майнінг хост", 13, 34, 10000, 28000, 0.15, 850],
+        ["Слот-казино", 14, 50, 25000, 75000, 0.35, 2200],
+        ["IT Тендери", 15, 55, 50000, 140000, 0.38, 4000],
+        ["Запчастини", 16, 22, 3500, 10000, 0.1, 300],
+        ["Даркнет супорт", 17, 65, 60000, 180000, 0.48, 5500],
+        ["Експорт лісу", 18, 60, 120000, 350000, 0.42, 9000],
+        ["Хедж-фонд", 19, 70, 200000, 600000, 0.52, 14000],
+        ["IDO Проект", 20, 75, 250000, 800000, 0.58, 20000],
+        ["Нафтова вежа", 21, 80, 400000, 1200000, 0.62, 30000],
+        ["Забудова ЖК", 22, 85, 600000, 2500000, 0.68, 50000],
+        ["Банк України", 23, 90, 1200000, 6000000, 0.72, 80000],
+        ["Лобіювання", 24, 95, 2500000, 12000000, 0.78, 150000],
+        ["Президент", 25, 100, 6000000, 30000000, 0.85, 400000]
     ];
 
     function showToast(txt, clr = 'var(--primary)') {
         const c = document.getElementById('notification-container');
         const t = document.createElement('div');
-        t.className = 'toast'; t.style.borderColor = clr;
-        t.textContent = txt; c.appendChild(t); setTimeout(() => t.remove(), 2500);
+        t.className = 'toast'; t.style.borderColor = clr; t.textContent = txt;
+        c.appendChild(t); setTimeout(() => t.remove(), 2500);
     }
-
-    function closeTutorial() {
-        document.getElementById('tutorial-overlay').style.display = 'none';
-        localStorage.setItem('tutorial_done', 'true');
-    }
-    if(localStorage.getItem('tutorial_done')) closeTutorial();
 
     function updateUI() {
         const lvl = Math.floor(xp / 1000) + 1;
         document.getElementById('balance').textContent = Math.floor(money).toLocaleString() + ' ₴';
-        document.getElementById('energy-bar').style.width = energy + '%';
+        document.getElementById('energy-fill').style.width = energy + '%';
         document.getElementById('energy-text').textContent = Math.floor(energy) + '%';
         document.getElementById('u-lvl').textContent = `LVL ${lvl}`;
-        document.getElementById('u-xp-text').textContent = `${xp} / ${lvl * 1000} XP`;
-        document.getElementById('u-name').textContent = tg.initDataUnsafe?.user?.first_name || "Темщик";
-        document.getElementById('u-avatar').textContent = (tg.initDataUnsafe?.user?.first_name || "T")[0].toUpperCase();
-        document.getElementById('my-btc').textContent = btc.toFixed(6) + ' BTC';
+        document.getElementById('u-xp').textContent = `${xp} / ${lvl * 1000} XP`;
+        document.getElementById('u-avatar').textContent = (tg.initDataUnsafe?.user?.first_name || "T")[0];
+        document.getElementById('my-btc').textContent = btc.toFixed(4) + ' BTC';
         document.getElementById('btc-price').textContent = '₴ ' + Math.floor(btcPrice).toLocaleString();
         
-        const pass = (myAssets.bot*15) + (myAssets.farm*220) + (myAssets.office*4500);
+        const pass = (myAssets.bot*25) + (myAssets.farm*300) + (myAssets.office*5500);
         document.getElementById('passive-info').textContent = `+${pass.toLocaleString()} ₴ / сек`;
 
         renderAll(lvl);
@@ -286,57 +221,46 @@
     }
 
     function renderAll(lvl) {
-        let tHtml = '';
-        configTemki.forEach(t => {
-            const lock = lvl < t.lvl;
-            tHtml += `<div class="item-card ${lock?'locked':''}">
-                <div><b style="display:block;margin-bottom:4px;">${lock?'🔒 Рівень '+t.lvl : t.n}</b>
-                <small style="color:#6b7280;">${lock?'Недоступно':t.min+'-'+t.max+' ₴ | -'+t.e+'⚡'}</small></div>
-                <button class="btn-buy" onclick="execTemka('${t.id}')" ${lock||energy<t.e?'disabled':''}>МУТИТИ</button>
+        let h = '';
+        temkiList.forEach((t, i) => {
+            const lock = lvl < t[1];
+            h += `<div class="item ${lock?'locked':''}">
+                <div class="item-info"><b>${lock?'🔒 Рівень '+t[1] : t[0]}</b><small>${lock?'Блоковано':t[3].toLocaleString()+'+ ₴ | -'+t[2]+'⚡'}</small></div>
+                <button class="btn" onclick="execTemka(${i})" ${lock||energy<t[2]?'disabled':''}>МУТИТИ</button>
             </div>`;
         });
-        document.getElementById('temki-list').innerHTML = tHtml;
+        document.getElementById('temki-list').innerHTML = h;
 
-        let fHtml = '';
-        [{n:"Енергетик",c:250,e:30},{n:"Шаурма",c:600,e:65},{n:"Обід",c:2200,e:100}].forEach(f => {
-            fHtml += `<div class="item-card">
-                <div><b>${f.n}</b><br><small style="color:#6b7280;">${f.c} ₴ | +${f.e}%⚡</small></div>
-                <button class="btn-buy" onclick="buyFood(${f.c},${f.e})" ${money<f.c||energy>=100?'disabled':''}>КУПИТИ</button>
+        let bH = '';
+        [{id:'bot',n:'ТГ Бот',c:20000,i:25},{id:'farm',n:'Ферма',c:250000,i:300},{id:'office',n:'Офіс',c:5000000,i:5500}].forEach(b => {
+            bH += `<div class="item">
+                <div class="item-info"><b>${b.n} (${myAssets[b.id]})</b><small>${b.c.toLocaleString()} ₴ | +${b.i}/с</small></div>
+                <button class="btn" onclick="buyAsset('${b.id}',${b.c})" ${money<b.c?'disabled':''}>КУПИТИ</button>
             </div>`;
         });
-        document.getElementById('food-list').innerHTML = fHtml;
+        document.getElementById('assets-list').innerHTML = bH;
 
-        let bHtml = '';
-        [{id:'bot',n:'ТГ Бот',c:20000,i:15},{id:'farm',n:'Ферма',c:200000,i:220},{id:'office',n:'Офіс',c:3500000,i:4500}].forEach(b => {
-            bHtml += `<div class="item-card">
-                <div><b>${b.n} (${myAssets[b.id]})</b><br><small style="color:#6b7280;">${b.c.toLocaleString()} ₴ | +${b.i} ₴/с</small></div>
-                <button class="btn-buy" onclick="buyAsset('${b.id}',${b.c})" ${money<b.c?'disabled':''}>КУПИТИ</button>
+        let fH = '';
+        [{n:"Енергетик",c:300,e:30},{n:"Шаурма",c:800,e:65},{n:"Ресторан",c:2500,e:100}].forEach(f => {
+            fH += `<div class="item">
+                <div class="item-info"><b>${f.n}</b><small>${f.c} ₴ | +${f.e}⚡</small></div>
+                <button class="btn" onclick="buyFood(${f.c},${f.e})" ${money<f.c||energy>=100?'disabled':''}>КУПИТИ</button>
             </div>`;
         });
-        document.getElementById('assets-list').innerHTML = bHtml;
-
-        let aHtml = '';
-        [{id:'lanos', n:'Lanos Turbo', c:200000}].forEach(a => {
-            const has = myGarage.includes(a.id);
-            aHtml += `<div class="item-card">
-                <div><b>${a.n}</b><br><small style="color:#6b7280;">${a.c.toLocaleString()} ₴ | Реген x2</small></div>
-                <button class="btn-buy" onclick="buyCar('${a.id}',${a.c})" ${has||money<a.c?'disabled':''}>${has?'КУПЛЕНО':'КУПИТИ'}</button>
-            </div>`;
-        });
-        document.getElementById('garage-list').innerHTML = aHtml;
+        document.getElementById('food-list').innerHTML = fH;
     }
 
-    function execTemka(tid) {
-        const t = configTemki.find(x => x.id === tid);
-        if(energy >= t.e) {
-            energy -= t.e;
-            if(Math.random() > t.risk) {
-                const p = Math.floor(Math.random()*(t.max-t.min+1))+t.min;
-                money += p; xp += t.xp;
-                showToast(`✅ Успіх! +${p} ₴`, 'var(--success)');
+    function execTemka(i) {
+        const t = temkiList[i];
+        if(energy >= t[2]) {
+            energy -= t[2];
+            if(Math.random() > t[5]) {
+                const p = Math.floor(Math.random()*(t[4]-t[3]+1))+t[3];
+                money += p; xp += t[6];
+                showToast(`✅ +${p} ₴`, 'var(--success)');
                 tg.HapticFeedback.impactOccurred('medium');
             } else {
-                const l = Math.floor(t.min * 1.6);
+                const l = Math.floor(t[3] * 1.5);
                 money = Math.max(0, money - l);
                 showToast(`❌ Облава! -${l} ₴`, 'var(--danger)');
                 tg.HapticFeedback.notificationOccurred('error');
@@ -347,11 +271,9 @@
 
     function buyFood(c,e) { if(money>=c && energy<100) { money-=c; energy=Math.min(100, energy+e); updateUI(); } }
     function buyAsset(id,c) { if(money>=c) { money-=c; myAssets[id]++; updateUI(); } }
-    function buyCar(id,c) { if(money>=c) { money-=c; myGarage.push(id); updateUI(); } }
-
     function trade(type) {
-        if(type==='buy' && money>100) { btc+=money/btcPrice; money=0; showToast("BTC Куплено!"); }
-        else if(type==='sell' && btc>0) { money+=btc*btcPrice; btc=0; showToast("BTC Продано!"); }
+        if(type==='buy' && money>100) { btc+=money/btcPrice; money=0; }
+        else if(type==='sell' && btc>0) { money+=btc*btcPrice; btc=0; }
         updateUI();
     }
 
@@ -366,13 +288,10 @@
     function save(lvl) {
         localStorage.setItem('money', money); localStorage.setItem('btc', btc);
         localStorage.setItem('energy', energy); localStorage.setItem('xp', xp);
-        localStorage.setItem('myGarage', JSON.stringify(myGarage));
         localStorage.setItem('myAssets', JSON.stringify(myAssets));
-        const uid = tg.initDataUnsafe?.user?.id || "dev_user";
-        db.ref('users/'+uid).set({
+        db.ref('users/'+(tg.initDataUnsafe?.user?.id || "dev")).set({
             name: tg.initDataUnsafe?.user?.first_name || "Темщик",
-            balance: Math.floor(money + (btc * btcPrice)),
-            lvl: lvl
+            balance: Math.floor(money + (btc * btcPrice)), lvl: lvl
         });
     }
 
@@ -380,30 +299,29 @@
         db.ref('users').orderByChild('balance').limitToLast(10).on('value', s => {
             let h = ''; let arr = []; s.forEach(x => arr.push(x.val()));
             arr.reverse().forEach((p,i) => {
-                h += `<div class="top-row"><b>#${i+1}</b> <span style="flex:1">${p.name}</span> <b class="txt-success">${Math.floor(p.balance).toLocaleString()} ₴</b></div>`;
+                h += `<div class="item"><b>#${i+1} ${p.name}</b><span>${Math.floor(p.balance).toLocaleString()} ₴</span></div>`;
             });
             document.getElementById('leader-list').innerHTML = h;
         });
     }
 
     function drawChart() {
-        const canvas = document.getElementById('cryptoChart'); const ctx = canvas.getContext('2d');
-        canvas.width = canvas.offsetWidth; canvas.height = 100;
-        ctx.clearRect(0,0,canvas.width,canvas.height); ctx.beginPath(); 
-        ctx.strokeStyle = '#6366f1'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        const c = document.getElementById('cryptoChart'); const ctx = c.getContext('2d');
+        c.width = c.offsetWidth; c.height = 90;
+        ctx.clearRect(0,0,c.width,c.height); ctx.beginPath(); ctx.strokeStyle = '#6366f1'; ctx.lineWidth = 4; ctx.lineJoin = 'round';
         priceHistory.forEach((p, i) => {
-            let x = (i/(priceHistory.length-1))*canvas.width;
-            let y = canvas.height - ((p-3500000)/1000000)*canvas.height;
+            let x = (i/(priceHistory.length-1))*c.width;
+            let y = c.height - ((p-3500000)/1000000)*c.height;
             if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
         });
         ctx.stroke();
     }
 
     setInterval(() => {
-        btcPrice += (Math.random()-0.5)*70000;
+        btcPrice += (Math.random()-0.5)*90000;
         priceHistory.push(btcPrice); if(priceHistory.length>15) priceHistory.shift();
-        if(energy < 100) energy = Math.min(100, energy + (myGarage.includes('lanos')?2.0:0.8));
-        money += (myAssets.bot*15 + myAssets.farm*220 + myAssets.office*4500)/10;
+        energy = Math.min(100, energy + 1.5); // Реген енергії кожні 3с
+        money += (myAssets.bot*25 + myAssets.farm*300 + myAssets.office*5500)/10;
         updateUI();
     }, 3000);
 
