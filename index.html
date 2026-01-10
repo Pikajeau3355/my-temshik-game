@@ -170,20 +170,20 @@
             </div>
         </div>
 
-        <!-- Channel Settings -->
+        <!-- Info Card -->
         <div class="px-4 mb-6">
-            <div class="glass-card rounded-2xl p-4">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="text-xl">📢</span>
-                    <span class="text-sm font-medium text-gray-300">Канал для отправки</span>
+            <div class="glass-card rounded-2xl p-4 border-l-4 border-purple-500">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl">💡</span>
+                    <div>
+                        <h3 class="text-sm font-semibold text-white mb-1">Как отправить в канал?</h3>
+                        <ul class="text-xs text-gray-400 space-y-1">
+                            <li>• <strong>Поделиться в Telegram</strong> — откроет выбор чата/канала</li>
+                            <li>• <strong>Скопировать</strong> — скопирует информацию о песне</li>
+                            <li>• <strong>Отправить боту</strong> — для автопостинга (нужен бот)</li>
+                        </ul>
+                    </div>
                 </div>
-                <input 
-                    type="text" 
-                    id="channelInput" 
-                    placeholder="@your_channel или ID канала"
-                    class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 transition-all text-sm"
-                >
-                <p class="text-xs text-gray-500 mt-2">Бот должен быть админом канала</p>
             </div>
         </div>
 
@@ -254,13 +254,32 @@
                     </button>
                 </div>
 
-                <!-- Send Button -->
-                <button onclick="sendToChannel()" class="w-full btn-send text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                    </svg>
-                    Отправить в канал
-                </button>
+                <!-- Send Buttons -->
+                <div class="w-full space-y-3">
+                    <!-- Share via Telegram -->
+                    <button onclick="shareViaTelegram()" class="w-full btn-send text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.828.94z"/>
+                        </svg>
+                        Поделиться в Telegram
+                    </button>
+                    
+                    <!-- Copy Link -->
+                    <button onclick="copyToClipboard()" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                        Скопировать информацию
+                    </button>
+                    
+                    <!-- Send to Bot (if available) -->
+                    <button onclick="sendToBot()" id="sendToBotBtn" class="w-full bg-purple-600/50 hover:bg-purple-600/70 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
+                        Отправить боту
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -544,14 +563,60 @@
             document.getElementById('duration').textContent = formatDuration(Math.floor(audioPlayer.duration));
         });
 
-        // Send to channel
-        function sendToChannel() {
-            const channel = channelInput.value.trim();
-            
-            if (!channel) {
-                showToast('⚠️', 'Укажите канал для отправки');
+        // Share via Telegram (opens Telegram share dialog)
+        function shareViaTelegram() {
+            if (!currentSong) {
+                showToast('⚠️', 'Выберите песню');
                 return;
             }
+
+            const text = `🎵 *${currentSong.title}*\n👤 ${currentSong.artist.name}\n💿 ${currentSong.album.title || 'Album'}`;
+            const url = currentSong.link;
+            
+            // Telegram share URL
+            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+            
+            // Try to open in Telegram
+            if (tg) {
+                tg.openTelegramLink(shareUrl);
+            } else {
+                window.open(shareUrl, '_blank');
+            }
+            
+            showToast('✅', 'Открываю Telegram...');
+            haptic('success');
+        }
+
+        // Copy song info to clipboard
+        function copyToClipboard() {
+            if (!currentSong) {
+                showToast('⚠️', 'Выберите песню');
+                return;
+            }
+
+            const text = `🎵 ${currentSong.title}
+👤 ${currentSong.artist.name}
+💿 ${currentSong.album.title || 'Album'}
+🔗 ${currentSong.link}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('✅', 'Скопировано в буфер!');
+                haptic('success');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('✅', 'Скопировано!');
+            });
+        }
+
+        // Send to Bot (for processing by your bot)
+        function sendToBot() {
+            const channel = channelInput.value.trim();
 
             if (!currentSong) {
                 showToast('⚠️', 'Выберите песню');
@@ -560,42 +625,36 @@
 
             // Prepare message data
             const songData = {
+                action: 'send_music',
                 title: currentSong.title,
                 artist: currentSong.artist.name,
                 album: currentSong.album.title || '',
                 cover: currentSong.album.cover_xl || currentSong.album.cover_big || currentSong.album.cover_medium,
                 preview: currentSong.preview || '',
                 link: currentSong.link,
-                channel: channel,
+                channel: channel || null,
                 source: currentSong.source || 'unknown'
             };
 
-            // Send data to Telegram
+            // Send data to Telegram Bot
             if (tg) {
-                tg.sendData(JSON.stringify({
-                    action: 'send_to_channel',
-                    ...songData
-                }));
-                
+                tg.sendData(JSON.stringify(songData));
                 showToast('✅', 'Отправлено боту!');
+                haptic('success');
                 
                 setTimeout(() => {
                     tg.close();
                 }, 1500);
             } else {
-                // Demo mode - show what would be sent
-                console.log('Would send to channel:', songData);
-                
-                // Copy link to clipboard as fallback
-                const text = `🎵 ${currentSong.title}\n👤 ${currentSong.artist.name}\n💿 ${currentSong.album.title || 'Unknown Album'}\n🔗 ${currentSong.link}`;
-                navigator.clipboard.writeText(text).then(() => {
-                    showToast('✅', 'Информация скопирована в буфер!');
-                }).catch(() => {
-                    showToast('📋', `Песня: ${currentSong.title}`);
-                });
+                // Demo mode
+                console.log('Data for bot:', songData);
+                showToast('ℹ️', 'Откройте в Telegram Mini App');
             }
+        }
 
-            closePlayer();
+        // Legacy function for compatibility
+        function sendToChannel() {
+            shareViaTelegram();
         }
 
         // Toast notification
