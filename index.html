@@ -2,1051 +2,1313 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Выживание | Survival</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>City Holder 🏙️</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+        
         * {
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
         
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: #0a0e27;
+            background-image: 
+                radial-gradient(ellipse at top, rgba(20, 40, 100, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(10, 20, 60, 0.3) 0%, transparent 50%);
             min-height: 100vh;
-            color: #e8e8e8;
             overflow-x: hidden;
-        }
-        
-        .font-orbitron {
-            font-family: 'Orbitron', monospace;
-        }
-        
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .glow-green {
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
-        }
-        
-        .glow-red {
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
-        }
-        
-        .glow-blue {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-        }
-        
-        .glow-yellow {
-            box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
-        }
-        
-        .stat-bar {
-            height: 8px;
-            border-radius: 4px;
-            background: rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-        }
-        
-        .stat-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.5s ease, background-color 0.3s ease;
-        }
-        
-        .action-btn {
-            transition: all 0.2s ease;
             position: relative;
-            overflow: hidden;
         }
         
-        .action-btn:active {
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, transparent 1px, transparent 2px, rgba(255,255,255,0.03) 3px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, transparent 1px, transparent 2px, rgba(255,255,255,0.03) 3px);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .tap-button {
+            background: linear-gradient(145deg, #ffeb3b 0%, #ffc107 50%, #ff9800 100%);
+            box-shadow: 
+                0 20px 40px rgba(255, 193, 7, 0.4),
+                0 10px 20px rgba(255, 152, 0, 0.3),
+                inset 0 -8px 16px rgba(0, 0, 0, 0.2),
+                inset 0 8px 16px rgba(255, 255, 255, 0.3);
+            border: 4px solid rgba(255, 235, 59, 0.5);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        
+        .tap-button::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tap-button:active::before {
+            opacity: 1;
+        }
+        
+        .tap-button:active {
+            transform: translateY(8px) translateZ(-20px) scale(0.95);
+            box-shadow: 
+                0 8px 20px rgba(255, 193, 7, 0.3),
+                0 4px 10px rgba(255, 152, 0, 0.2),
+                inset 0 -4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 4px 8px rgba(255, 255, 255, 0.2);
+        }
+        
+        .tap-button.disabled {
+            background: linear-gradient(145deg, #424242, #212121);
+            box-shadow: 
+                0 10px 20px rgba(0, 0, 0, 0.4),
+                inset 0 -4px 8px rgba(0, 0, 0, 0.3);
+            border-color: rgba(66, 66, 66, 0.5);
+        }
+        
+        .building-card {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%);
+            border: 2px solid rgba(63, 81, 181, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            position: relative;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                0 1px 0 rgba(255, 255, 255, 0.1) inset,
+                0 -1px 0 rgba(0, 0, 0, 0.5) inset;
+        }
+        
+        .building-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .building-card:active {
+            transform: translateZ(-10px) scale(0.98);
+        }
+        
+        .building-card:active::before {
+            opacity: 1;
+        }
+        
+        .building-card.locked {
+            opacity: 0.4;
+            filter: grayscale(1);
             transform: scale(0.95);
         }
         
-        .action-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .coin-animation {
+            position: fixed;
+            pointer-events: none;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            animation: coinFloat 1s ease-out forwards;
+            z-index: 1000;
         }
         
-        .action-btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
+        @keyframes coinFloat {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-80px) scale(1.5); }
         }
         
-        .action-btn:active::after {
-            width: 200px;
-            height: 200px;
+        .energy-bar {
+            background: linear-gradient(90deg, #00d4ff, #0099cc);
+            transition: width 0.3s ease;
         }
         
-        .inventory-item {
-            transition: all 0.2s ease;
-        }
-        
-        .inventory-item:hover {
-            transform: translateY(-2px);
-        }
-        
-        .pulse-animation {
+        .pulse {
             animation: pulse 2s infinite;
         }
         
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         
-        .fade-in {
-            animation: fadeIn 0.5s ease;
+        .city-bg {
+            background: linear-gradient(180deg, transparent 0%, rgba(15, 52, 96, 0.8) 100%);
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .tab-active {
+            background: linear-gradient(145deg, #ffd700, #ffaa00);
+            color: #1a1a2e;
         }
         
-        .event-notification {
+        .mission-card {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            border-left: 4px solid #ffd700;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.4),
+                0 2px 0 rgba(255, 215, 0, 0.3) inset;
+        }
+        
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #ffd700, #ffaa00);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .mission-card:active {
+            transform: translateX(4px) translateZ(-5px);
+        }
+        
+        .mission-card.completed {
+            border-left-color: #00ff88;
+            opacity: 0.6;
+            background: linear-gradient(135deg, #1a3a1a 0%, #2d4a2d 100%);
+        }
+        
+        .mission-card.completed::before {
+            background: linear-gradient(180deg, #00ff88, #00cc66);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        
+        .booster-active {
+            animation: glow 1s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 10px #ffd700; }
+            to { box-shadow: 0 0 25px #ffd700, 0 0 40px #ffaa00; }
+        }
+        
+        .notification {
             animation: slideIn 0.3s ease, slideOut 0.3s ease 2.7s forwards;
         }
         
         @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
         @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-100%); opacity: 0; }
         }
         
-        .weather-icon {
-            font-size: 2rem;
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
         }
         
-        .tab-active {
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-            color: white;
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
         }
         
-        ::-webkit-scrollbar {
-            width: 4px;
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
         }
         
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
+        /* 3D Panel Styles */
+        .panel-3d {
+            background: linear-gradient(135deg, rgba(26, 35, 126, 0.9) 0%, rgba(40, 53, 147, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(63, 81, 181, 0.3);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 1px rgba(255, 255, 255, 0.2) inset,
+                0 10px 40px rgba(63, 81, 181, 0.1);
+            transform-style: preserve-3d;
+            position: relative;
         }
         
-        ::-webkit-scrollbar-thumb {
-            background: rgba(34, 197, 94, 0.5);
-            border-radius: 2px;
+        .panel-3d::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+            border-radius: inherit;
+            pointer-events: none;
+        }
+        
+        /* Isometric City */
+        .isometric-city {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        
+        .building-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+        }
+        
+        .building-3d:hover {
+            transform: translateY(-10px) rotateX(5deg);
+        }
+        
+        /* Button 3D Effects */
+        .btn-3d {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 10px 20px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+        
+        .btn-3d:active {
+            transform: translateY(4px) translateZ(-10px);
+            box-shadow: 
+                0 5px 10px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+        
+        /* Stat Card 3D */
+        .stat-card-3d {
+            background: linear-gradient(135deg, rgba(30, 40, 80, 0.8) 0%, rgba(20, 30, 60, 0.8) 100%);
+            border: 1px solid rgba(100, 120, 200, 0.3);
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.4),
+                0 0 1px rgba(255, 255, 255, 0.1) inset;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card-3d:active {
+            transform: translateZ(-5px) scale(0.98);
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 640px) {
+            .tap-button {
+                width: 160px !important;
+                height: 160px !important;
+                font-size: 4rem !important;
+            }
+            
+            .building-card {
+                padding: 1rem !important;
+            }
+            
+            body {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 375px) {
+            .tap-button {
+                width: 140px !important;
+                height: 140px !important;
+                font-size: 3.5rem !important;
+            }
         }
     </style>
 </head>
-<body>
-    <div id="app" class="min-h-screen pb-20">
-        <!-- Header -->
-        <header class="glass sticky top-0 z-50 px-4 py-3">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <div class="text-2xl">🏕️</div>
-                    <div>
-                        <h1 class="font-orbitron font-bold text-lg text-green-400">ВЫЖИВАНИЕ</h1>
-                        <p class="text-xs text-gray-400">День <span id="day-counter" class="text-yellow-400 font-bold">1</span></p>
-                    </div>
+<body class="text-white">
+    <!-- Stars Background -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Notification Container -->
+    <div id="notification" class="fixed top-4 left-4 right-4 z-50 hidden">
+        <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-4 shadow-xl notification">
+            <p id="notificationText" class="text-center font-semibold"></p>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl p-4" style="background: linear-gradient(180deg, rgba(10, 14, 39, 0.95) 0%, rgba(10, 14, 39, 0.8) 80%, transparent 100%);">
+        <div class="flex justify-between items-center max-w-lg mx-auto">
+            <div class="flex items-center gap-3">
+                <div class="text-3xl building-3d" style="filter: drop-shadow(0 4px 8px rgba(255, 215, 0, 0.3));">
+                    🏙️
                 </div>
-                <div class="flex items-center gap-3">
-                    <div id="weather-display" class="weather-icon">☀️</div>
-                    <div class="text-right">
-                        <p class="text-xs text-gray-400">Время</p>
-                        <p id="time-display" class="font-orbitron text-sm text-blue-400">06:00</p>
+                <div>
+                    <h1 class="font-bold text-xl" style="text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);">City Holder</h1>
+                    <p class="text-xs text-gray-400" id="playerName">Загрузка...</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="panel-3d rounded-full px-4 py-2 flex items-center gap-2">
+                    <span class="text-xl">⭐</span>
+                    <span class="font-bold text-lg" id="cityLevel">1</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="pt-24 pb-32 px-4 max-w-lg mx-auto relative z-10">
+        <!-- Resources Panel -->
+        <div class="panel-3d rounded-3xl p-5 mb-6">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="text-center stat-card-3d rounded-2xl p-4">
+                    <p class="text-gray-300 text-sm mb-2 flex items-center justify-center gap-1">
+                        <span class="text-xl">💰</span>
+                        <span>Монеты</span>
+                    </p>
+                    <p class="text-3xl font-black text-yellow-400 mb-1" id="coins" style="text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);">0</p>
+                    <p class="text-xs text-green-400 font-semibold" id="passiveIncome">+0/сек</p>
+                </div>
+                <div class="text-center stat-card-3d rounded-2xl p-4">
+                    <p class="text-gray-300 text-sm mb-2 flex items-center justify-center gap-1">
+                        <span class="text-xl">⚡</span>
+                        <span>Энергия</span>
+                    </p>
+                    <p class="text-3xl font-black text-cyan-400 mb-1" style="text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);">
+                        <span id="energy">100</span>/<span id="maxEnergy">100</span>
+                    </p>
+                    <div class="w-full bg-slate-900/50 rounded-full h-3 mt-2 overflow-hidden" style="box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);">
+                        <div class="energy-bar h-3 rounded-full" id="energyBar" style="width: 100%; background: linear-gradient(90deg, #00d4ff, #0099cc); box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);"></div>
                     </div>
                 </div>
             </div>
-        </header>
-
-        <!-- Stats Section -->
-        <section class="px-4 py-4">
-            <div class="glass rounded-2xl p-4 space-y-3">
-                <!-- Health -->
-                <div class="flex items-center gap-3">
-                    <div class="text-xl w-8 text-center">❤️</div>
-                    <div class="flex-1">
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="text-gray-400">Здоровье</span>
-                            <span id="health-value" class="text-red-400 font-bold">100%</span>
-                        </div>
-                        <div class="stat-bar">
-                            <div id="health-bar" class="stat-fill bg-gradient-to-r from-red-600 to-red-400" style="width: 100%"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Hunger -->
-                <div class="flex items-center gap-3">
-                    <div class="text-xl w-8 text-center">🍖</div>
-                    <div class="flex-1">
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="text-gray-400">Сытость</span>
-                            <span id="hunger-value" class="text-orange-400 font-bold">100%</span>
-                        </div>
-                        <div class="stat-bar">
-                            <div id="hunger-bar" class="stat-fill bg-gradient-to-r from-orange-600 to-orange-400" style="width: 100%"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Thirst -->
-                <div class="flex items-center gap-3">
-                    <div class="text-xl w-8 text-center">💧</div>
-                    <div class="flex-1">
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="text-gray-400">Жажда</span>
-                            <span id="thirst-value" class="text-blue-400 font-bold">100%</span>
-                        </div>
-                        <div class="stat-bar">
-                            <div id="thirst-bar" class="stat-fill bg-gradient-to-r from-blue-600 to-blue-400" style="width: 100%"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Energy -->
-                <div class="flex items-center gap-3">
-                    <div class="text-xl w-8 text-center">⚡</div>
-                    <div class="flex-1">
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="text-gray-400">Энергия</span>
-                            <span id="energy-value" class="text-yellow-400 font-bold">100%</span>
-                        </div>
-                        <div class="stat-bar">
-                            <div id="energy-bar" class="stat-fill bg-gradient-to-r from-yellow-600 to-yellow-400" style="width: 100%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        </div>
+        
         <!-- Tab Navigation -->
-        <section class="px-4 mb-4">
-            <div class="glass rounded-xl p-1 flex gap-1">
-                <button onclick="switchTab('actions')" id="tab-actions" class="tab-active flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all">
-                    ⚔️ Действия
-                </button>
-                <button onclick="switchTab('inventory')" id="tab-inventory" class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all text-gray-400 hover:text-white">
-                    🎒 Инвентарь
-                </button>
-                <button onclick="switchTab('crafting')" id="tab-crafting" class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all text-gray-400 hover:text-white">
-                    🔨 Крафт
-                </button>
-            </div>
-        </section>
-
-        <!-- Actions Tab -->
-        <section id="panel-actions" class="px-4 space-y-3">
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="doAction('explore')" class="action-btn glass rounded-xl p-4 text-left glow-green">
-                    <div class="text-3xl mb-2">🌲</div>
-                    <h3 class="font-bold text-green-400">Исследовать</h3>
-                    <p class="text-xs text-gray-400 mt-1">-10 ⚡ | Найти ресурсы</p>
-                </button>
-                
-                <button onclick="doAction('hunt')" class="action-btn glass rounded-xl p-4 text-left glow-red">
-                    <div class="text-3xl mb-2">🏹</div>
-                    <h3 class="font-bold text-red-400">Охотиться</h3>
-                    <p class="text-xs text-gray-400 mt-1">-20 ⚡ | Добыть еду</p>
-                </button>
-                
-                <button onclick="doAction('gather_water')" class="action-btn glass rounded-xl p-4 text-left glow-blue">
-                    <div class="text-3xl mb-2">🏞️</div>
-                    <h3 class="font-bold text-blue-400">К реке</h3>
-                    <p class="text-xs text-gray-400 mt-1">-15 ⚡ | Набрать воды</p>
-                </button>
-                
-                <button onclick="doAction('rest')" class="action-btn glass rounded-xl p-4 text-left glow-yellow">
-                    <div class="text-3xl mb-2">🏕️</div>
-                    <h3 class="font-bold text-yellow-400">Отдохнуть</h3>
-                    <p class="text-xs text-gray-400 mt-1">+30 ⚡ | 2 часа</p>
-                </button>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="doAction('eat')" class="action-btn glass rounded-xl p-3 flex items-center gap-3">
-                    <div class="text-2xl">🍖</div>
-                    <div class="text-left">
-                        <h3 class="font-bold text-sm">Поесть</h3>
-                        <p class="text-xs text-gray-400">Использовать еду</p>
-                    </div>
-                </button>
-                
-                <button onclick="doAction('drink')" class="action-btn glass rounded-xl p-3 flex items-center gap-3">
-                    <div class="text-2xl">🥤</div>
-                    <div class="text-left">
-                        <h3 class="font-bold text-sm">Попить</h3>
-                        <p class="text-xs text-gray-400">Использовать воду</p>
-                    </div>
-                </button>
-            </div>
-            
-            <button onclick="doAction('sleep')" class="action-btn w-full glass rounded-xl p-4 flex items-center justify-center gap-3 border border-purple-500/30">
-                <div class="text-2xl">😴</div>
-                <div class="text-left">
-                    <h3 class="font-bold text-purple-400">Спать до утра</h3>
-                    <p class="text-xs text-gray-400">Полное восстановление энергии</p>
-                </div>
+        <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <button onclick="switchTab('city')" id="tab-city" class="tab-active px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all">
+                🏙️ Город
             </button>
-        </section>
-
-        <!-- Inventory Tab -->
-        <section id="panel-inventory" class="px-4 hidden">
-            <div class="glass rounded-2xl p-4">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="font-orbitron font-bold text-lg">Инвентарь</h2>
-                    <span id="inventory-count" class="text-sm text-gray-400">0/20</span>
-                </div>
-                <div id="inventory-grid" class="grid grid-cols-4 gap-2">
-                    <!-- Items will be added here dynamically -->
-                </div>
-                <div id="empty-inventory" class="text-center py-8 text-gray-500">
-                    <div class="text-4xl mb-2">🎒</div>
-                    <p>Инвентарь пуст</p>
-                    <p class="text-sm">Исследуйте мир, чтобы найти ресурсы</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Crafting Tab -->
-        <section id="panel-crafting" class="px-4 hidden">
-            <div class="space-y-3">
-                <div class="glass rounded-xl p-4">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="text-3xl">🔥</div>
-                        <div>
-                            <h3 class="font-bold">Костёр</h3>
-                            <p class="text-xs text-gray-400">Готовить еду, греться</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="text-sm text-gray-400">
-                            <span class="text-orange-400">🪵 x3</span> + <span class="text-gray-400">🪨 x2</span>
-                        </div>
-                        <button onclick="craft('campfire')" class="action-btn bg-gradient-to-r from-orange-600 to-red-600 px-4 py-2 rounded-lg text-sm font-bold">
-                            Создать
-                        </button>
-                    </div>
+            <button onclick="switchTab('buildings')" id="tab-buildings" class="bg-slate-700/50 px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all">
+                🏗️ Здания
+            </button>
+            <button onclick="switchTab('missions')" id="tab-missions" class="bg-slate-700/50 px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all relative">
+                📋 Задания
+                <span id="missionBadge" class="absolute -top-1 -right-1 bg-red-500 text-xs w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+            </button>
+            <button onclick="switchTab('boosters')" id="tab-boosters" class="bg-slate-700/50 px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all">
+                🚀 Бустеры
+            </button>
+        </div>
+        
+        <!-- City Tab -->
+        <div id="cityTab" class="tab-content">
+            <!-- City Visualization -->
+            <div class="relative panel-3d rounded-3xl p-6 mb-6 min-h-[240px] overflow-hidden isometric-city" style="background: linear-gradient(180deg, rgba(15, 30, 80, 0.9) 0%, rgba(10, 20, 50, 0.9) 100%);">
+                <div class="absolute inset-0" style="background: radial-gradient(ellipse at center, rgba(100, 150, 255, 0.1) 0%, transparent 70%);"></div>
+                
+                <!-- Sky gradient -->
+                <div class="absolute top-0 left-0 right-0 h-32" style="background: linear-gradient(180deg, rgba(100, 150, 255, 0.2) 0%, transparent 100%);"></div>
+                
+                <div id="cityView" class="relative z-10 flex justify-center items-end gap-3 h-48" style="perspective: 800px; transform-style: preserve-3d;">
+                    <!-- Buildings will be rendered here -->
                 </div>
                 
-                <div class="glass rounded-xl p-4">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="text-3xl">🏠</div>
-                        <div>
-                            <h3 class="font-bold">Укрытие</h3>
-                            <p class="text-xs text-gray-400">Защита от непогоды</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="text-sm text-gray-400">
-                            <span class="text-orange-400">🪵 x10</span> + <span class="text-green-400">🌿 x5</span>
-                        </div>
-                        <button onclick="craft('shelter')" class="action-btn bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-2 rounded-lg text-sm font-bold">
-                            Создать
-                        </button>
-                    </div>
-                </div>
+                <!-- Ground with 3D effect -->
+                <div class="absolute bottom-0 left-0 right-0 h-12" style="background: linear-gradient(180deg, transparent 0%, rgba(34, 139, 34, 0.6) 30%, rgba(34, 100, 34, 0.8) 100%); box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);"></div>
                 
-                <div class="glass rounded-xl p-4">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="text-3xl">🗡️</div>
-                        <div>
-                            <h3 class="font-bold">Копьё</h3>
-                            <p class="text-xs text-gray-400">Улучшает охоту</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="text-sm text-gray-400">
-                            <span class="text-orange-400">🪵 x2</span> + <span class="text-gray-400">🪨 x1</span>
-                        </div>
-                        <button onclick="craft('spear')" class="action-btn bg-gradient-to-r from-gray-600 to-gray-500 px-4 py-2 rounded-lg text-sm font-bold">
-                            Создать
-                        </button>
-                    </div>
-                </div>
+                <!-- Grid lines for depth -->
+                <div class="absolute bottom-12 left-0 right-0" style="height: 2px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);"></div>
+            </div>
+            
+            <!-- Tap Area -->
+            <div class="text-center mb-6">
+                <p class="text-gray-300 mb-3 font-semibold text-lg" style="text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);">Тапни, чтобы заработать!</p>
+                <p class="text-base text-yellow-400 mb-6 font-bold" id="tapBonus" style="text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">+1 💰 за тап</p>
                 
-                <div class="glass rounded-xl p-4">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="text-3xl">🧴</div>
-                        <div>
-                            <h3 class="font-bold">Фляга</h3>
-                            <p class="text-xs text-gray-400">Хранить больше воды</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="text-sm text-gray-400">
-                            <span class="text-green-400">🌿 x3</span> + <span class="text-blue-400">💧 x1</span>
-                        </div>
-                        <button onclick="craft('flask')" class="action-btn bg-gradient-to-r from-blue-600 to-cyan-600 px-4 py-2 rounded-lg text-sm font-bold">
-                            Создать
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Event Log -->
-        <section class="px-4 mt-4">
-            <div class="glass rounded-2xl p-4">
-                <h2 class="font-orbitron font-bold text-sm mb-3 text-gray-400">📜 Журнал событий</h2>
-                <div id="event-log" class="space-y-2 max-h-32 overflow-y-auto">
-                    <p class="text-sm text-gray-500 fade-in">Добро пожаловать в мир выживания!</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Notifications -->
-        <div id="notifications" class="fixed top-20 right-4 space-y-2 z-50"></div>
-
-        <!-- Game Over Modal -->
-        <div id="game-over-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-            <div class="glass rounded-2xl p-6 max-w-sm w-full text-center">
-                <div class="text-6xl mb-4">💀</div>
-                <h2 class="font-orbitron font-bold text-2xl text-red-500 mb-2">ИГРА ОКОНЧЕНА</h2>
-                <p id="death-reason" class="text-gray-400 mb-4">Вы не смогли выжить...</p>
-                <div class="glass rounded-xl p-4 mb-4">
-                    <p class="text-sm text-gray-400">Вы выжили</p>
-                    <p class="font-orbitron text-3xl text-yellow-400" id="survived-days">1 день</p>
-                </div>
-                <button onclick="restartGame()" class="w-full action-btn bg-gradient-to-r from-green-600 to-emerald-600 py-3 rounded-xl font-bold text-lg">
-                    🔄 Начать заново
+                <button id="tapButton" onclick="handleTap(event)" class="tap-button w-40 h-40 rounded-full flex items-center justify-center text-6xl mx-auto transition-transform" style="transform: translateZ(0);">
+                    🏙️
                 </button>
+                
+                <div id="boosterStatus" class="mt-6 hidden">
+                    <div class="inline-flex items-center gap-3 panel-3d px-6 py-3 rounded-full" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 152, 0, 0.2) 100%); border: 2px solid rgba(255, 193, 7, 0.4);">
+                        <span class="text-2xl">🚀</span>
+                        <span class="font-black text-yellow-400 text-xl">x<span id="boosterMultiplier">1</span></span>
+                        <span class="text-sm text-gray-300 font-semibold">(<span id="boosterTime">0</span>с)</span>
+                    </div>
+                </div>
             </div>
+            
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-3 gap-3 text-center">
+                <div class="bg-slate-800/50 rounded-xl p-3">
+                    <p class="text-2xl mb-1">👆</p>
+                    <p class="text-sm text-gray-400">Тапов</p>
+                    <p class="font-bold" id="totalTaps">0</p>
+                </div>
+                <div class="bg-slate-800/50 rounded-xl p-3">
+                    <p class="text-2xl mb-1">🏢</p>
+                    <p class="text-sm text-gray-400">Зданий</p>
+                    <p class="font-bold" id="totalBuildings">0</p>
+                </div>
+                <div class="bg-slate-800/50 rounded-xl p-3">
+                    <p class="text-2xl mb-1">📈</p>
+                    <p class="text-sm text-gray-400">Доход/тап</p>
+                    <p class="font-bold text-yellow-400" id="incomePerTap">1</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Buildings Tab -->
+        <div id="buildingsTab" class="tab-content hidden">
+            <h2 class="text-xl font-bold mb-4">🏗️ Здания города</h2>
+            <div class="space-y-4" id="buildingsList">
+                <!-- Buildings will be rendered here -->
+            </div>
+        </div>
+        
+        <!-- Missions Tab -->
+        <div id="missionsTab" class="tab-content hidden">
+            <h2 class="text-xl font-bold mb-4">📋 Ежедневные задания</h2>
+            <div class="space-y-3" id="missionsList">
+                <!-- Missions will be rendered here -->
+            </div>
+            
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-400">Обновление через: <span id="missionsTimer" class="text-cyan-400 font-bold">--:--:--</span></p>
+            </div>
+        </div>
+        
+        <!-- Boosters Tab -->
+        <div id="boostersTab" class="tab-content hidden">
+            <h2 class="text-xl font-bold mb-4">🚀 Бустеры</h2>
+            <div class="space-y-4" id="boostersList">
+                <!-- Boosters will be rendered here -->
+            </div>
+        </div>
+    </main>
+    
+    <!-- Offline Earnings Modal -->
+    <div id="offlineModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-gradient-to-b from-slate-800 to-slate-900 rounded-3xl p-6 max-w-sm w-full text-center">
+            <div class="text-6xl mb-4">💰</div>
+            <h2 class="text-2xl font-bold mb-2">С возвращением!</h2>
+            <p class="text-gray-400 mb-4">Пока вас не было, город заработал:</p>
+            <p class="text-4xl font-bold text-yellow-400 mb-6">+<span id="offlineEarnings">0</span> 💰</p>
+            <button onclick="claimOfflineEarnings()" class="w-full bg-gradient-to-r from-yellow-500 to-orange-500 py-3 rounded-xl font-bold text-lg">
+                Забрать!
+            </button>
         </div>
     </div>
 
     <script>
-        // Initialize Telegram WebApp
-        const tg = window.Telegram?.WebApp;
-        if (tg) {
-            tg.ready();
-            tg.expand();
-            tg.setHeaderColor('#1a1a2e');
-            tg.setBackgroundColor('#1a1a2e');
-        }
-
-        // Game State
-        let gameState = {
-            day: 1,
-            hour: 6,
-            health: 100,
-            hunger: 100,
-            thirst: 100,
-            energy: 100,
-            inventory: [],
-            crafted: {
-                campfire: false,
-                shelter: false,
-                spear: false,
-                flask: false
+        // ==================== GAME DATA ====================
+        const BUILDINGS = [
+            {
+                id: 'house',
+                name: 'Жилой дом',
+                icon: '🏠',
+                description: 'Увеличивает пассивный доход',
+                baseCost: 50,
+                baseBonus: 1,
+                bonusType: 'passive',
+                unlockLevel: 1
             },
-            weather: 'sunny',
-            isAlive: true
-        };
-
-        // Item definitions
-        const items = {
-            wood: { name: 'Древесина', emoji: '🪵', stackable: true },
-            stone: { name: 'Камень', emoji: '🪨', stackable: true },
-            plant: { name: 'Растения', emoji: '🌿', stackable: true },
-            meat_raw: { name: 'Сырое мясо', emoji: '🥩', stackable: true },
-            meat_cooked: { name: 'Жареное мясо', emoji: '🍖', stackable: true },
-            water: { name: 'Вода', emoji: '💧', stackable: true },
-            berries: { name: 'Ягоды', emoji: '🫐', stackable: true },
-            mushroom: { name: 'Грибы', emoji: '🍄', stackable: true },
-            fish: { name: 'Рыба', emoji: '🐟', stackable: true }
-        };
-
-        // Weather types
-        const weatherTypes = [
-            { type: 'sunny', emoji: '☀️', effect: 'normal' },
-            { type: 'cloudy', emoji: '☁️', effect: 'normal' },
-            { type: 'rainy', emoji: '🌧️', effect: 'wet' },
-            { type: 'stormy', emoji: '⛈️', effect: 'dangerous' },
-            { type: 'night', emoji: '🌙', effect: 'dark' }
+            {
+                id: 'business',
+                name: 'Бизнес-центр',
+                icon: '🏢',
+                description: 'Увеличивает доход с тапов',
+                baseCost: 200,
+                baseBonus: 1,
+                bonusType: 'tap',
+                unlockLevel: 1
+            },
+            {
+                id: 'factory',
+                name: 'Завод',
+                icon: '🏭',
+                description: 'Даёт бонус к пассивному доходу',
+                baseCost: 500,
+                baseBonus: 5,
+                bonusType: 'passive',
+                unlockLevel: 2
+            },
+            {
+                id: 'townhall',
+                name: 'Мэрия',
+                icon: '🏛️',
+                description: 'Повышает уровень города',
+                baseCost: 1000,
+                baseBonus: 1,
+                bonusType: 'level',
+                unlockLevel: 3
+            },
+            {
+                id: 'park',
+                name: 'Парк',
+                icon: '🌳',
+                description: 'Увеличивает максимум энергии',
+                baseCost: 300,
+                baseBonus: 10,
+                bonusType: 'energy',
+                unlockLevel: 2
+            },
+            {
+                id: 'powerplant',
+                name: 'Электростанция',
+                icon: '⚡',
+                description: 'Ускоряет восстановление энергии',
+                baseCost: 800,
+                baseBonus: 0.5,
+                bonusType: 'energyRegen',
+                unlockLevel: 4
+            }
         ];
 
-        // Update UI
-        function updateUI() {
-            // Stats
-            document.getElementById('health-value').textContent = Math.round(gameState.health) + '%';
-            document.getElementById('health-bar').style.width = gameState.health + '%';
-            
-            document.getElementById('hunger-value').textContent = Math.round(gameState.hunger) + '%';
-            document.getElementById('hunger-bar').style.width = gameState.hunger + '%';
-            
-            document.getElementById('thirst-value').textContent = Math.round(gameState.thirst) + '%';
-            document.getElementById('thirst-bar').style.width = gameState.thirst + '%';
-            
-            document.getElementById('energy-value').textContent = Math.round(gameState.energy) + '%';
-            document.getElementById('energy-bar').style.width = gameState.energy + '%';
-            
-            // Day and time
-            document.getElementById('day-counter').textContent = gameState.day;
-            document.getElementById('time-display').textContent = 
-                String(gameState.hour).padStart(2, '0') + ':00';
-            
-            // Weather
-            updateWeather();
-            
-            // Inventory
-            updateInventory();
-            
-            // Color coding for low stats
-            updateStatColors();
-        }
+        const MISSIONS = [
+            { id: 'tap100', name: 'Тапни 100 раз', target: 100, type: 'taps', reward: 500, icon: '👆' },
+            { id: 'tap500', name: 'Тапни 500 раз', target: 500, type: 'taps', reward: 2500, icon: '👆' },
+            { id: 'earn1000', name: 'Заработай 1000 монет', target: 1000, type: 'earnings', reward: 300, icon: '💰' },
+            { id: 'earn5000', name: 'Заработай 5000 монет', target: 5000, type: 'earnings', reward: 1500, icon: '💰' },
+            { id: 'upgrade3', name: 'Улучши здания 3 раза', target: 3, type: 'upgrades', reward: 800, icon: '🏗️' },
+            { id: 'useBooster', name: 'Используй бустер', target: 1, type: 'boosters', reward: 200, icon: '🚀' }
+        ];
 
-        function updateStatColors() {
-            const healthBar = document.getElementById('health-bar');
-            const hungerBar = document.getElementById('hunger-bar');
-            const thirstBar = document.getElementById('thirst-bar');
-            
-            if (gameState.health < 25) healthBar.classList.add('pulse-animation');
-            else healthBar.classList.remove('pulse-animation');
-            
-            if (gameState.hunger < 25) hungerBar.classList.add('pulse-animation');
-            else hungerBar.classList.remove('pulse-animation');
-            
-            if (gameState.thirst < 25) thirstBar.classList.add('pulse-animation');
-            else thirstBar.classList.remove('pulse-animation');
-        }
+        const BOOSTERS = [
+            { id: 'x2', name: 'Двойной доход', icon: '⚡', multiplier: 2, duration: 30, cost: 100 },
+            { id: 'x5', name: 'Пятикратный доход', icon: '🔥', multiplier: 5, duration: 15, cost: 300 },
+            { id: 'energy', name: 'Полная энергия', icon: '🔋', type: 'energy', cost: 150 },
+            { id: 'x10', name: 'Мега бустер', icon: '💎', multiplier: 10, duration: 10, cost: 500 }
+        ];
 
-        function updateWeather() {
-            const hour = gameState.hour;
-            let weather;
-            
-            if (hour >= 21 || hour < 6) {
-                weather = weatherTypes[4]; // night
+        // ==================== GAME STATE ====================
+        let gameState = {
+            coins: 0,
+            energy: 100,
+            maxEnergy: 100,
+            cityLevel: 1,
+            totalTaps: 0,
+            todayTaps: 0,
+            todayEarnings: 0,
+            todayUpgrades: 0,
+            todayBoosters: 0,
+            buildings: {},
+            completedMissions: [],
+            lastOnline: Date.now(),
+            lastMissionReset: Date.now(),
+            energyRegen: 1,
+            activeBooster: null,
+            boosterEndTime: 0
+        };
+
+        // ==================== TELEGRAM INTEGRATION ====================
+        let tg = window.Telegram?.WebApp;
+        
+        function initTelegram() {
+            if (tg) {
+                tg.ready();
+                tg.expand();
+                
+                const user = tg.initDataUnsafe?.user;
+                if (user) {
+                    document.getElementById('playerName').textContent = user.first_name || 'Игрок';
+                } else {
+                    document.getElementById('playerName').textContent = 'Гость';
+                }
+                
+                // Set theme
+                if (tg.colorScheme === 'light') {
+                    document.body.style.background = 'linear-gradient(180deg, #e8f4f8 0%, #b8d4e3 50%, #87ceeb 100%)';
+                }
             } else {
-                const rand = Math.random();
-                if (rand < 0.6) weather = weatherTypes[0];
-                else if (rand < 0.8) weather = weatherTypes[1];
-                else if (rand < 0.95) weather = weatherTypes[2];
-                else weather = weatherTypes[3];
+                document.getElementById('playerName').textContent = 'Демо режим';
             }
-            
-            gameState.weather = weather.type;
-            document.getElementById('weather-display').textContent = weather.emoji;
         }
 
-        function updateInventory() {
-            const grid = document.getElementById('inventory-grid');
-            const emptyMsg = document.getElementById('empty-inventory');
-            const countEl = document.getElementById('inventory-count');
-            
-            // Count items
-            const itemCounts = {};
-            gameState.inventory.forEach(item => {
-                itemCounts[item] = (itemCounts[item] || 0) + 1;
-            });
-            
-            const totalItems = gameState.inventory.length;
-            countEl.textContent = `${totalItems}/20`;
-            
-            if (totalItems === 0) {
-                grid.innerHTML = '';
-                emptyMsg.classList.remove('hidden');
+        // ==================== SAVE/LOAD ====================
+        function saveGame() {
+            gameState.lastOnline = Date.now();
+            localStorage.setItem('cityHolder', JSON.stringify(gameState));
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('cityHolder');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                gameState = { ...gameState, ...parsed };
+                
+                // Calculate offline earnings
+                const offlineTime = (Date.now() - gameState.lastOnline) / 1000;
+                const passiveIncome = calculatePassiveIncome();
+                const offlineEarnings = Math.floor(offlineTime * passiveIncome * 0.5); // 50% efficiency offline
+                
+                if (offlineEarnings > 10) {
+                    document.getElementById('offlineEarnings').textContent = formatNumber(offlineEarnings);
+                    document.getElementById('offlineModal').classList.remove('hidden');
+                    gameState.pendingOfflineEarnings = offlineEarnings;
+                }
+                
+                // Check mission reset
+                checkMissionReset();
+            }
+        }
+
+        function claimOfflineEarnings() {
+            if (gameState.pendingOfflineEarnings) {
+                gameState.coins += gameState.pendingOfflineEarnings;
+                gameState.pendingOfflineEarnings = 0;
+            }
+            document.getElementById('offlineModal').classList.add('hidden');
+            updateUI();
+            saveGame();
+        }
+
+        // ==================== CORE MECHANICS ====================
+        function handleTap(event) {
+            if (gameState.energy <= 0) {
+                showNotification('⚡ Нет энергии! Подождите...', 'warning');
                 return;
             }
             
-            emptyMsg.classList.add('hidden');
-            grid.innerHTML = '';
+            // Calculate earnings
+            let earnings = calculateTapIncome();
             
-            Object.entries(itemCounts).forEach(([itemId, count]) => {
-                const item = items[itemId];
-                if (item) {
-                    const div = document.createElement('div');
-                    div.className = 'inventory-item glass rounded-lg p-2 text-center relative';
-                    div.innerHTML = `
-                        <div class="text-2xl">${item.emoji}</div>
-                        <div class="text-xs text-gray-400 mt-1">${item.name}</div>
-                        ${count > 1 ? `<div class="absolute -top-1 -right-1 bg-green-500 text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">${count}</div>` : ''}
-                    `;
-                    grid.appendChild(div);
-                }
-            });
-        }
-
-        // Switch tabs
-        function switchTab(tab) {
-            ['actions', 'inventory', 'crafting'].forEach(t => {
-                document.getElementById(`panel-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.remove('tab-active');
-                document.getElementById(`tab-${t}`).classList.add('text-gray-400');
-            });
-            
-            document.getElementById(`panel-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-${tab}`).classList.add('tab-active');
-            document.getElementById(`tab-${tab}`).classList.remove('text-gray-400');
-        }
-
-        // Add to log
-        function addLog(message, type = 'normal') {
-            const log = document.getElementById('event-log');
-            const p = document.createElement('p');
-            p.className = 'text-sm fade-in';
-            
-            switch(type) {
-                case 'success': p.classList.add('text-green-400'); break;
-                case 'danger': p.classList.add('text-red-400'); break;
-                case 'warning': p.classList.add('text-yellow-400'); break;
-                case 'info': p.classList.add('text-blue-400'); break;
-                default: p.classList.add('text-gray-400');
+            // Apply booster
+            if (gameState.activeBooster && Date.now() < gameState.boosterEndTime) {
+                earnings *= gameState.activeBooster.multiplier;
             }
             
-            const time = String(gameState.hour).padStart(2, '0') + ':00';
-            p.textContent = `[${time}] ${message}`;
-            log.insertBefore(p, log.firstChild);
+            // Update state
+            gameState.coins += earnings;
+            gameState.energy -= 1;
+            gameState.totalTaps += 1;
+            gameState.todayTaps += 1;
+            gameState.todayEarnings += earnings;
             
-            // Keep only last 20 entries
-            while (log.children.length > 20) {
-                log.removeChild(log.lastChild);
-            }
-        }
-
-        // Show notification
-        function showNotification(message, type = 'info') {
-            const container = document.getElementById('notifications');
-            const div = document.createElement('div');
-            div.className = `event-notification glass rounded-lg px-4 py-2 text-sm`;
-            
-            switch(type) {
-                case 'success': div.classList.add('border-l-4', 'border-green-500'); break;
-                case 'danger': div.classList.add('border-l-4', 'border-red-500'); break;
-                case 'warning': div.classList.add('border-l-4', 'border-yellow-500'); break;
-                default: div.classList.add('border-l-4', 'border-blue-500');
-            }
-            
-            div.textContent = message;
-            container.appendChild(div);
-            
-            setTimeout(() => div.remove(), 3000);
+            // Show floating coin
+            createCoinAnimation(event.clientX || event.touches?.[0]?.clientX || window.innerWidth/2, 
+                               event.clientY || event.touches?.[0]?.clientY || window.innerHeight/2, 
+                               earnings);
             
             // Haptic feedback
             if (tg?.HapticFeedback) {
-                if (type === 'danger') tg.HapticFeedback.notificationOccurred('error');
-                else if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
-                else tg.HapticFeedback.impactOccurred('light');
-            }
-        }
-
-        // Advance time
-        function advanceTime(hours) {
-            gameState.hour += hours;
-            
-            while (gameState.hour >= 24) {
-                gameState.hour -= 24;
-                gameState.day++;
-                addLog(`Наступил день ${gameState.day}`, 'info');
-            }
-            
-            // Decrease stats over time
-            gameState.hunger -= hours * 3;
-            gameState.thirst -= hours * 4;
-            
-            // Weather effects
-            if (gameState.weather === 'rainy' && !gameState.crafted.shelter) {
-                gameState.health -= hours * 2;
-                addLog('Вы мокнете под дождём...', 'warning');
-            }
-            if (gameState.weather === 'stormy' && !gameState.crafted.shelter) {
-                gameState.health -= hours * 5;
-                addLog('Гроза наносит урон!', 'danger');
-            }
-            
-            // Low stats damage
-            if (gameState.hunger <= 0) {
-                gameState.hunger = 0;
-                gameState.health -= hours * 5;
-                addLog('Вы умираете от голода!', 'danger');
-            }
-            if (gameState.thirst <= 0) {
-                gameState.thirst = 0;
-                gameState.health -= hours * 7;
-                addLog('Вы умираете от жажды!', 'danger');
-            }
-            
-            // Clamp values
-            gameState.health = Math.max(0, Math.min(100, gameState.health));
-            gameState.hunger = Math.max(0, Math.min(100, gameState.hunger));
-            gameState.thirst = Math.max(0, Math.min(100, gameState.thirst));
-            gameState.energy = Math.max(0, Math.min(100, gameState.energy));
-            
-            updateUI();
-            checkGameOver();
-        }
-
-        // Check game over
-        function checkGameOver() {
-            if (gameState.health <= 0 && gameState.isAlive) {
-                gameState.isAlive = false;
-                let reason = 'Вы не смогли выжить в дикой природе.';
-                
-                if (gameState.hunger <= 0) reason = 'Вы умерли от голода.';
-                else if (gameState.thirst <= 0) reason = 'Вы умерли от обезвоживания.';
-                else if (gameState.weather === 'stormy') reason = 'Вас убила гроза.';
-                
-                document.getElementById('death-reason').textContent = reason;
-                document.getElementById('survived-days').textContent = 
-                    gameState.day === 1 ? '1 день' : `${gameState.day} дней`;
-                document.getElementById('game-over-modal').classList.remove('hidden');
-                
-                if (tg?.HapticFeedback) {
-                    tg.HapticFeedback.notificationOccurred('error');
-                }
-            }
-        }
-
-        // Add item to inventory
-        function addItem(itemId, count = 1) {
-            for (let i = 0; i < count; i++) {
-                if (gameState.inventory.length < 20) {
-                    gameState.inventory.push(itemId);
-                }
-            }
-            updateInventory();
-        }
-
-        // Remove item from inventory
-        function removeItem(itemId, count = 1) {
-            for (let i = 0; i < count; i++) {
-                const idx = gameState.inventory.indexOf(itemId);
-                if (idx > -1) {
-                    gameState.inventory.splice(idx, 1);
-                }
-            }
-            updateInventory();
-        }
-
-        // Count items
-        function countItem(itemId) {
-            return gameState.inventory.filter(i => i === itemId).length;
-        }
-
-        // Actions
-        function doAction(action) {
-            if (!gameState.isAlive) return;
-            
-            switch(action) {
-                case 'explore':
-                    if (gameState.energy < 10) {
-                        showNotification('Недостаточно энергии!', 'warning');
-                        return;
-                    }
-                    gameState.energy -= 10;
-                    
-                    const finds = [];
-                    const rand = Math.random();
-                    
-                    if (rand < 0.4) {
-                        addItem('wood', Math.floor(Math.random() * 3) + 1);
-                        finds.push('древесину');
-                    }
-                    if (rand < 0.3) {
-                        addItem('stone', Math.floor(Math.random() * 2) + 1);
-                        finds.push('камни');
-                    }
-                    if (rand < 0.5) {
-                        addItem('plant', Math.floor(Math.random() * 2) + 1);
-                        finds.push('растения');
-                    }
-                    if (rand < 0.2) {
-                        addItem('berries', Math.floor(Math.random() * 3) + 1);
-                        finds.push('ягоды');
-                    }
-                    if (rand < 0.1) {
-                        addItem('mushroom', 1);
-                        finds.push('грибы');
-                    }
-                    
-                    if (finds.length > 0) {
-                        addLog(`Вы нашли: ${finds.join(', ')}`, 'success');
-                        showNotification(`Найдено: ${finds.join(', ')}`, 'success');
-                    } else {
-                        addLog('Вы ничего не нашли...', 'normal');
-                        showNotification('Ничего не найдено', 'warning');
-                    }
-                    
-                    advanceTime(1);
-                    break;
-                    
-                case 'hunt':
-                    if (gameState.energy < 20) {
-                        showNotification('Недостаточно энергии!', 'warning');
-                        return;
-                    }
-                    gameState.energy -= 20;
-                    
-                    let successChance = 0.4;
-                    if (gameState.crafted.spear) successChance = 0.7;
-                    
-                    if (Math.random() < successChance) {
-                        const meatCount = gameState.crafted.spear ? 
-                            Math.floor(Math.random() * 2) + 2 : 
-                            Math.floor(Math.random() * 2) + 1;
-                        addItem('meat_raw', meatCount);
-                        addLog(`Охота успешна! Добыто мяса: ${meatCount}`, 'success');
-                        showNotification(`🥩 Добыто мяса: ${meatCount}`, 'success');
-                    } else {
-                        addLog('Охота неудачна...', 'warning');
-                        showNotification('Добыча ускользнула', 'warning');
-                    }
-                    
-                    advanceTime(2);
-                    break;
-                    
-                case 'gather_water':
-                    if (gameState.energy < 15) {
-                        showNotification('Недостаточно энергии!', 'warning');
-                        return;
-                    }
-                    gameState.energy -= 15;
-                    
-                    let waterAmount = gameState.crafted.flask ? 
-                        Math.floor(Math.random() * 3) + 3 : 
-                        Math.floor(Math.random() * 2) + 1;
-                    
-                    addItem('water', waterAmount);
-                    
-                    // Chance to find fish
-                    if (Math.random() < 0.3) {
-                        addItem('fish', 1);
-                        addLog(`Набрано воды: ${waterAmount}, поймана рыба!`, 'success');
-                        showNotification(`💧 Вода +${waterAmount}, 🐟 Рыба +1`, 'success');
-                    } else {
-                        addLog(`Набрано воды: ${waterAmount}`, 'success');
-                        showNotification(`💧 Вода +${waterAmount}`, 'success');
-                    }
-                    
-                    advanceTime(1);
-                    break;
-                    
-                case 'rest':
-                    gameState.energy = Math.min(100, gameState.energy + 30);
-                    addLog('Вы отдохнули и восстановили силы.', 'success');
-                    showNotification('⚡ Энергия +30', 'success');
-                    advanceTime(2);
-                    break;
-                    
-                case 'eat':
-                    // Priority: cooked meat > fish > berries > mushroom > raw meat
-                    let foodEaten = null;
-                    let hungerRestore = 0;
-                    
-                    if (countItem('meat_cooked') > 0) {
-                        removeItem('meat_cooked');
-                        hungerRestore = 35;
-                        foodEaten = '🍖 жареное мясо';
-                    } else if (countItem('fish') > 0) {
-                        removeItem('fish');
-                        hungerRestore = 25;
-                        foodEaten = '🐟 рыбу';
-                    } else if (countItem('berries') > 0) {
-                        removeItem('berries');
-                        hungerRestore = 15;
-                        foodEaten = '🫐 ягоды';
-                    } else if (countItem('mushroom') > 0) {
-                        removeItem('mushroom');
-                        hungerRestore = 10;
-                        foodEaten = '🍄 грибы';
-                        // Chance of poisoning
-                        if (Math.random() < 0.2) {
-                            gameState.health -= 15;
-                            addLog('Грибы оказались ядовитыми!', 'danger');
-                            showNotification('🤢 Отравление! -15 HP', 'danger');
-                        }
-                    } else if (countItem('meat_raw') > 0) {
-                        removeItem('meat_raw');
-                        hungerRestore = 15;
-                        foodEaten = '🥩 сырое мясо';
-                        // Chance of sickness
-                        if (Math.random() < 0.3) {
-                            gameState.health -= 10;
-                            addLog('Сырое мясо вызвало расстройство!', 'danger');
-                            showNotification('🤢 Расстройство! -10 HP', 'danger');
-                        }
-                    }
-                    
-                    if (foodEaten) {
-                        gameState.hunger = Math.min(100, gameState.hunger + hungerRestore);
-                        addLog(`Вы съели ${foodEaten}`, 'success');
-                        showNotification(`🍖 Сытость +${hungerRestore}`, 'success');
-                    } else {
-                        showNotification('Нет еды в инвентаре!', 'warning');
-                    }
-                    updateUI();
-                    break;
-                    
-                case 'drink':
-                    if (countItem('water') > 0) {
-                        removeItem('water');
-                        gameState.thirst = Math.min(100, gameState.thirst + 30);
-                        addLog('Вы утолили жажду.', 'success');
-                        showNotification('💧 Жажда +30', 'success');
-                    } else {
-                        showNotification('Нет воды в инвентаре!', 'warning');
-                    }
-                    updateUI();
-                    break;
-                    
-                case 'sleep':
-                    const hoursUntilMorning = gameState.hour < 6 ? 
-                        6 - gameState.hour : 
-                        24 - gameState.hour + 6;
-                    
-                    if (gameState.crafted.shelter) {
-                        gameState.energy = 100;
-                        addLog('Вы хорошо выспались в укрытии!', 'success');
-                    } else {
-                        gameState.energy = Math.min(100, gameState.energy + 60);
-                        addLog('Вы поспали под открытым небом.', 'info');
-                    }
-                    
-                    showNotification('😴 Сон до утра...', 'info');
-                    advanceTime(hoursUntilMorning);
-                    break;
-            }
-        }
-
-        // Crafting
-        function craft(item) {
-            if (!gameState.isAlive) return;
-            
-            switch(item) {
-                case 'campfire':
-                    if (countItem('wood') >= 3 && countItem('stone') >= 2) {
-                        removeItem('wood', 3);
-                        removeItem('stone', 2);
-                        gameState.crafted.campfire = true;
-                        addLog('Вы создали костёр! Теперь можно готовить.', 'success');
-                        showNotification('🔥 Костёр создан!', 'success');
-                        
-                        // Cook all raw meat
-                        const rawMeat = countItem('meat_raw');
-                        if (rawMeat > 0) {
-                            removeItem('meat_raw', rawMeat);
-                            addItem('meat_cooked', rawMeat);
-                            addLog(`Приготовлено мяса: ${rawMeat}`, 'success');
-                        }
-                    } else {
-                        showNotification('Недостаточно ресурсов!', 'warning');
-                    }
-                    break;
-                    
-                case 'shelter':
-                    if (countItem('wood') >= 10 && countItem('plant') >= 5) {
-                        removeItem('wood', 10);
-                        removeItem('plant', 5);
-                        gameState.crafted.shelter = true;
-                        addLog('Вы построили укрытие! Теперь вы защищены от непогоды.', 'success');
-                        showNotification('🏠 Укрытие построено!', 'success');
-                    } else {
-                        showNotification('Недостаточно ресурсов!', 'warning');
-                    }
-                    break;
-                    
-                case 'spear':
-                    if (countItem('wood') >= 2 && countItem('stone') >= 1) {
-                        removeItem('wood', 2);
-                        removeItem('stone', 1);
-                        gameState.crafted.spear = true;
-                        addLog('Вы создали копьё! Охота стала эффективнее.', 'success');
-                        showNotification('🗡️ Копьё создано!', 'success');
-                    } else {
-                        showNotification('Недостаточно ресурсов!', 'warning');
-                    }
-                    break;
-                    
-                case 'flask':
-                    if (countItem('plant') >= 3 && countItem('water') >= 1) {
-                        removeItem('plant', 3);
-                        removeItem('water', 1);
-                        gameState.crafted.flask = true;
-                        addLog('Вы создали флягу! Можно носить больше воды.', 'success');
-                        showNotification('🧴 Фляга создана!', 'success');
-                    } else {
-                        showNotification('Недостаточно ресурсов!', 'warning');
-                    }
-                    break;
+                tg.HapticFeedback.impactOccurred('light');
             }
             
             updateUI();
+            checkMissions();
+            saveGame();
         }
 
-        // Restart game
-        function restartGame() {
-            gameState = {
-                day: 1,
-                hour: 6,
-                health: 100,
-                hunger: 100,
-                thirst: 100,
-                energy: 100,
-                inventory: [],
-                crafted: {
-                    campfire: false,
-                    shelter: false,
-                    spear: false,
-                    flask: false
-                },
-                weather: 'sunny',
-                isAlive: true
-            };
+        function createCoinAnimation(x, y, amount) {
+            const coin = document.createElement('div');
+            coin.className = 'coin-animation';
+            coin.textContent = `+${formatNumber(amount)}`;
+            coin.style.left = `${x}px`;
+            coin.style.top = `${y}px`;
+            document.body.appendChild(coin);
             
-            document.getElementById('game-over-modal').classList.add('hidden');
-            document.getElementById('event-log').innerHTML = '<p class="text-sm text-gray-500 fade-in">Новая игра началась. Удачи!</p>';
+            setTimeout(() => coin.remove(), 1000);
+        }
+
+        function calculateTapIncome() {
+            let base = 1;
             
-            updateUI();
+            // Add business center bonus
+            const businessLevel = gameState.buildings['business'] || 0;
+            base += businessLevel * BUILDINGS.find(b => b.id === 'business').baseBonus;
+            
+            // City level bonus
+            base += Math.floor(gameState.cityLevel * 0.5);
+            
+            return base;
+        }
+
+        function calculatePassiveIncome() {
+            let income = 0;
+            
+            // House income
+            const houseLevel = gameState.buildings['house'] || 0;
+            income += houseLevel * BUILDINGS.find(b => b.id === 'house').baseBonus;
+            
+            // Factory income
+            const factoryLevel = gameState.buildings['factory'] || 0;
+            income += factoryLevel * BUILDINGS.find(b => b.id === 'factory').baseBonus;
+            
+            return income;
+        }
+
+        function calculateCityLevel() {
+            const townhallLevel = gameState.buildings['townhall'] || 0;
+            let baseLevel = 1 + townhallLevel;
+            
+            // Bonus from total buildings
+            const totalBuildingLevels = Object.values(gameState.buildings).reduce((a, b) => a + b, 0);
+            baseLevel += Math.floor(totalBuildingLevels / 10);
+            
+            return baseLevel;
+        }
+
+        // ==================== BUILDINGS ====================
+        function upgradeBuilding(buildingId) {
+            const building = BUILDINGS.find(b => b.id === buildingId);
+            if (!building) return;
+            
+            const currentLevel = gameState.buildings[buildingId] || 0;
+            const cost = calculateBuildingCost(building, currentLevel);
+            
+            if (gameState.cityLevel < building.unlockLevel) {
+                showNotification(`🔒 Требуется уровень города ${building.unlockLevel}`, 'error');
+                return;
+            }
+            
+            if (gameState.coins < cost) {
+                showNotification('💰 Недостаточно монет!', 'error');
+                return;
+            }
+            
+            gameState.coins -= cost;
+            gameState.buildings[buildingId] = currentLevel + 1;
+            gameState.todayUpgrades += 1;
+            
+            // Apply special effects
+            if (building.bonusType === 'energy') {
+                gameState.maxEnergy += building.baseBonus;
+            } else if (building.bonusType === 'energyRegen') {
+                gameState.energyRegen += building.baseBonus;
+            }
+            
+            // Update city level
+            gameState.cityLevel = calculateCityLevel();
+            
+            showNotification(`🏗️ ${building.name} улучшен до уровня ${currentLevel + 1}!`, 'success');
             
             if (tg?.HapticFeedback) {
                 tg.HapticFeedback.notificationOccurred('success');
             }
+            
+            updateUI();
+            renderBuildings();
+            renderCityView();
+            checkMissions();
+            saveGame();
         }
 
-        // Auto-cook meat if campfire exists
-        function autoCook() {
-            if (gameState.crafted.campfire) {
-                const rawMeat = countItem('meat_raw');
-                const rawFish = countItem('fish');
+        function calculateBuildingCost(building, level) {
+            return Math.floor(building.baseCost * Math.pow(1.5, level));
+        }
+
+        function renderBuildings() {
+            const container = document.getElementById('buildingsList');
+            container.innerHTML = '';
+            
+            BUILDINGS.forEach(building => {
+                const level = gameState.buildings[building.id] || 0;
+                const cost = calculateBuildingCost(building, level);
+                const isLocked = gameState.cityLevel < building.unlockLevel;
+                const canAfford = gameState.coins >= cost;
                 
-                if (rawMeat > 0) {
-                    removeItem('meat_raw', rawMeat);
-                    addItem('meat_cooked', rawMeat);
+                const bonus = building.bonusType === 'passive' ? `+${level * building.baseBonus}/сек` :
+                              building.bonusType === 'tap' ? `+${level * building.baseBonus}/тап` :
+                              building.bonusType === 'energy' ? `+${level * building.baseBonus} макс. энергии` :
+                              building.bonusType === 'energyRegen' ? `+${(level * building.baseBonus).toFixed(1)}/сек восст.` :
+                              `Уровень +${level * building.baseBonus}`;
+                
+                container.innerHTML += `
+                    <div class="building-card rounded-2xl p-4 ${isLocked ? 'locked' : ''}">
+                        <div class="flex items-center gap-4">
+                            <div class="text-4xl">${building.icon}</div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2">
+                                    <h3 class="font-bold">${building.name}</h3>
+                                    <span class="bg-slate-700 px-2 py-0.5 rounded text-sm">Lv.${level}</span>
+                                </div>
+                                <p class="text-sm text-gray-400">${building.description}</p>
+                                <p class="text-sm text-yellow-400">${bonus}</p>
+                            </div>
+                            <div class="text-right">
+                                ${isLocked ? 
+                                    `<p class="text-sm text-gray-500">🔒 Ур. ${building.unlockLevel}</p>` :
+                                    `<button onclick="upgradeBuilding('${building.id}')" 
+                                        class="px-4 py-2 rounded-xl font-bold transition-all ${canAfford ? 
+                                            'bg-gradient-to-r from-yellow-500 to-orange-500 hover:scale-105' : 
+                                            'bg-gray-600 cursor-not-allowed'}">
+                                        ${formatNumber(cost)} 💰
+                                    </button>`
+                                }
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderCityView() {
+            const container = document.getElementById('cityView');
+            container.innerHTML = '';
+            
+            const buildingHeights = {
+                'house': 50,
+                'business': 80,
+                'factory': 65,
+                'townhall': 100,
+                'park': 35,
+                'powerplant': 70
+            };
+            
+            const buildingColors = {
+                'house': 'linear-gradient(135deg, #ef5350 0%, #c62828 100%)',
+                'business': 'linear-gradient(135deg, #42a5f5 0%, #1976d2 100%)',
+                'factory': 'linear-gradient(135deg, #9e9e9e 0%, #616161 100%)',
+                'townhall': 'linear-gradient(135deg, #ffd54f 0%, #f9a825 100%)',
+                'park': 'linear-gradient(135deg, #66bb6a 0%, #388e3c 100%)',
+                'powerplant': 'linear-gradient(135deg, #ffb74d 0%, #f57c00 100%)'
+            };
+            
+            BUILDINGS.forEach(building => {
+                const level = gameState.buildings[building.id] || 0;
+                if (level > 0) {
+                    const height = buildingHeights[building.id] + (level * 8);
+                    const color = buildingColors[building.id];
+                    
+                    container.innerHTML += `
+                        <div class="building-3d flex flex-col items-center justify-end gap-1" style="height: ${height}px; min-width: 60px;">
+                            <!-- Building body with 3D effect -->
+                            <div class="relative flex flex-col items-center justify-end" style="height: ${height - 20}px; width: 50px;">
+                                <!-- Main building -->
+                                <div class="w-full rounded-t-lg relative overflow-hidden" 
+                                     style="height: 100%; 
+                                            background: ${color};
+                                            box-shadow: 
+                                                0 10px 30px rgba(0, 0, 0, 0.6),
+                                                inset -4px 0 8px rgba(0, 0, 0, 0.3),
+                                                inset 4px 0 8px rgba(255, 255, 255, 0.2);
+                                            border: 2px solid rgba(255, 255, 255, 0.2);
+                                            transform: perspective(500px) rotateY(-5deg);">
+                                    
+                                    <!-- Windows/details -->
+                                    <div class="absolute inset-0 grid grid-cols-2 gap-1 p-2">
+                                        ${Array(Math.min(level * 2, 8)).fill(0).map((_, i) => `
+                                            <div class="bg-yellow-300/60 rounded-sm" 
+                                                 style="box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 4px rgba(255, 255, 100, 0.4);"></div>
+                                        `).join('')}
+                                    </div>
+                                    
+                                    <!-- Roof shine -->
+                                    <div class="absolute top-0 left-0 right-0 h-1/3" 
+                                         style="background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 100%);"></div>
+                                </div>
+                                
+                                <!-- Icon on top -->
+                                <div class="absolute -top-6 text-3xl" 
+                                     style="filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));">
+                                    ${building.icon}
+                                </div>
+                            </div>
+                            
+                            <!-- Level badge -->
+                            <div class="panel-3d px-2 py-1 rounded-lg text-xs font-bold" 
+                                 style="background: rgba(0, 0, 0, 0.6); 
+                                        border: 1px solid rgba(255, 255, 255, 0.2);
+                                        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);">
+                                Ур.${level}
+                            </div>
+                        </div>
+                    `;
                 }
+            });
+            
+            if (container.innerHTML === '') {
+                container.innerHTML = `
+                    <div class="text-center w-full" style="transform: translateY(50%);">
+                        <p class="text-gray-400 text-lg mb-2">🏗️</p>
+                        <p class="text-gray-500 font-semibold">Постройте первое здание!</p>
+                    </div>
+                `;
             }
         }
 
-        // Initialize
-        updateUI();
-        addLog('Вы очнулись в незнакомом лесу. Нужно выжить!', 'info');
-
-        // Auto-save and periodic updates
-        setInterval(() => {
-            if (gameState.isAlive) {
-                autoCook();
+        // ==================== MISSIONS ====================
+        function checkMissionReset() {
+            const now = new Date();
+            const lastReset = new Date(gameState.lastMissionReset);
+            
+            if (now.getDate() !== lastReset.getDate() || 
+                now.getMonth() !== lastReset.getMonth() ||
+                now.getFullYear() !== lastReset.getFullYear()) {
+                // Reset daily stats
+                gameState.todayTaps = 0;
+                gameState.todayEarnings = 0;
+                gameState.todayUpgrades = 0;
+                gameState.todayBoosters = 0;
+                gameState.completedMissions = [];
+                gameState.lastMissionReset = Date.now();
             }
-        }, 5000);
+        }
+
+        function checkMissions() {
+            let completed = 0;
+            
+            MISSIONS.forEach(mission => {
+                if (gameState.completedMissions.includes(mission.id)) return;
+                
+                let progress = 0;
+                switch (mission.type) {
+                    case 'taps': progress = gameState.todayTaps; break;
+                    case 'earnings': progress = gameState.todayEarnings; break;
+                    case 'upgrades': progress = gameState.todayUpgrades; break;
+                    case 'boosters': progress = gameState.todayBoosters; break;
+                }
+                
+                if (progress >= mission.target) {
+                    completed++;
+                }
+            });
+            
+            const badge = document.getElementById('missionBadge');
+            if (completed > 0) {
+                badge.textContent = completed;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function claimMission(missionId) {
+            const mission = MISSIONS.find(m => m.id === missionId);
+            if (!mission || gameState.completedMissions.includes(missionId)) return;
+            
+            let progress = 0;
+            switch (mission.type) {
+                case 'taps': progress = gameState.todayTaps; break;
+                case 'earnings': progress = gameState.todayEarnings; break;
+                case 'upgrades': progress = gameState.todayUpgrades; break;
+                case 'boosters': progress = gameState.todayBoosters; break;
+            }
+            
+            if (progress < mission.target) {
+                showNotification('❌ Задание ещё не выполнено!', 'error');
+                return;
+            }
+            
+            gameState.coins += mission.reward;
+            gameState.completedMissions.push(missionId);
+            
+            showNotification(`🎉 Получено ${formatNumber(mission.reward)} монет!`, 'success');
+            
+            if (tg?.HapticFeedback) {
+                tg.HapticFeedback.notificationOccurred('success');
+            }
+            
+            updateUI();
+            renderMissions();
+            checkMissions();
+            saveGame();
+        }
+
+        function renderMissions() {
+            const container = document.getElementById('missionsList');
+            container.innerHTML = '';
+            
+            MISSIONS.forEach(mission => {
+                const isCompleted = gameState.completedMissions.includes(mission.id);
+                
+                let progress = 0;
+                switch (mission.type) {
+                    case 'taps': progress = gameState.todayTaps; break;
+                    case 'earnings': progress = gameState.todayEarnings; break;
+                    case 'upgrades': progress = gameState.todayUpgrades; break;
+                    case 'boosters': progress = gameState.todayBoosters; break;
+                }
+                
+                const canClaim = progress >= mission.target && !isCompleted;
+                const progressPercent = Math.min(100, (progress / mission.target) * 100);
+                
+                container.innerHTML += `
+                    <div class="mission-card rounded-xl p-4 ${isCompleted ? 'completed' : ''}">
+                        <div class="flex items-center gap-3">
+                            <div class="text-3xl">${mission.icon}</div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold">${mission.name}</h3>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <div class="flex-1 bg-slate-700 rounded-full h-2">
+                                        <div class="bg-gradient-to-r from-yellow-500 to-orange-500 h-2 rounded-full transition-all" 
+                                             style="width: ${progressPercent}%"></div>
+                                    </div>
+                                    <span class="text-sm text-gray-400">${Math.min(progress, mission.target)}/${mission.target}</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                ${isCompleted ? 
+                                    '<span class="text-green-400">✓</span>' :
+                                    canClaim ?
+                                        `<button onclick="claimMission('${mission.id}')" 
+                                            class="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg font-bold animate-pulse">
+                                            ${formatNumber(mission.reward)} 💰
+                                        </button>` :
+                                        `<span class="text-gray-500">${formatNumber(mission.reward)} 💰</span>`
+                                }
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Mission reset timer
+            updateMissionTimer();
+        }
+
+        function updateMissionTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const diff = tomorrow - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('missionsTimer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // ==================== BOOSTERS ====================
+        function activateBooster(boosterId) {
+            const booster = BOOSTERS.find(b => b.id === boosterId);
+            if (!booster) return;
+            
+            if (gameState.coins < booster.cost) {
+                showNotification('💰 Недостаточно монет!', 'error');
+                return;
+            }
+            
+            gameState.coins -= booster.cost;
+            gameState.todayBoosters += 1;
+            
+            if (booster.type === 'energy') {
+                gameState.energy = gameState.maxEnergy;
+                showNotification('🔋 Энергия восстановлена!', 'success');
+            } else {
+                gameState.activeBooster = booster;
+                gameState.boosterEndTime = Date.now() + (booster.duration * 1000);
+                showNotification(`${booster.icon} ${booster.name} активирован на ${booster.duration} сек!`, 'success');
+            }
+            
+            if (tg?.HapticFeedback) {
+                tg.HapticFeedback.notificationOccurred('success');
+            }
+            
+            updateUI();
+            renderBoosters();
+            checkMissions();
+            saveGame();
+        }
+
+        function renderBoosters() {
+            const container = document.getElementById('boostersList');
+            container.innerHTML = '';
+            
+            BOOSTERS.forEach(booster => {
+                const canAfford = gameState.coins >= booster.cost;
+                const isActive = gameState.activeBooster?.id === booster.id && Date.now() < gameState.boosterEndTime;
+                
+                container.innerHTML += `
+                    <div class="building-card rounded-2xl p-4 ${isActive ? 'booster-active' : ''}">
+                        <div class="flex items-center gap-4">
+                            <div class="text-4xl">${booster.icon}</div>
+                            <div class="flex-1">
+                                <h3 class="font-bold">${booster.name}</h3>
+                                <p class="text-sm text-gray-400">
+                                    ${booster.type === 'energy' ? 
+                                        'Полностью восстанавливает энергию' : 
+                                        `x${booster.multiplier} доход на ${booster.duration} сек`}
+                                </p>
+                            </div>
+                            <div>
+                                ${isActive ?
+                                    '<span class="text-green-400 font-bold">Активен</span>' :
+                                    `<button onclick="activateBooster('${booster.id}')" 
+                                        class="px-4 py-2 rounded-xl font-bold transition-all ${canAfford ? 
+                                            'bg-gradient-to-r from-purple-500 to-pink-500 hover:scale-105' : 
+                                            'bg-gray-600 cursor-not-allowed'}">
+                                        ${formatNumber(booster.cost)} 💰
+                                    </button>`
+                                }
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // ==================== UI UPDATES ====================
+        function updateUI() {
+            document.getElementById('coins').textContent = formatNumber(gameState.coins);
+            document.getElementById('energy').textContent = gameState.energy;
+            document.getElementById('maxEnergy').textContent = gameState.maxEnergy;
+            document.getElementById('cityLevel').textContent = gameState.cityLevel;
+            document.getElementById('totalTaps').textContent = formatNumber(gameState.totalTaps);
+            document.getElementById('incomePerTap').textContent = formatNumber(calculateTapIncome());
+            document.getElementById('passiveIncome').textContent = `+${formatNumber(calculatePassiveIncome())}/сек`;
+            document.getElementById('tapBonus').textContent = `+${formatNumber(calculateTapIncome())} 💰 за тап`;
+            
+            // Energy bar
+            const energyPercent = (gameState.energy / gameState.maxEnergy) * 100;
+            document.getElementById('energyBar').style.width = `${energyPercent}%`;
+            
+            // Tap button state
+            const tapButton = document.getElementById('tapButton');
+            if (gameState.energy <= 0) {
+                tapButton.classList.add('disabled');
+            } else {
+                tapButton.classList.remove('disabled');
+            }
+            
+            // Total buildings
+            const totalBuildings = Object.values(gameState.buildings).reduce((a, b) => a + b, 0);
+            document.getElementById('totalBuildings').textContent = totalBuildings;
+            
+            // Booster status
+            if (gameState.activeBooster && Date.now() < gameState.boosterEndTime) {
+                document.getElementById('boosterStatus').classList.remove('hidden');
+                document.getElementById('boosterMultiplier').textContent = gameState.activeBooster.multiplier;
+                const timeLeft = Math.ceil((gameState.boosterEndTime - Date.now()) / 1000);
+                document.getElementById('boosterTime').textContent = timeLeft;
+            } else {
+                document.getElementById('boosterStatus').classList.add('hidden');
+                gameState.activeBooster = null;
+            }
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            
+            // Deactivate all tab buttons
+            document.querySelectorAll('[id^="tab-"]').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('bg-slate-700/50');
+            });
+            
+            // Show selected tab
+            document.getElementById(`${tabName}Tab`).classList.remove('hidden');
+            
+            // Activate tab button
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            activeBtn.classList.add('tab-active');
+            activeBtn.classList.remove('bg-slate-700/50');
+            
+            // Render content
+            if (tabName === 'buildings') renderBuildings();
+            if (tabName === 'missions') renderMissions();
+            if (tabName === 'boosters') renderBoosters();
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notificationText');
+            
+            text.textContent = message;
+            
+            const colors = {
+                success: 'from-green-500 to-emerald-600',
+                error: 'from-red-500 to-rose-600',
+                warning: 'from-yellow-500 to-orange-600'
+            };
+            
+            notification.querySelector('div').className = `bg-gradient-to-r ${colors[type]} rounded-xl p-4 shadow-xl notification`;
+            notification.classList.remove('hidden');
+            
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return Math.floor(num).toString();
+        }
+
+        // ==================== GAME LOOPS ====================
+        function gameLoop() {
+            // Energy regeneration
+            if (gameState.energy < gameState.maxEnergy) {
+                gameState.energy = Math.min(gameState.maxEnergy, gameState.energy + gameState.energyRegen * 0.1);
+            }
+            
+            // Passive income
+            const passiveIncome = calculatePassiveIncome();
+            if (passiveIncome > 0) {
+                gameState.coins += passiveIncome / 10;
+                gameState.todayEarnings += passiveIncome / 10;
+            }
+            
+            updateUI();
+        }
+
+        function createStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 60}%`;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                container.appendChild(star);
+            }
+        }
+
+        // ==================== INITIALIZATION ====================
+        function init() {
+            initTelegram();
+            loadGame();
+            createStars();
+            updateUI();
+            renderCityView();
+            checkMissions();
+            
+            // Game loop - runs every 100ms
+            setInterval(gameLoop, 100);
+            
+            // Save every 5 seconds
+            setInterval(saveGame, 5000);
+            
+            // Update mission timer every second
+            setInterval(updateMissionTimer, 1000);
+            
+            // Update booster timer
+            setInterval(() => {
+                if (gameState.activeBooster && Date.now() < gameState.boosterEndTime) {
+                    const timeLeft = Math.ceil((gameState.boosterEndTime - Date.now()) / 1000);
+                    document.getElementById('boosterTime').textContent = timeLeft;
+                }
+            }, 1000);
+        }
+
+        // Start the game
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
