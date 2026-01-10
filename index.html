@@ -3,368 +3,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>🎰 Lucky Casino</title>
+    <title>Выживание | Survival</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
-            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
         
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
+            color: #e8e8e8;
             overflow-x: hidden;
         }
         
-        .gold-gradient {
-            background: linear-gradient(135deg, #f5af19 0%, #f12711 50%, #f5af19 100%);
-            background-size: 200% 200%;
-            animation: shimmer 3s ease infinite;
+        .font-orbitron {
+            font-family: 'Orbitron', monospace;
         }
         
-        .gold-text {
-            background: linear-gradient(135deg, #ffd700, #ffaa00, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        .glow-green {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
         }
         
-        .slot-reel {
-            background: linear-gradient(180deg, #2d2d44 0%, #1a1a2e 50%, #2d2d44 100%);
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+        .glow-red {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
         }
         
-        .slot-symbol {
-            font-size: 2.5rem;
-            text-shadow: 0 0 20px rgba(255,215,0,0.5);
+        .glow-blue {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
         }
         
-        @keyframes spin {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-100%); }
+        .glow-yellow {
+            box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
         }
         
-        .spinning .slot-symbol {
-            animation: spin 0.1s linear infinite;
+        .stat-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
         
-        .glow-button {
-            box-shadow: 0 0 20px rgba(245, 175, 25, 0.4), 
-                        0 0 40px rgba(245, 175, 25, 0.2),
-                        inset 0 1px 0 rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
+        .stat-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease, background-color 0.3s ease;
         }
         
-        .glow-button:hover {
-            box-shadow: 0 0 30px rgba(245, 175, 25, 0.6), 
-                        0 0 60px rgba(245, 175, 25, 0.3),
-                        inset 0 1px 0 rgba(255,255,255,0.3);
-            transform: scale(1.02);
+        .action-btn {
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
         }
         
-        .glow-button:active {
-            transform: scale(0.98);
+        .action-btn:active {
+            transform: scale(0.95);
         }
         
-        .card {
-            background: linear-gradient(145deg, #252542 0%, #1e1e35 100%);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
-        .balance-card {
-            background: linear-gradient(145deg, #2a2a4a 0%, #1f1f38 100%);
-            border: 1px solid rgba(255, 215, 0, 0.3);
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
         }
         
-        @keyframes jackpot {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        .action-btn:active::after {
+            width: 200px;
+            height: 200px;
         }
         
-        @keyframes coins {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        .inventory-item {
+            transition: all 0.2s ease;
         }
         
-        .coin {
-            position: fixed;
+        .inventory-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .event-notification {
+            animation: slideIn 0.3s ease, slideOut 0.3s ease 2.7s forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        .weather-icon {
             font-size: 2rem;
-            animation: coins 2s ease-in forwards;
-            pointer-events: none;
-            z-index: 100;
-        }
-        
-        .win-animation {
-            animation: jackpot 0.3s ease infinite;
         }
         
         .tab-active {
-            background: linear-gradient(135deg, #f5af19 0%, #f12711 100%);
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
             color: white;
         }
         
-        .roulette-wheel {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background: conic-gradient(
-                #e53935 0deg 10deg, #1a1a2e 10deg 20deg,
-                #e53935 20deg 30deg, #1a1a2e 30deg 40deg,
-                #e53935 40deg 50deg, #1a1a2e 50deg 60deg,
-                #e53935 60deg 70deg, #1a1a2e 70deg 80deg,
-                #e53935 80deg 90deg, #1a1a2e 90deg 100deg,
-                #e53935 100deg 110deg, #1a1a2e 110deg 120deg,
-                #e53935 120deg 130deg, #1a1a2e 130deg 140deg,
-                #e53935 140deg 150deg, #1a1a2e 150deg 160deg,
-                #e53935 160deg 170deg, #1a1a2e 170deg 180deg,
-                #e53935 180deg 190deg, #1a1a2e 190deg 200deg,
-                #e53935 200deg 210deg, #1a1a2e 210deg 220deg,
-                #e53935 220deg 230deg, #1a1a2e 230deg 240deg,
-                #e53935 240deg 250deg, #1a1a2e 250deg 260deg,
-                #e53935 260deg 270deg, #1a1a2e 270deg 280deg,
-                #e53935 280deg 290deg, #1a1a2e 290deg 300deg,
-                #e53935 300deg 310deg, #1a1a2e 310deg 320deg,
-                #e53935 320deg 330deg, #1a1a2e 330deg 340deg,
-                #4caf50 340deg 350deg, #1a1a2e 350deg 360deg
-            );
-            box-shadow: 0 0 0 10px #ffd700, 0 0 0 15px #1a1a2e, 0 0 40px rgba(255,215,0,0.3);
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        ::-webkit-scrollbar {
+            width: 4px;
         }
         
-        .nav-item {
-            transition: all 0.3s ease;
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
         }
         
-        .nav-item.active {
-            color: #ffd700;
-            transform: scale(1.1);
+        ::-webkit-scrollbar-thumb {
+            background: rgba(34, 197, 94, 0.5);
+            border-radius: 2px;
         }
-        
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 0;
-        }
-        
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: twinkle 2s ease-in-out infinite;
-        }
-        
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.8; }
-        }
-        
-        .history-item {
-            border-left: 3px solid;
-        }
-        
-        .history-win { border-color: #4caf50; }
-        .history-lose { border-color: #e53935; }
     </style>
 </head>
-<body class="text-white pb-24">
-    <!-- Stars Background -->
-    <div class="stars" id="stars"></div>
-    
-    <!-- Header -->
-    <header class="relative z-10 p-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-full gold-gradient flex items-center justify-center text-2xl">
-                🎰
-            </div>
-            <div>
-                <h1 class="text-xl font-bold gold-text">Lucky Casino</h1>
-                <p class="text-xs text-gray-400">Удачи в игре!</p>
-            </div>
-        </div>
-        <div class="balance-card rounded-xl px-4 py-2">
-            <p class="text-xs text-gray-400">Баланс</p>
-            <p class="text-lg font-bold gold-text" id="balance">10,000 💎</p>
-        </div>
-    </header>
-    
-    <!-- Main Content -->
-    <main class="relative z-10 px-4">
-        <!-- Tabs -->
-        <div class="flex gap-2 mb-6 bg-[#1a1a2e] rounded-2xl p-1">
-            <button onclick="showTab('slots')" id="tab-slots" class="tab-active flex-1 py-3 rounded-xl font-semibold transition-all">
-                🎰 Слоты
-            </button>
-            <button onclick="showTab('roulette')" id="tab-roulette" class="flex-1 py-3 rounded-xl font-semibold transition-all text-gray-400">
-                🎡 Рулетка
-            </button>
-            <button onclick="showTab('history')" id="tab-history" class="flex-1 py-3 rounded-xl font-semibold transition-all text-gray-400">
-                📜 История
-            </button>
-        </div>
-        
-        <!-- Slots Game -->
-        <div id="slots-game" class="game-section">
-            <div class="card rounded-3xl p-6 mb-6">
-                <div class="text-center mb-4">
-                    <span class="text-sm text-gray-400">Множитель выигрыша</span>
-                    <div class="flex justify-center gap-4 mt-2 text-sm">
-                        <span>3️⃣ = x10</span>
-                        <span>🍒 = x5</span>
-                        <span>🍋 = x3</span>
+<body>
+    <div id="app" class="min-h-screen pb-20">
+        <!-- Header -->
+        <header class="glass sticky top-0 z-50 px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="text-2xl">🏕️</div>
+                    <div>
+                        <h1 class="font-orbitron font-bold text-lg text-green-400">ВЫЖИВАНИЕ</h1>
+                        <p class="text-xs text-gray-400">День <span id="day-counter" class="text-yellow-400 font-bold">1</span></p>
                     </div>
                 </div>
-                
-                <!-- Slot Machine -->
-                <div class="flex justify-center gap-3 mb-6">
-                    <div class="slot-reel w-24 h-28 rounded-2xl flex items-center justify-center overflow-hidden" id="reel1">
-                        <span class="slot-symbol">🍒</span>
+                <div class="flex items-center gap-3">
+                    <div id="weather-display" class="weather-icon">☀️</div>
+                    <div class="text-right">
+                        <p class="text-xs text-gray-400">Время</p>
+                        <p id="time-display" class="font-orbitron text-sm text-blue-400">06:00</p>
                     </div>
-                    <div class="slot-reel w-24 h-28 rounded-2xl flex items-center justify-center overflow-hidden" id="reel2">
-                        <span class="slot-symbol">🍋</span>
-                    </div>
-                    <div class="slot-reel w-24 h-28 rounded-2xl flex items-center justify-center overflow-hidden" id="reel3">
-                        <span class="slot-symbol">🍇</span>
-                    </div>
-                </div>
-                
-                <!-- Win Display -->
-                <div id="win-display" class="text-center mb-4 h-8">
-                    <span class="text-2xl font-bold gold-text"></span>
-                </div>
-                
-                <!-- Bet Controls -->
-                <div class="flex items-center justify-center gap-4 mb-6">
-                    <button onclick="changeBet(-100)" class="w-12 h-12 rounded-full bg-[#2d2d44] text-2xl font-bold hover:bg-[#3d3d54] transition-all">-</button>
-                    <div class="text-center">
-                        <p class="text-xs text-gray-400">Ставка</p>
-                        <p class="text-2xl font-bold" id="bet-amount">500 💎</p>
-                    </div>
-                    <button onclick="changeBet(100)" class="w-12 h-12 rounded-full bg-[#2d2d44] text-2xl font-bold hover:bg-[#3d3d54] transition-all">+</button>
-                </div>
-                
-                <!-- Spin Button -->
-                <button onclick="spin()" id="spin-btn" class="w-full py-4 rounded-2xl gold-gradient glow-button text-xl font-bold text-white">
-                    🎰 КРУТИТЬ
-                </button>
-            </div>
-            
-            <!-- Quick Stats -->
-            <div class="grid grid-cols-3 gap-3">
-                <div class="card rounded-2xl p-4 text-center">
-                    <p class="text-2xl">🏆</p>
-                    <p class="text-xs text-gray-400 mt-1">Побед</p>
-                    <p class="font-bold gold-text" id="wins-count">0</p>
-                </div>
-                <div class="card rounded-2xl p-4 text-center">
-                    <p class="text-2xl">🎮</p>
-                    <p class="text-xs text-gray-400 mt-1">Игр</p>
-                    <p class="font-bold" id="games-count">0</p>
-                </div>
-                <div class="card rounded-2xl p-4 text-center">
-                    <p class="text-2xl">💰</p>
-                    <p class="text-xs text-gray-400 mt-1">Макс. выигрыш</p>
-                    <p class="font-bold gold-text" id="max-win">0</p>
                 </div>
             </div>
-        </div>
-        
-        <!-- Roulette Game -->
-        <div id="roulette-game" class="game-section hidden">
-            <div class="card rounded-3xl p-6 mb-6">
-                <!-- Roulette Wheel -->
-                <div class="flex justify-center mb-6 relative">
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 z-10">
-                        <div class="w-0 h-0 border-l-8 border-r-8 border-t-12 border-l-transparent border-r-transparent border-t-yellow-400"></div>
-                    </div>
-                    <div class="roulette-wheel" id="roulette-wheel">
-                        <div class="absolute inset-8 rounded-full bg-[#1a1a2e] flex items-center justify-center">
-                            <span class="text-4xl" id="roulette-result">🎱</span>
+        </header>
+
+        <!-- Stats Section -->
+        <section class="px-4 py-4">
+            <div class="glass rounded-2xl p-4 space-y-3">
+                <!-- Health -->
+                <div class="flex items-center gap-3">
+                    <div class="text-xl w-8 text-center">❤️</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-gray-400">Здоровье</span>
+                            <span id="health-value" class="text-red-400 font-bold">100%</span>
+                        </div>
+                        <div class="stat-bar">
+                            <div id="health-bar" class="stat-fill bg-gradient-to-r from-red-600 to-red-400" style="width: 100%"></div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Betting Options -->
-                <div class="grid grid-cols-2 gap-3 mb-4">
-                    <button onclick="selectRouletteColor('red')" id="bet-red" class="py-4 rounded-xl bg-red-600 font-bold text-lg hover:bg-red-500 transition-all border-2 border-transparent">
-                        🔴 Красное x2
-                    </button>
-                    <button onclick="selectRouletteColor('black')" id="bet-black" class="py-4 rounded-xl bg-gray-800 font-bold text-lg hover:bg-gray-700 transition-all border-2 border-transparent">
-                        ⚫ Чёрное x2
-                    </button>
-                </div>
-                <button onclick="selectRouletteColor('green')" id="bet-green" class="w-full py-3 rounded-xl bg-green-600 font-bold hover:bg-green-500 transition-all border-2 border-transparent mb-4">
-                    🟢 Зелёное x14
-                </button>
-                
-                <!-- Bet Controls -->
-                <div class="flex items-center justify-center gap-4 mb-4">
-                    <button onclick="changeRouletteBet(-100)" class="w-10 h-10 rounded-full bg-[#2d2d44] text-xl font-bold">-</button>
-                    <div class="text-center">
-                        <p class="text-xs text-gray-400">Ставка</p>
-                        <p class="text-xl font-bold" id="roulette-bet-amount">500 💎</p>
+                <!-- Hunger -->
+                <div class="flex items-center gap-3">
+                    <div class="text-xl w-8 text-center">🍖</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-gray-400">Сытость</span>
+                            <span id="hunger-value" class="text-orange-400 font-bold">100%</span>
+                        </div>
+                        <div class="stat-bar">
+                            <div id="hunger-bar" class="stat-fill bg-gradient-to-r from-orange-600 to-orange-400" style="width: 100%"></div>
+                        </div>
                     </div>
-                    <button onclick="changeRouletteBet(100)" class="w-10 h-10 rounded-full bg-[#2d2d44] text-xl font-bold">+</button>
                 </div>
                 
-                <!-- Spin Button -->
-                <button onclick="spinRoulette()" id="roulette-spin-btn" class="w-full py-4 rounded-2xl gold-gradient glow-button text-xl font-bold text-white">
-                    🎡 КРУТИТЬ РУЛЕТКУ
+                <!-- Thirst -->
+                <div class="flex items-center gap-3">
+                    <div class="text-xl w-8 text-center">💧</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-gray-400">Жажда</span>
+                            <span id="thirst-value" class="text-blue-400 font-bold">100%</span>
+                        </div>
+                        <div class="stat-bar">
+                            <div id="thirst-bar" class="stat-fill bg-gradient-to-r from-blue-600 to-blue-400" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Energy -->
+                <div class="flex items-center gap-3">
+                    <div class="text-xl w-8 text-center">⚡</div>
+                    <div class="flex-1">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="text-gray-400">Энергия</span>
+                            <span id="energy-value" class="text-yellow-400 font-bold">100%</span>
+                        </div>
+                        <div class="stat-bar">
+                            <div id="energy-bar" class="stat-fill bg-gradient-to-r from-yellow-600 to-yellow-400" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Navigation -->
+        <section class="px-4 mb-4">
+            <div class="glass rounded-xl p-1 flex gap-1">
+                <button onclick="switchTab('actions')" id="tab-actions" class="tab-active flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all">
+                    ⚔️ Действия
+                </button>
+                <button onclick="switchTab('inventory')" id="tab-inventory" class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all text-gray-400 hover:text-white">
+                    🎒 Инвентарь
+                </button>
+                <button onclick="switchTab('crafting')" id="tab-crafting" class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all text-gray-400 hover:text-white">
+                    🔨 Крафт
+                </button>
+            </div>
+        </section>
+
+        <!-- Actions Tab -->
+        <section id="panel-actions" class="px-4 space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="doAction('explore')" class="action-btn glass rounded-xl p-4 text-left glow-green">
+                    <div class="text-3xl mb-2">🌲</div>
+                    <h3 class="font-bold text-green-400">Исследовать</h3>
+                    <p class="text-xs text-gray-400 mt-1">-10 ⚡ | Найти ресурсы</p>
+                </button>
+                
+                <button onclick="doAction('hunt')" class="action-btn glass rounded-xl p-4 text-left glow-red">
+                    <div class="text-3xl mb-2">🏹</div>
+                    <h3 class="font-bold text-red-400">Охотиться</h3>
+                    <p class="text-xs text-gray-400 mt-1">-20 ⚡ | Добыть еду</p>
+                </button>
+                
+                <button onclick="doAction('gather_water')" class="action-btn glass rounded-xl p-4 text-left glow-blue">
+                    <div class="text-3xl mb-2">🏞️</div>
+                    <h3 class="font-bold text-blue-400">К реке</h3>
+                    <p class="text-xs text-gray-400 mt-1">-15 ⚡ | Набрать воды</p>
+                </button>
+                
+                <button onclick="doAction('rest')" class="action-btn glass rounded-xl p-4 text-left glow-yellow">
+                    <div class="text-3xl mb-2">🏕️</div>
+                    <h3 class="font-bold text-yellow-400">Отдохнуть</h3>
+                    <p class="text-xs text-gray-400 mt-1">+30 ⚡ | 2 часа</p>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="doAction('eat')" class="action-btn glass rounded-xl p-3 flex items-center gap-3">
+                    <div class="text-2xl">🍖</div>
+                    <div class="text-left">
+                        <h3 class="font-bold text-sm">Поесть</h3>
+                        <p class="text-xs text-gray-400">Использовать еду</p>
+                    </div>
+                </button>
+                
+                <button onclick="doAction('drink')" class="action-btn glass rounded-xl p-3 flex items-center gap-3">
+                    <div class="text-2xl">🥤</div>
+                    <div class="text-left">
+                        <h3 class="font-bold text-sm">Попить</h3>
+                        <p class="text-xs text-gray-400">Использовать воду</p>
+                    </div>
+                </button>
+            </div>
+            
+            <button onclick="doAction('sleep')" class="action-btn w-full glass rounded-xl p-4 flex items-center justify-center gap-3 border border-purple-500/30">
+                <div class="text-2xl">😴</div>
+                <div class="text-left">
+                    <h3 class="font-bold text-purple-400">Спать до утра</h3>
+                    <p class="text-xs text-gray-400">Полное восстановление энергии</p>
+                </div>
+            </button>
+        </section>
+
+        <!-- Inventory Tab -->
+        <section id="panel-inventory" class="px-4 hidden">
+            <div class="glass rounded-2xl p-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="font-orbitron font-bold text-lg">Инвентарь</h2>
+                    <span id="inventory-count" class="text-sm text-gray-400">0/20</span>
+                </div>
+                <div id="inventory-grid" class="grid grid-cols-4 gap-2">
+                    <!-- Items will be added here dynamically -->
+                </div>
+                <div id="empty-inventory" class="text-center py-8 text-gray-500">
+                    <div class="text-4xl mb-2">🎒</div>
+                    <p>Инвентарь пуст</p>
+                    <p class="text-sm">Исследуйте мир, чтобы найти ресурсы</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Crafting Tab -->
+        <section id="panel-crafting" class="px-4 hidden">
+            <div class="space-y-3">
+                <div class="glass rounded-xl p-4">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="text-3xl">🔥</div>
+                        <div>
+                            <h3 class="font-bold">Костёр</h3>
+                            <p class="text-xs text-gray-400">Готовить еду, греться</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-gray-400">
+                            <span class="text-orange-400">🪵 x3</span> + <span class="text-gray-400">🪨 x2</span>
+                        </div>
+                        <button onclick="craft('campfire')" class="action-btn bg-gradient-to-r from-orange-600 to-red-600 px-4 py-2 rounded-lg text-sm font-bold">
+                            Создать
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-xl p-4">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="text-3xl">🏠</div>
+                        <div>
+                            <h3 class="font-bold">Укрытие</h3>
+                            <p class="text-xs text-gray-400">Защита от непогоды</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-gray-400">
+                            <span class="text-orange-400">🪵 x10</span> + <span class="text-green-400">🌿 x5</span>
+                        </div>
+                        <button onclick="craft('shelter')" class="action-btn bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-2 rounded-lg text-sm font-bold">
+                            Создать
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-xl p-4">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="text-3xl">🗡️</div>
+                        <div>
+                            <h3 class="font-bold">Копьё</h3>
+                            <p class="text-xs text-gray-400">Улучшает охоту</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-gray-400">
+                            <span class="text-orange-400">🪵 x2</span> + <span class="text-gray-400">🪨 x1</span>
+                        </div>
+                        <button onclick="craft('spear')" class="action-btn bg-gradient-to-r from-gray-600 to-gray-500 px-4 py-2 rounded-lg text-sm font-bold">
+                            Создать
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-xl p-4">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="text-3xl">🧴</div>
+                        <div>
+                            <h3 class="font-bold">Фляга</h3>
+                            <p class="text-xs text-gray-400">Хранить больше воды</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-gray-400">
+                            <span class="text-green-400">🌿 x3</span> + <span class="text-blue-400">💧 x1</span>
+                        </div>
+                        <button onclick="craft('flask')" class="action-btn bg-gradient-to-r from-blue-600 to-cyan-600 px-4 py-2 rounded-lg text-sm font-bold">
+                            Создать
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Event Log -->
+        <section class="px-4 mt-4">
+            <div class="glass rounded-2xl p-4">
+                <h2 class="font-orbitron font-bold text-sm mb-3 text-gray-400">📜 Журнал событий</h2>
+                <div id="event-log" class="space-y-2 max-h-32 overflow-y-auto">
+                    <p class="text-sm text-gray-500 fade-in">Добро пожаловать в мир выживания!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notifications -->
+        <div id="notifications" class="fixed top-20 right-4 space-y-2 z-50"></div>
+
+        <!-- Game Over Modal -->
+        <div id="game-over-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+            <div class="glass rounded-2xl p-6 max-w-sm w-full text-center">
+                <div class="text-6xl mb-4">💀</div>
+                <h2 class="font-orbitron font-bold text-2xl text-red-500 mb-2">ИГРА ОКОНЧЕНА</h2>
+                <p id="death-reason" class="text-gray-400 mb-4">Вы не смогли выжить...</p>
+                <div class="glass rounded-xl p-4 mb-4">
+                    <p class="text-sm text-gray-400">Вы выжили</p>
+                    <p class="font-orbitron text-3xl text-yellow-400" id="survived-days">1 день</p>
+                </div>
+                <button onclick="restartGame()" class="w-full action-btn bg-gradient-to-r from-green-600 to-emerald-600 py-3 rounded-xl font-bold text-lg">
+                    🔄 Начать заново
                 </button>
             </div>
         </div>
-        
-        <!-- History -->
-        <div id="history-game" class="game-section hidden">
-            <div class="card rounded-3xl p-6">
-                <h2 class="text-xl font-bold mb-4 gold-text">📜 История игр</h2>
-                <div id="history-list" class="space-y-3">
-                    <p class="text-gray-400 text-center py-8">История пуста. Сыграйте первую игру!</p>
-                </div>
-            </div>
-        </div>
-    </main>
-    
-    <!-- Bottom Navigation -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-[#1a1a2e]/95 backdrop-blur-lg border-t border-yellow-500/20 px-6 py-4 z-50">
-        <div class="flex justify-around items-center">
-            <button onclick="showTab('slots')" class="nav-item active flex flex-col items-center gap-1" id="nav-slots">
-                <span class="text-2xl">🎰</span>
-                <span class="text-xs">Слоты</span>
-            </button>
-            <button onclick="showTab('roulette')" class="nav-item flex flex-col items-center gap-1 text-gray-400" id="nav-roulette">
-                <span class="text-2xl">🎡</span>
-                <span class="text-xs">Рулетка</span>
-            </button>
-            <button onclick="addBonus()" class="nav-item flex flex-col items-center gap-1 text-gray-400" id="nav-bonus">
-                <span class="text-2xl">🎁</span>
-                <span class="text-xs">Бонус</span>
-            </button>
-            <button onclick="showTab('history')" class="nav-item flex flex-col items-center gap-1 text-gray-400" id="nav-history">
-                <span class="text-2xl">📜</span>
-                <span class="text-xs">История</span>
-            </button>
-        </div>
-    </nav>
+    </div>
 
     <script>
-        // Telegram WebApp Init
+        // Initialize Telegram WebApp
         const tg = window.Telegram?.WebApp;
         if (tg) {
             tg.ready();
@@ -372,365 +445,608 @@
             tg.setHeaderColor('#1a1a2e');
             tg.setBackgroundColor('#1a1a2e');
         }
-        
+
         // Game State
-        let balance = 10000;
-        let bet = 500;
-        let rouletteBet = 500;
-        let selectedColor = 'red';
-        let isSpinning = false;
-        let wins = 0;
-        let games = 0;
-        let maxWin = 0;
-        let history = [];
-        let lastBonusTime = 0;
-        
-        const symbols = ['🍒', '🍋', '🍇', '🍊', '💎', '7️⃣', '🍀', '⭐'];
-        const jackpotSymbol = '7️⃣';
-        
-        // Create stars background
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            for (let i = 0; i < 50; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 2 + 's';
-                starsContainer.appendChild(star);
+        let gameState = {
+            day: 1,
+            hour: 6,
+            health: 100,
+            hunger: 100,
+            thirst: 100,
+            energy: 100,
+            inventory: [],
+            crafted: {
+                campfire: false,
+                shelter: false,
+                spear: false,
+                flask: false
+            },
+            weather: 'sunny',
+            isAlive: true
+        };
+
+        // Item definitions
+        const items = {
+            wood: { name: 'Древесина', emoji: '🪵', stackable: true },
+            stone: { name: 'Камень', emoji: '🪨', stackable: true },
+            plant: { name: 'Растения', emoji: '🌿', stackable: true },
+            meat_raw: { name: 'Сырое мясо', emoji: '🥩', stackable: true },
+            meat_cooked: { name: 'Жареное мясо', emoji: '🍖', stackable: true },
+            water: { name: 'Вода', emoji: '💧', stackable: true },
+            berries: { name: 'Ягоды', emoji: '🫐', stackable: true },
+            mushroom: { name: 'Грибы', emoji: '🍄', stackable: true },
+            fish: { name: 'Рыба', emoji: '🐟', stackable: true }
+        };
+
+        // Weather types
+        const weatherTypes = [
+            { type: 'sunny', emoji: '☀️', effect: 'normal' },
+            { type: 'cloudy', emoji: '☁️', effect: 'normal' },
+            { type: 'rainy', emoji: '🌧️', effect: 'wet' },
+            { type: 'stormy', emoji: '⛈️', effect: 'dangerous' },
+            { type: 'night', emoji: '🌙', effect: 'dark' }
+        ];
+
+        // Update UI
+        function updateUI() {
+            // Stats
+            document.getElementById('health-value').textContent = Math.round(gameState.health) + '%';
+            document.getElementById('health-bar').style.width = gameState.health + '%';
+            
+            document.getElementById('hunger-value').textContent = Math.round(gameState.hunger) + '%';
+            document.getElementById('hunger-bar').style.width = gameState.hunger + '%';
+            
+            document.getElementById('thirst-value').textContent = Math.round(gameState.thirst) + '%';
+            document.getElementById('thirst-bar').style.width = gameState.thirst + '%';
+            
+            document.getElementById('energy-value').textContent = Math.round(gameState.energy) + '%';
+            document.getElementById('energy-bar').style.width = gameState.energy + '%';
+            
+            // Day and time
+            document.getElementById('day-counter').textContent = gameState.day;
+            document.getElementById('time-display').textContent = 
+                String(gameState.hour).padStart(2, '0') + ':00';
+            
+            // Weather
+            updateWeather();
+            
+            // Inventory
+            updateInventory();
+            
+            // Color coding for low stats
+            updateStatColors();
+        }
+
+        function updateStatColors() {
+            const healthBar = document.getElementById('health-bar');
+            const hungerBar = document.getElementById('hunger-bar');
+            const thirstBar = document.getElementById('thirst-bar');
+            
+            if (gameState.health < 25) healthBar.classList.add('pulse-animation');
+            else healthBar.classList.remove('pulse-animation');
+            
+            if (gameState.hunger < 25) hungerBar.classList.add('pulse-animation');
+            else hungerBar.classList.remove('pulse-animation');
+            
+            if (gameState.thirst < 25) thirstBar.classList.add('pulse-animation');
+            else thirstBar.classList.remove('pulse-animation');
+        }
+
+        function updateWeather() {
+            const hour = gameState.hour;
+            let weather;
+            
+            if (hour >= 21 || hour < 6) {
+                weather = weatherTypes[4]; // night
+            } else {
+                const rand = Math.random();
+                if (rand < 0.6) weather = weatherTypes[0];
+                else if (rand < 0.8) weather = weatherTypes[1];
+                else if (rand < 0.95) weather = weatherTypes[2];
+                else weather = weatherTypes[3];
             }
+            
+            gameState.weather = weather.type;
+            document.getElementById('weather-display').textContent = weather.emoji;
         }
-        createStars();
-        
-        // Update Balance Display
-        function updateBalance() {
-            document.getElementById('balance').textContent = balance.toLocaleString() + ' 💎';
-        }
-        
-        // Change Bet
-        function changeBet(amount) {
-            bet = Math.max(100, Math.min(balance, bet + amount));
-            document.getElementById('bet-amount').textContent = bet.toLocaleString() + ' 💎';
-        }
-        
-        function changeRouletteBet(amount) {
-            rouletteBet = Math.max(100, Math.min(balance, rouletteBet + amount));
-            document.getElementById('roulette-bet-amount').textContent = rouletteBet.toLocaleString() + ' 💎';
-        }
-        
-        // Slot Machine Spin
-        function spin() {
-            if (isSpinning || balance < bet) {
-                if (balance < bet) {
-                    showNotification('Недостаточно средств! 💸', 'error');
-                }
+
+        function updateInventory() {
+            const grid = document.getElementById('inventory-grid');
+            const emptyMsg = document.getElementById('empty-inventory');
+            const countEl = document.getElementById('inventory-count');
+            
+            // Count items
+            const itemCounts = {};
+            gameState.inventory.forEach(item => {
+                itemCounts[item] = (itemCounts[item] || 0) + 1;
+            });
+            
+            const totalItems = gameState.inventory.length;
+            countEl.textContent = `${totalItems}/20`;
+            
+            if (totalItems === 0) {
+                grid.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
                 return;
             }
             
-            isSpinning = true;
-            balance -= bet;
-            games++;
-            updateBalance();
+            emptyMsg.classList.add('hidden');
+            grid.innerHTML = '';
             
-            const spinBtn = document.getElementById('spin-btn');
-            spinBtn.disabled = true;
-            spinBtn.textContent = '🎰 КРУТИМ...';
-            
-            document.getElementById('win-display').innerHTML = '';
-            
-            const reels = [
-                document.getElementById('reel1'),
-                document.getElementById('reel2'),
-                document.getElementById('reel3')
-            ];
-            
-            // Add spinning class
-            reels.forEach(reel => reel.classList.add('spinning'));
-            
-            // Generate results
-            const results = [];
-            for (let i = 0; i < 3; i++) {
-                results.push(symbols[Math.floor(Math.random() * symbols.length)]);
-            }
-            
-            // Force occasional wins (30% chance)
-            if (Math.random() < 0.3) {
-                const winSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-                results[0] = winSymbol;
-                results[1] = winSymbol;
-                if (Math.random() < 0.3) {
-                    results[2] = winSymbol;
+            Object.entries(itemCounts).forEach(([itemId, count]) => {
+                const item = items[itemId];
+                if (item) {
+                    const div = document.createElement('div');
+                    div.className = 'inventory-item glass rounded-lg p-2 text-center relative';
+                    div.innerHTML = `
+                        <div class="text-2xl">${item.emoji}</div>
+                        <div class="text-xs text-gray-400 mt-1">${item.name}</div>
+                        ${count > 1 ? `<div class="absolute -top-1 -right-1 bg-green-500 text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">${count}</div>` : ''}
+                    `;
+                    grid.appendChild(div);
                 }
-            }
-            
-            // Stop reels with delay
-            reels.forEach((reel, index) => {
-                setTimeout(() => {
-                    reel.classList.remove('spinning');
-                    reel.querySelector('.slot-symbol').textContent = results[index];
-                    
-                    if (index === 2) {
-                        checkWin(results);
-                    }
-                }, 500 + (index * 400));
             });
         }
-        
-        // Check Win
-        function checkWin(results) {
-            let winAmount = 0;
-            let message = '';
+
+        // Switch tabs
+        function switchTab(tab) {
+            ['actions', 'inventory', 'crafting'].forEach(t => {
+                document.getElementById(`panel-${t}`).classList.add('hidden');
+                document.getElementById(`tab-${t}`).classList.remove('tab-active');
+                document.getElementById(`tab-${t}`).classList.add('text-gray-400');
+            });
             
-            if (results[0] === results[1] && results[1] === results[2]) {
-                // Jackpot - all same
-                if (results[0] === jackpotSymbol) {
-                    winAmount = bet * 50;
-                    message = '🎉 ДЖЕКПОТ! 🎉';
-                } else if (results[0] === '💎') {
-                    winAmount = bet * 20;
-                    message = '💎 MEGA WIN! 💎';
-                } else {
-                    winAmount = bet * 10;
-                    message = '🏆 БОЛЬШОЙ ВЫИГРЫШ!';
-                }
-            } else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
-                // Two same
-                winAmount = bet * 2;
-                message = '✨ Выигрыш!';
+            document.getElementById(`panel-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.add('tab-active');
+            document.getElementById(`tab-${tab}`).classList.remove('text-gray-400');
+        }
+
+        // Add to log
+        function addLog(message, type = 'normal') {
+            const log = document.getElementById('event-log');
+            const p = document.createElement('p');
+            p.className = 'text-sm fade-in';
+            
+            switch(type) {
+                case 'success': p.classList.add('text-green-400'); break;
+                case 'danger': p.classList.add('text-red-400'); break;
+                case 'warning': p.classList.add('text-yellow-400'); break;
+                case 'info': p.classList.add('text-blue-400'); break;
+                default: p.classList.add('text-gray-400');
             }
             
-            if (winAmount > 0) {
-                balance += winAmount;
-                wins++;
-                maxWin = Math.max(maxWin, winAmount);
+            const time = String(gameState.hour).padStart(2, '0') + ':00';
+            p.textContent = `[${time}] ${message}`;
+            log.insertBefore(p, log.firstChild);
+            
+            // Keep only last 20 entries
+            while (log.children.length > 20) {
+                log.removeChild(log.lastChild);
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notifications');
+            const div = document.createElement('div');
+            div.className = `event-notification glass rounded-lg px-4 py-2 text-sm`;
+            
+            switch(type) {
+                case 'success': div.classList.add('border-l-4', 'border-green-500'); break;
+                case 'danger': div.classList.add('border-l-4', 'border-red-500'); break;
+                case 'warning': div.classList.add('border-l-4', 'border-yellow-500'); break;
+                default: div.classList.add('border-l-4', 'border-blue-500');
+            }
+            
+            div.textContent = message;
+            container.appendChild(div);
+            
+            setTimeout(() => div.remove(), 3000);
+            
+            // Haptic feedback
+            if (tg?.HapticFeedback) {
+                if (type === 'danger') tg.HapticFeedback.notificationOccurred('error');
+                else if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
+                else tg.HapticFeedback.impactOccurred('light');
+            }
+        }
+
+        // Advance time
+        function advanceTime(hours) {
+            gameState.hour += hours;
+            
+            while (gameState.hour >= 24) {
+                gameState.hour -= 24;
+                gameState.day++;
+                addLog(`Наступил день ${gameState.day}`, 'info');
+            }
+            
+            // Decrease stats over time
+            gameState.hunger -= hours * 3;
+            gameState.thirst -= hours * 4;
+            
+            // Weather effects
+            if (gameState.weather === 'rainy' && !gameState.crafted.shelter) {
+                gameState.health -= hours * 2;
+                addLog('Вы мокнете под дождём...', 'warning');
+            }
+            if (gameState.weather === 'stormy' && !gameState.crafted.shelter) {
+                gameState.health -= hours * 5;
+                addLog('Гроза наносит урон!', 'danger');
+            }
+            
+            // Low stats damage
+            if (gameState.hunger <= 0) {
+                gameState.hunger = 0;
+                gameState.health -= hours * 5;
+                addLog('Вы умираете от голода!', 'danger');
+            }
+            if (gameState.thirst <= 0) {
+                gameState.thirst = 0;
+                gameState.health -= hours * 7;
+                addLog('Вы умираете от жажды!', 'danger');
+            }
+            
+            // Clamp values
+            gameState.health = Math.max(0, Math.min(100, gameState.health));
+            gameState.hunger = Math.max(0, Math.min(100, gameState.hunger));
+            gameState.thirst = Math.max(0, Math.min(100, gameState.thirst));
+            gameState.energy = Math.max(0, Math.min(100, gameState.energy));
+            
+            updateUI();
+            checkGameOver();
+        }
+
+        // Check game over
+        function checkGameOver() {
+            if (gameState.health <= 0 && gameState.isAlive) {
+                gameState.isAlive = false;
+                let reason = 'Вы не смогли выжить в дикой природе.';
                 
-                document.getElementById('win-display').innerHTML = 
-                    `<span class="win-animation">${message} +${winAmount.toLocaleString()} 💎</span>`;
+                if (gameState.hunger <= 0) reason = 'Вы умерли от голода.';
+                else if (gameState.thirst <= 0) reason = 'Вы умерли от обезвоживания.';
+                else if (gameState.weather === 'stormy') reason = 'Вас убила гроза.';
                 
-                createCoinRain();
-                addToHistory('slots', bet, winAmount, true);
+                document.getElementById('death-reason').textContent = reason;
+                document.getElementById('survived-days').textContent = 
+                    gameState.day === 1 ? '1 день' : `${gameState.day} дней`;
+                document.getElementById('game-over-modal').classList.remove('hidden');
                 
                 if (tg?.HapticFeedback) {
-                    tg.HapticFeedback.notificationOccurred('success');
+                    tg.HapticFeedback.notificationOccurred('error');
                 }
-            } else {
-                document.getElementById('win-display').innerHTML = 
-                    '<span class="text-gray-400">Попробуйте ещё раз!</span>';
-                addToHistory('slots', bet, 0, false);
             }
-            
-            updateBalance();
-            updateStats();
-            
-            const spinBtn = document.getElementById('spin-btn');
-            spinBtn.disabled = false;
-            spinBtn.textContent = '🎰 КРУТИТЬ';
-            isSpinning = false;
         }
-        
-        // Roulette
-        function selectRouletteColor(color) {
-            selectedColor = color;
-            
-            document.getElementById('bet-red').classList.remove('border-yellow-400');
-            document.getElementById('bet-black').classList.remove('border-yellow-400');
-            document.getElementById('bet-green').classList.remove('border-yellow-400');
-            
-            document.getElementById('bet-' + color).classList.add('border-yellow-400');
-        }
-        
-        function spinRoulette() {
-            if (isSpinning || balance < rouletteBet) {
-                if (balance < rouletteBet) {
-                    showNotification('Недостаточно средств! 💸', 'error');
+
+        // Add item to inventory
+        function addItem(itemId, count = 1) {
+            for (let i = 0; i < count; i++) {
+                if (gameState.inventory.length < 20) {
+                    gameState.inventory.push(itemId);
                 }
-                return;
             }
+            updateInventory();
+        }
+
+        // Remove item from inventory
+        function removeItem(itemId, count = 1) {
+            for (let i = 0; i < count; i++) {
+                const idx = gameState.inventory.indexOf(itemId);
+                if (idx > -1) {
+                    gameState.inventory.splice(idx, 1);
+                }
+            }
+            updateInventory();
+        }
+
+        // Count items
+        function countItem(itemId) {
+            return gameState.inventory.filter(i => i === itemId).length;
+        }
+
+        // Actions
+        function doAction(action) {
+            if (!gameState.isAlive) return;
             
-            isSpinning = true;
-            balance -= rouletteBet;
-            games++;
-            updateBalance();
-            
-            const spinBtn = document.getElementById('roulette-spin-btn');
-            spinBtn.disabled = true;
-            spinBtn.textContent = '🎡 КРУТИМ...';
-            
-            const wheel = document.getElementById('roulette-wheel');
-            const resultDisplay = document.getElementById('roulette-result');
-            
-            // Random result
-            const randomDeg = 1800 + Math.random() * 1800;
-            wheel.style.transform = `rotate(${randomDeg}deg)`;
-            
-            // Determine result based on final position
-            setTimeout(() => {
-                const colors = ['red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 
-                               'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 
-                               'red', 'black', 'green', 'black'];
-                const result = colors[Math.floor(Math.random() * colors.length)];
-                
-                const icons = { red: '🔴', black: '⚫', green: '🟢' };
-                resultDisplay.textContent = icons[result];
-                
-                let winAmount = 0;
-                if (result === selectedColor) {
-                    const multipliers = { red: 2, black: 2, green: 14 };
-                    winAmount = rouletteBet * multipliers[result];
-                    balance += winAmount;
-                    wins++;
-                    maxWin = Math.max(maxWin, winAmount);
-                    
-                    showNotification(`Выигрыш +${winAmount.toLocaleString()} 💎`, 'success');
-                    createCoinRain();
-                    addToHistory('roulette', rouletteBet, winAmount, true);
-                    
-                    if (tg?.HapticFeedback) {
-                        tg.HapticFeedback.notificationOccurred('success');
+            switch(action) {
+                case 'explore':
+                    if (gameState.energy < 10) {
+                        showNotification('Недостаточно энергии!', 'warning');
+                        return;
                     }
-                } else {
-                    showNotification('Не повезло! Попробуйте ещё раз', 'error');
-                    addToHistory('roulette', rouletteBet, 0, false);
-                }
-                
-                updateBalance();
-                updateStats();
-                
-                spinBtn.disabled = false;
-                spinBtn.textContent = '🎡 КРУТИТЬ РУЛЕТКУ';
-                isSpinning = false;
-            }, 4000);
-        }
-        
-        // Effects
-        function createCoinRain() {
-            const coins = ['💎', '💰', '🪙', '✨'];
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    const coin = document.createElement('div');
-                    coin.className = 'coin';
-                    coin.textContent = coins[Math.floor(Math.random() * coins.length)];
-                    coin.style.left = Math.random() * 100 + '%';
-                    document.body.appendChild(coin);
+                    gameState.energy -= 10;
                     
-                    setTimeout(() => coin.remove(), 2000);
-                }, i * 100);
+                    const finds = [];
+                    const rand = Math.random();
+                    
+                    if (rand < 0.4) {
+                        addItem('wood', Math.floor(Math.random() * 3) + 1);
+                        finds.push('древесину');
+                    }
+                    if (rand < 0.3) {
+                        addItem('stone', Math.floor(Math.random() * 2) + 1);
+                        finds.push('камни');
+                    }
+                    if (rand < 0.5) {
+                        addItem('plant', Math.floor(Math.random() * 2) + 1);
+                        finds.push('растения');
+                    }
+                    if (rand < 0.2) {
+                        addItem('berries', Math.floor(Math.random() * 3) + 1);
+                        finds.push('ягоды');
+                    }
+                    if (rand < 0.1) {
+                        addItem('mushroom', 1);
+                        finds.push('грибы');
+                    }
+                    
+                    if (finds.length > 0) {
+                        addLog(`Вы нашли: ${finds.join(', ')}`, 'success');
+                        showNotification(`Найдено: ${finds.join(', ')}`, 'success');
+                    } else {
+                        addLog('Вы ничего не нашли...', 'normal');
+                        showNotification('Ничего не найдено', 'warning');
+                    }
+                    
+                    advanceTime(1);
+                    break;
+                    
+                case 'hunt':
+                    if (gameState.energy < 20) {
+                        showNotification('Недостаточно энергии!', 'warning');
+                        return;
+                    }
+                    gameState.energy -= 20;
+                    
+                    let successChance = 0.4;
+                    if (gameState.crafted.spear) successChance = 0.7;
+                    
+                    if (Math.random() < successChance) {
+                        const meatCount = gameState.crafted.spear ? 
+                            Math.floor(Math.random() * 2) + 2 : 
+                            Math.floor(Math.random() * 2) + 1;
+                        addItem('meat_raw', meatCount);
+                        addLog(`Охота успешна! Добыто мяса: ${meatCount}`, 'success');
+                        showNotification(`🥩 Добыто мяса: ${meatCount}`, 'success');
+                    } else {
+                        addLog('Охота неудачна...', 'warning');
+                        showNotification('Добыча ускользнула', 'warning');
+                    }
+                    
+                    advanceTime(2);
+                    break;
+                    
+                case 'gather_water':
+                    if (gameState.energy < 15) {
+                        showNotification('Недостаточно энергии!', 'warning');
+                        return;
+                    }
+                    gameState.energy -= 15;
+                    
+                    let waterAmount = gameState.crafted.flask ? 
+                        Math.floor(Math.random() * 3) + 3 : 
+                        Math.floor(Math.random() * 2) + 1;
+                    
+                    addItem('water', waterAmount);
+                    
+                    // Chance to find fish
+                    if (Math.random() < 0.3) {
+                        addItem('fish', 1);
+                        addLog(`Набрано воды: ${waterAmount}, поймана рыба!`, 'success');
+                        showNotification(`💧 Вода +${waterAmount}, 🐟 Рыба +1`, 'success');
+                    } else {
+                        addLog(`Набрано воды: ${waterAmount}`, 'success');
+                        showNotification(`💧 Вода +${waterAmount}`, 'success');
+                    }
+                    
+                    advanceTime(1);
+                    break;
+                    
+                case 'rest':
+                    gameState.energy = Math.min(100, gameState.energy + 30);
+                    addLog('Вы отдохнули и восстановили силы.', 'success');
+                    showNotification('⚡ Энергия +30', 'success');
+                    advanceTime(2);
+                    break;
+                    
+                case 'eat':
+                    // Priority: cooked meat > fish > berries > mushroom > raw meat
+                    let foodEaten = null;
+                    let hungerRestore = 0;
+                    
+                    if (countItem('meat_cooked') > 0) {
+                        removeItem('meat_cooked');
+                        hungerRestore = 35;
+                        foodEaten = '🍖 жареное мясо';
+                    } else if (countItem('fish') > 0) {
+                        removeItem('fish');
+                        hungerRestore = 25;
+                        foodEaten = '🐟 рыбу';
+                    } else if (countItem('berries') > 0) {
+                        removeItem('berries');
+                        hungerRestore = 15;
+                        foodEaten = '🫐 ягоды';
+                    } else if (countItem('mushroom') > 0) {
+                        removeItem('mushroom');
+                        hungerRestore = 10;
+                        foodEaten = '🍄 грибы';
+                        // Chance of poisoning
+                        if (Math.random() < 0.2) {
+                            gameState.health -= 15;
+                            addLog('Грибы оказались ядовитыми!', 'danger');
+                            showNotification('🤢 Отравление! -15 HP', 'danger');
+                        }
+                    } else if (countItem('meat_raw') > 0) {
+                        removeItem('meat_raw');
+                        hungerRestore = 15;
+                        foodEaten = '🥩 сырое мясо';
+                        // Chance of sickness
+                        if (Math.random() < 0.3) {
+                            gameState.health -= 10;
+                            addLog('Сырое мясо вызвало расстройство!', 'danger');
+                            showNotification('🤢 Расстройство! -10 HP', 'danger');
+                        }
+                    }
+                    
+                    if (foodEaten) {
+                        gameState.hunger = Math.min(100, gameState.hunger + hungerRestore);
+                        addLog(`Вы съели ${foodEaten}`, 'success');
+                        showNotification(`🍖 Сытость +${hungerRestore}`, 'success');
+                    } else {
+                        showNotification('Нет еды в инвентаре!', 'warning');
+                    }
+                    updateUI();
+                    break;
+                    
+                case 'drink':
+                    if (countItem('water') > 0) {
+                        removeItem('water');
+                        gameState.thirst = Math.min(100, gameState.thirst + 30);
+                        addLog('Вы утолили жажду.', 'success');
+                        showNotification('💧 Жажда +30', 'success');
+                    } else {
+                        showNotification('Нет воды в инвентаре!', 'warning');
+                    }
+                    updateUI();
+                    break;
+                    
+                case 'sleep':
+                    const hoursUntilMorning = gameState.hour < 6 ? 
+                        6 - gameState.hour : 
+                        24 - gameState.hour + 6;
+                    
+                    if (gameState.crafted.shelter) {
+                        gameState.energy = 100;
+                        addLog('Вы хорошо выспались в укрытии!', 'success');
+                    } else {
+                        gameState.energy = Math.min(100, gameState.energy + 60);
+                        addLog('Вы поспали под открытым небом.', 'info');
+                    }
+                    
+                    showNotification('😴 Сон до утра...', 'info');
+                    advanceTime(hoursUntilMorning);
+                    break;
             }
         }
-        
-        // Update Stats
-        function updateStats() {
-            document.getElementById('wins-count').textContent = wins;
-            document.getElementById('games-count').textContent = games;
-            document.getElementById('max-win').textContent = maxWin.toLocaleString();
+
+        // Crafting
+        function craft(item) {
+            if (!gameState.isAlive) return;
+            
+            switch(item) {
+                case 'campfire':
+                    if (countItem('wood') >= 3 && countItem('stone') >= 2) {
+                        removeItem('wood', 3);
+                        removeItem('stone', 2);
+                        gameState.crafted.campfire = true;
+                        addLog('Вы создали костёр! Теперь можно готовить.', 'success');
+                        showNotification('🔥 Костёр создан!', 'success');
+                        
+                        // Cook all raw meat
+                        const rawMeat = countItem('meat_raw');
+                        if (rawMeat > 0) {
+                            removeItem('meat_raw', rawMeat);
+                            addItem('meat_cooked', rawMeat);
+                            addLog(`Приготовлено мяса: ${rawMeat}`, 'success');
+                        }
+                    } else {
+                        showNotification('Недостаточно ресурсов!', 'warning');
+                    }
+                    break;
+                    
+                case 'shelter':
+                    if (countItem('wood') >= 10 && countItem('plant') >= 5) {
+                        removeItem('wood', 10);
+                        removeItem('plant', 5);
+                        gameState.crafted.shelter = true;
+                        addLog('Вы построили укрытие! Теперь вы защищены от непогоды.', 'success');
+                        showNotification('🏠 Укрытие построено!', 'success');
+                    } else {
+                        showNotification('Недостаточно ресурсов!', 'warning');
+                    }
+                    break;
+                    
+                case 'spear':
+                    if (countItem('wood') >= 2 && countItem('stone') >= 1) {
+                        removeItem('wood', 2);
+                        removeItem('stone', 1);
+                        gameState.crafted.spear = true;
+                        addLog('Вы создали копьё! Охота стала эффективнее.', 'success');
+                        showNotification('🗡️ Копьё создано!', 'success');
+                    } else {
+                        showNotification('Недостаточно ресурсов!', 'warning');
+                    }
+                    break;
+                    
+                case 'flask':
+                    if (countItem('plant') >= 3 && countItem('water') >= 1) {
+                        removeItem('plant', 3);
+                        removeItem('water', 1);
+                        gameState.crafted.flask = true;
+                        addLog('Вы создали флягу! Можно носить больше воды.', 'success');
+                        showNotification('🧴 Фляга создана!', 'success');
+                    } else {
+                        showNotification('Недостаточно ресурсов!', 'warning');
+                    }
+                    break;
+            }
+            
+            updateUI();
         }
-        
-        // History
-        function addToHistory(game, betAmount, winAmount, isWin) {
-            const gameNames = { slots: '🎰 Слоты', roulette: '🎡 Рулетка' };
-            const entry = {
-                game: gameNames[game],
-                bet: betAmount,
-                win: winAmount,
-                isWin: isWin,
-                time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+
+        // Restart game
+        function restartGame() {
+            gameState = {
+                day: 1,
+                hour: 6,
+                health: 100,
+                hunger: 100,
+                thirst: 100,
+                energy: 100,
+                inventory: [],
+                crafted: {
+                    campfire: false,
+                    shelter: false,
+                    spear: false,
+                    flask: false
+                },
+                weather: 'sunny',
+                isAlive: true
             };
             
-            history.unshift(entry);
-            if (history.length > 20) history.pop();
+            document.getElementById('game-over-modal').classList.add('hidden');
+            document.getElementById('event-log').innerHTML = '<p class="text-sm text-gray-500 fade-in">Новая игра началась. Удачи!</p>';
             
-            renderHistory();
-        }
-        
-        function renderHistory() {
-            const container = document.getElementById('history-list');
-            
-            if (history.length === 0) {
-                container.innerHTML = '<p class="text-gray-400 text-center py-8">История пуста. Сыграйте первую игру!</p>';
-                return;
-            }
-            
-            container.innerHTML = history.map(item => `
-                <div class="history-item ${item.isWin ? 'history-win' : 'history-lose'} bg-[#2d2d44] rounded-xl p-3 pl-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="font-semibold">${item.game}</p>
-                            <p class="text-xs text-gray-400">Ставка: ${item.bet.toLocaleString()} 💎</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-bold ${item.isWin ? 'text-green-400' : 'text-red-400'}">
-                                ${item.isWin ? '+' + item.win.toLocaleString() : '-' + item.bet.toLocaleString()} 💎
-                            </p>
-                            <p class="text-xs text-gray-400">${item.time}</p>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        // Tabs
-        function showTab(tab) {
-            document.querySelectorAll('.game-section').forEach(el => el.classList.add('hidden'));
-            document.getElementById(tab + '-game').classList.remove('hidden');
-            
-            document.querySelectorAll('[id^="tab-"]').forEach(el => {
-                el.classList.remove('tab-active');
-                el.classList.add('text-gray-400');
-            });
-            document.getElementById('tab-' + tab).classList.add('tab-active');
-            document.getElementById('tab-' + tab).classList.remove('text-gray-400');
-            
-            document.querySelectorAll('.nav-item').forEach(el => {
-                el.classList.remove('active');
-                el.classList.add('text-gray-400');
-            });
-            const navItem = document.getElementById('nav-' + tab);
-            if (navItem) {
-                navItem.classList.add('active');
-                navItem.classList.remove('text-gray-400');
-            }
-        }
-        
-        // Bonus
-        function addBonus() {
-            const now = Date.now();
-            const cooldown = 60000; // 1 minute
-            
-            if (now - lastBonusTime < cooldown) {
-                const remaining = Math.ceil((cooldown - (now - lastBonusTime)) / 1000);
-                showNotification(`Бонус доступен через ${remaining} сек ⏰`, 'error');
-                return;
-            }
-            
-            const bonusAmount = 1000;
-            balance += bonusAmount;
-            lastBonusTime = now;
-            updateBalance();
-            createCoinRain();
-            showNotification(`Бонус +${bonusAmount} 💎 получен!`, 'success');
+            updateUI();
             
             if (tg?.HapticFeedback) {
                 tg.HapticFeedback.notificationOccurred('success');
             }
         }
-        
-        // Notification
-        function showNotification(message, type) {
-            const existing = document.querySelector('.notification');
-            if (existing) existing.remove();
-            
-            const notification = document.createElement('div');
-            notification.className = `notification fixed top-20 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl font-semibold z-50 ${
-                type === 'success' ? 'bg-green-500' : 'bg-red-500'
-            }`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => notification.remove(), 2500);
+
+        // Auto-cook meat if campfire exists
+        function autoCook() {
+            if (gameState.crafted.campfire) {
+                const rawMeat = countItem('meat_raw');
+                const rawFish = countItem('fish');
+                
+                if (rawMeat > 0) {
+                    removeItem('meat_raw', rawMeat);
+                    addItem('meat_cooked', rawMeat);
+                }
+            }
         }
-        
-        // Initial setup
-        selectRouletteColor('red');
+
+        // Initialize
+        updateUI();
+        addLog('Вы очнулись в незнакомом лесу. Нужно выжить!', 'info');
+
+        // Auto-save and periodic updates
+        setInterval(() => {
+            if (gameState.isAlive) {
+                autoCook();
+            }
+        }, 5000);
     </script>
 </body>
 </html>
