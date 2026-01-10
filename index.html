@@ -322,15 +322,18 @@
             loadingState.classList.remove('hidden');
 
             try {
-                // Using Deezer API through a CORS proxy
-                const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=20`)}`);
-                const data = await response.json();
-                const results = JSON.parse(data.contents);
+                // Try iTunes API first (no CORS issues)
+                let songs = await searchItunes(query);
+                
+                // Fallback to Deezer with different proxies
+                if (!songs || songs.length === 0) {
+                    songs = await searchDeezer(query);
+                }
 
                 loadingState.classList.add('hidden');
 
-                if (results.data && results.data.length > 0) {
-                    displayResults(results.data);
+                if (songs && songs.length > 0) {
+                    displayResults(songs);
                 } else {
                     showToast('😔', 'Ничего не найдено');
                     emptyState.classList.remove('hidden');
@@ -343,6 +346,81 @@
             }
         }
 
+        // iTunes Search API (works without CORS proxy)
+        async function searchItunes(query) {
+            try {
+                const response = await fetch(
+                    `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&entity=song&limit=20`
+                );
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    // Transform iTunes format to our format
+                    return data.results.map(track => ({
+                        id: track.trackId,
+                        title: track.trackName,
+                        artist: {
+                            name: track.artistName
+                        },
+                        album: {
+                            title: track.collectionName,
+                            cover_medium: track.artworkUrl100,
+                            cover_big: track.artworkUrl100.replace('100x100', '400x400'),
+                            cover_xl: track.artworkUrl100.replace('100x100', '600x600')
+                        },
+                        duration: Math.floor(track.trackTimeMillis / 1000),
+                        preview: track.previewUrl,
+                        link: track.trackViewUrl,
+                        source: 'itunes'
+                    }));
+                }
+                return [];
+            } catch (e) {
+                console.log('iTunes search failed:', e);
+                return [];
+            }
+        }
+
+        // Deezer API with multiple CORS proxies as fallback
+        async function searchDeezer(query) {
+            const proxies = [
+                `https://corsproxy.io/?${encodeURIComponent(`https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=20`)}`,
+                `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=20`)}`,
+                `https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=${encodeURIComponent(query)}&limit=20`
+            ];
+
+            for (const proxyUrl of proxies) {
+                try {
+                    const response = await fetch(proxyUrl);
+                    const data = await response.json();
+                    
+                    if (data.data && data.data.length > 0) {
+                        return data.data.map(track => ({
+                            id: track.id,
+                            title: track.title,
+                            artist: {
+                                name: track.artist.name
+                            },
+                            album: {
+                                title: track.album.title,
+                                cover_medium: track.album.cover_medium,
+                                cover_big: track.album.cover_big,
+                                cover_xl: track.album.cover_xl
+                            },
+                            duration: track.duration,
+                            preview: track.preview,
+                            link: track.link,
+                            source: 'deezer'
+                        }));
+                    }
+                } catch (e) {
+                    console.log('Deezer proxy failed:', proxyUrl, e);
+                    continue;
+                }
+            }
+            return [];
+        }
+
         function displayResults(songs) {
             resultsList.innerHTML = '';
             resultsCount.textContent = `${songs.length} треков`;
@@ -351,14 +429,19 @@
                 const card = document.createElement('div');
                 card.className = 'song-card glass-card rounded-xl p-3 flex items-center gap-3 cursor-pointer transition-all slide-up';
                 card.style.animationDelay = `${index * 0.05}s`;
+                
+                const coverUrl = song.album.cover_medium || song.album.cover_big || 'https://via.placeholder.com/100?text=🎵';
+                const duration = song.duration || 0;
+                
                 card.innerHTML = `
-                    <img src="${song.album.cover_medium}" alt="${song.title}" class="w-14 h-14 rounded-lg object-cover">
+                    <img src="${coverUrl}" alt="${song.title}" class="w-14 h-14 rounded-lg object-cover" onerror="this.src='https://via.placeholder.com/100?text=🎵'">
                     <div class="flex-1 min-w-0">
                         <h4 class="font-semibold text-white truncate">${song.title}</h4>
                         <p class="text-sm text-gray-400 truncate">${song.artist.name}</p>
+                        <p class="text-xs text-gray-500 truncate">${song.album.title || ''}</p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-500">${formatDuration(song.duration)}</span>
+                        <span class="text-xs text-gray-500">${formatDuration(duration)}</span>
                         <div class="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
                             <svg class="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M8 5v14l11-7z"/>
@@ -382,13 +465,27 @@
         function openPlayer(song) {
             currentSong = song;
             
-            document.getElementById('playerCover').src = song.album.cover_xl || song.album.cover_big;
+            const coverUrl = song.album.cover_xl || song.album.cover_big || song.album.cover_medium || 'https://via.placeholder.com/300?text=🎵';
+            document.getElementById('playerCover').src = coverUrl;
+            document.getElementById('playerCover').onerror = function() {
+                this.src = 'https://via.placeholder.com/300?text=🎵';
+            };
             document.getElementById('playerTitle').textContent = song.title;
             document.getElementById('playerArtist').textContent = song.artist.name;
+            
+            // Reset player state
+            isPlaying = false;
+            updatePlayButton();
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('currentTime').textContent = '0:00';
             
             if (song.preview) {
                 audioPlayer.src = song.preview;
                 audioPlayer.load();
+                document.getElementById('duration').textContent = '0:30';
+            } else {
+                audioPlayer.src = '';
+                document.getElementById('duration').textContent = formatDuration(song.duration || 0);
             }
 
             playerModal.classList.remove('hidden');
@@ -465,11 +562,12 @@
             const songData = {
                 title: currentSong.title,
                 artist: currentSong.artist.name,
-                album: currentSong.album.title,
-                cover: currentSong.album.cover_xl,
-                preview: currentSong.preview,
+                album: currentSong.album.title || '',
+                cover: currentSong.album.cover_xl || currentSong.album.cover_big || currentSong.album.cover_medium,
+                preview: currentSong.preview || '',
                 link: currentSong.link,
-                channel: channel
+                channel: channel,
+                source: currentSong.source || 'unknown'
             };
 
             // Send data to Telegram
@@ -479,16 +577,21 @@
                     ...songData
                 }));
                 
-                showToast('✅', 'Отправлено в канал!');
+                showToast('✅', 'Отправлено боту!');
+                
+                setTimeout(() => {
+                    tg.close();
+                }, 1500);
             } else {
                 // Demo mode - show what would be sent
                 console.log('Would send to channel:', songData);
-                showToast('📋', `Песня "${currentSong.title}" будет отправлена в ${channel}`);
                 
                 // Copy link to clipboard as fallback
-                const text = `🎵 ${currentSong.title}\n👤 ${currentSong.artist.name}\n💿 ${currentSong.album.title}\n🔗 ${currentSong.link}`;
+                const text = `🎵 ${currentSong.title}\n👤 ${currentSong.artist.name}\n💿 ${currentSong.album.title || 'Unknown Album'}\n🔗 ${currentSong.link}`;
                 navigator.clipboard.writeText(text).then(() => {
-                    showToast('✅', 'Информация скопирована!');
+                    showToast('✅', 'Информация скопирована в буфер!');
+                }).catch(() => {
+                    showToast('📋', `Песня: ${currentSong.title}`);
                 });
             }
 
