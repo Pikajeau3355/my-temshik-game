@@ -2,64 +2,140 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>CryptoMiner - Telegram Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>💎 GemRush - Telegram Game</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Rubik', sans-serif;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
+            box-sizing: border-box;
         }
         
         body {
-            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            background: #0a0a0f;
             min-height: 100vh;
+            min-height: 100dvh;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(120, 0, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 200, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 0, 150, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .game-container {
+            position: relative;
+            z-index: 1;
         }
 
         .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .neon-border {
+            box-shadow: 
+                0 0 20px rgba(139, 92, 246, 0.3),
+                inset 0 0 20px rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.5);
         }
 
         .gradient-gold {
-            background: linear-gradient(135deg, #f5af19 0%, #f12711 100%);
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 50%, #ff6347 100%);
         }
 
         .gradient-blue {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00d4ff 0%, #5b7cfa 50%, #8b5cf6 100%);
         }
 
         .gradient-green {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            background: linear-gradient(135deg, #00ff87 0%, #00d4aa 50%, #00b894 100%);
         }
 
         .gradient-purple {
-            background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%);
+            background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #6366f1 100%);
         }
 
         .gradient-pink {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #ff006e 0%, #fb5607 100%);
+        }
+
+        .gradient-cyber {
+            background: linear-gradient(135deg, #00f5d4 0%, #00bbf9 50%, #9b5de5 100%);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .text-glow {
-            text-shadow: 0 0 20px currentColor;
+            text-shadow: 0 0 30px currentColor, 0 0 60px currentColor;
         }
 
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .card-game {
+            background: linear-gradient(145deg, rgba(30, 30, 45, 0.8) 0%, rgba(15, 15, 25, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        .card-game:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.5);
         }
 
-        .card-hover:active {
+        .card-game:active {
             transform: scale(0.98);
+        }
+
+        .btn-game {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-game::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-game:hover::before {
+            left: 100%;
+        }
+
+        .btn-game:active {
+            transform: scale(0.95);
         }
 
         .pulse-glow {
@@ -67,153 +143,145 @@
         }
 
         @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(245, 175, 25, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(245, 175, 25, 0.6); }
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.4),
+                            0 0 40px rgba(255, 215, 0, 0.2);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(255, 215, 0, 0.6),
+                            0 0 80px rgba(255, 215, 0, 0.4);
+            }
         }
 
         .float {
-            animation: float 3s ease-in-out infinite;
+            animation: float 4s ease-in-out infinite;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .spin-slow {
-            animation: spin 8s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .shake {
-            animation: shake 0.5s ease-in-out;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px) rotate(-5deg); }
-            75% { transform: translateX(5px) rotate(5deg); }
-        }
-
-        .slot-spin {
-            animation: slotSpin 0.1s linear infinite;
-        }
-
-        @keyframes slotSpin {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-100%); }
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(2deg); }
+            75% { transform: translateY(4px) rotate(-2deg); }
         }
 
         .bounce-in {
-            animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         @keyframes bounceIn {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+            0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(3deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
         .slide-up {
-            animation: slideUp 0.4s ease-out;
+            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         @keyframes slideUp {
-            0% { transform: translateY(100%); opacity: 0; }
+            0% { transform: translateY(100px); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
         }
 
-        .progress-bar {
-            transition: width 0.5s ease-out;
+        .shake {
+            animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
         }
 
-        .nav-item {
-            transition: all 0.3s ease;
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, 0, 0) rotate(-1deg); }
+            20%, 80% { transform: translate3d(4px, 0, 0) rotate(2deg); }
+            30%, 50%, 70% { transform: translate3d(-6px, 0, 0) rotate(-3deg); }
+            40%, 60% { transform: translate3d(6px, 0, 0) rotate(3deg); }
         }
 
-        .nav-item.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transform: scale(1.1);
+        .mining-hit {
+            animation: miningHit 0.2s ease-out;
         }
 
-        .energy-bar {
-            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
-        }
-
-        .coin-flip {
-            animation: coinFlip 0.6s ease-in-out;
-        }
-
-        @keyframes coinFlip {
-            0% { transform: rotateY(0); }
-            50% { transform: rotateY(180deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        .sparkle {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: radial-gradient(circle, #fff 0%, transparent 70%);
-            border-radius: 50%;
-            animation: sparkle 1s ease-out forwards;
-            pointer-events: none;
-        }
-
-        @keyframes sparkle {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        .mining-effect {
-            animation: miningPulse 0.3s ease-out;
-        }
-
-        @keyframes miningPulse {
+        @keyframes miningHit {
             0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            50% { transform: scale(1.3) rotate(10deg); }
             100% { transform: scale(1); }
         }
 
-        .case-glow {
-            animation: caseGlow 1.5s ease-in-out infinite alternate;
+        .coin-pop {
+            animation: coinPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
         }
 
-        @keyframes caseGlow {
-            0% { filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.5)); }
-            100% { filter: drop-shadow(0 0 30px rgba(138, 43, 226, 0.9)); }
+        @keyframes coinPop {
+            0% { transform: scale(0) translateY(0); opacity: 1; }
+            50% { transform: scale(1.5) translateY(-30px); opacity: 1; }
+            100% { transform: scale(0) translateY(-60px); opacity: 0; }
         }
 
-        .rarity-common { border-color: #9ca3af; }
-        .rarity-rare { border-color: #3b82f6; }
-        .rarity-epic { border-color: #8b5cf6; }
-        .rarity-legendary { border-color: #f59e0b; }
-
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
+        .spin-slot {
+            animation: spinSlot 0.1s linear infinite;
         }
 
-        ::-webkit-scrollbar {
-            width: 4px;
+        @keyframes spinSlot {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50px); }
         }
 
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+        .coin-flip-anim {
+            animation: coinFlipAnim 0.8s ease-in-out;
+            transform-style: preserve-3d;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+        @keyframes coinFlipAnim {
+            0% { transform: rotateY(0) scale(1); }
+            50% { transform: rotateY(900deg) scale(1.3); }
+            100% { transform: rotateY(1800deg) scale(1); }
+        }
+
+        .progress-bar {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .energy-bar-fill {
+            background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .xp-bar-fill {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.5);
+        }
+
+        .nav-item {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #8b5cf6, #06b6d4);
             border-radius: 2px;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-item.active::after {
+            width: 30px;
+        }
+
+        .nav-item.active {
+            color: #a78bfa;
+            transform: translateY(-3px);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 8px rgba(167, 139, 250, 0.8));
         }
 
         .tab-content {
             display: none;
-            animation: fadeIn 0.3s ease-out;
+            animation: fadeIn 0.4s ease-out;
         }
 
         .tab-content.active {
@@ -221,683 +289,1236 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .slot-reel {
-            height: 80px;
-            overflow: hidden;
-            position: relative;
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
         }
 
-        .slot-symbols {
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        .reward-text {
+            animation: rewardPulse 0.5s ease-out;
         }
 
-        .xp-gain {
-            animation: xpFloat 1s ease-out forwards;
+        @keyframes rewardPulse {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .particle {
             position: absolute;
             pointer-events: none;
+            animation: particleFly 1s ease-out forwards;
         }
 
-        @keyframes xpFloat {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-50px); }
+        @keyframes particleFly {
+            0% { opacity: 1; transform: translate(0, 0) scale(1); }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+        }
+
+        .level-badge {
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            border: 2px solid;
+            border-image: linear-gradient(135deg, #8b5cf6, #06b6d4) 1;
+        }
+
+        .rarity-common { 
+            border-color: #6b7280; 
+            box-shadow: 0 0 15px rgba(107, 114, 128, 0.3);
+        }
+        .rarity-rare { 
+            border-color: #3b82f6; 
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+        .rarity-epic { 
+            border-color: #8b5cf6; 
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
+        }
+        .rarity-legendary { 
+            border-color: #f59e0b; 
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.6);
+            animation: legendaryGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes legendaryGlow {
+            0% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
+            100% { box-shadow: 0 0 40px rgba(245, 158, 11, 0.8); }
+        }
+
+        .streak-fire {
+            animation: firePulse 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes firePulse {
+            0% { transform: scale(1); filter: brightness(1); }
+            100% { transform: scale(1.1); filter: brightness(1.3); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #8b5cf6, #06b6d4);
+            border-radius: 3px;
+        }
+
+        .achievement-unlock {
+            animation: achievementPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes achievementPop {
+            0% { transform: translateY(100px) scale(0); opacity: 0; }
+            60% { transform: translateY(-20px) scale(1.1); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .slot-machine {
+            background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
+            border: 3px solid #ffd700;
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.3),
+                inset 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .daily-bonus-available {
+            animation: dailyPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes dailyPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.8); }
+        }
+
+        .prestige-glow {
+            background: linear-gradient(135deg, #ff006e 0%, #8338ec 50%, #3a86ff 100%);
+            background-size: 200% 200%;
+            animation: prestigeShift 3s ease infinite;
+        }
+
+        @keyframes prestigeShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
     </style>
 </head>
-<body class="text-white pb-24">
-    <!-- Header -->
-    <header class="glass sticky top-0 z-50 px-4 py-3">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-full gradient-purple flex items-center justify-center font-bold text-lg">
-                    <span id="playerInitial">M</span>
+<body class="text-white pb-28">
+    <div class="game-container">
+        <!-- Header -->
+        <header class="glass-dark sticky top-0 z-50 px-4 py-3 border-b border-white/5">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div class="w-12 h-12 rounded-2xl gradient-purple flex items-center justify-center font-black text-xl shadow-lg shadow-purple-500/30">
+                            <span id="playerInitial">G</span>
+                        </div>
+                        <div class="absolute -bottom-1 -right-1 bg-gray-900 rounded-full px-1.5 py-0.5 text-xs font-bold border border-purple-500">
+                            <span id="playerLevel">1</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-300">Уровень <span id="headerLevel" class="text-purple-400">1</span></div>
+                        <div class="w-28 h-2.5 bg-gray-800 rounded-full overflow-hidden mt-1">
+                            <div id="xpBar" class="h-full xp-bar-fill progress-bar rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <div class="text-sm font-semibold">Уровень <span id="playerLevel">1</span></div>
-                    <div class="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
-                        <div id="xpBar" class="h-full gradient-blue progress-bar" style="width: 0%"></div>
+                <div class="flex gap-2">
+                    <div class="glass px-3 py-2 rounded-xl flex items-center gap-2 border border-yellow-500/30">
+                        <span class="text-xl">🪙</span>
+                        <span id="coins" class="font-bold text-yellow-400">0</span>
+                    </div>
+                    <div class="glass px-3 py-2 rounded-xl flex items-center gap-2 border border-purple-500/30">
+                        <span class="text-xl">💎</span>
+                        <span id="gems" class="font-bold text-purple-400">0</span>
                     </div>
                 </div>
             </div>
-            <div class="flex gap-3">
-                <div class="glass px-3 py-1.5 rounded-full flex items-center gap-1">
-                    <span class="text-yellow-400">💰</span>
-                    <span id="coins" class="font-bold">1000</span>
+            <!-- Energy Bar -->
+            <div class="bg-gray-800/50 rounded-xl p-2">
+                <div class="flex justify-between text-xs mb-1.5 px-1">
+                    <span class="text-cyan-400 font-semibold flex items-center gap-1">
+                        <span class="text-base">⚡</span> Энергия
+                    </span>
+                    <span class="text-gray-400">
+                        <span id="currentEnergy" class="text-cyan-400 font-bold">100</span>
+                        <span class="text-gray-600">/</span>
+                        <span id="maxEnergy">100</span>
+                    </span>
                 </div>
-                <div class="glass px-3 py-1.5 rounded-full flex items-center gap-1">
-                    <span class="text-purple-400">💎</span>
-                    <span id="gems" class="font-bold">10</span>
+                <div class="w-full h-4 bg-gray-900 rounded-full overflow-hidden border border-gray-700">
+                    <div id="energyBar" class="h-full energy-bar-fill progress-bar rounded-full" style="width: 100%"></div>
                 </div>
             </div>
-        </div>
-        <!-- Energy Bar -->
-        <div class="mt-3">
-            <div class="flex justify-between text-xs mb-1">
-                <span class="text-cyan-400">⚡ Энергия</span>
-                <span><span id="currentEnergy">100</span>/<span id="maxEnergy">100</span></span>
-            </div>
-            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
-                <div id="energyBar" class="h-full energy-bar progress-bar" style="width: 100%"></div>
-            </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- Main Content -->
-    <main class="px-4 py-4">
-        <!-- Work Section -->
-        <div id="workTab" class="tab-content active">
-            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-                <span class="text-3xl">💼</span> Работа
-            </h2>
-            <div class="grid gap-4">
-                <div class="glass rounded-2xl p-4 card-hover cursor-pointer" onclick="doWork('office')">
-                    <div class="flex items-center gap-4">
-                        <div class="w-16 h-16 rounded-xl gradient-blue flex items-center justify-center text-3xl float">🏢</div>
-                        <div class="flex-1">
-                            <h3 class="font-bold text-lg">Офис</h3>
-                            <p class="text-gray-400 text-sm">+50-100 💰 | -10 ⚡</p>
-                            <p class="text-green-400 text-xs">+15 XP</p>
-                        </div>
-                        <div class="text-2xl">▶️</div>
-                    </div>
+        <!-- Main Content -->
+        <main class="px-4 py-4">
+            <!-- Home Section -->
+            <div id="homeTab" class="tab-content active">
+                <div class="text-center mb-6">
+                    <h1 class="text-3xl font-black text-gradient mb-2">💎 GemRush</h1>
+                    <p class="text-gray-500 text-sm">Добывай, играй, побеждай!</p>
                 </div>
-                <div class="glass rounded-2xl p-4 card-hover cursor-pointer" onclick="doWork('factory')">
-                    <div class="flex items-center gap-4">
-                        <div class="w-16 h-16 rounded-xl gradient-gold flex items-center justify-center text-3xl float">🏭</div>
-                        <div class="flex-1">
-                            <h3 class="font-bold text-lg">Завод</h3>
-                            <p class="text-gray-400 text-sm">+100-200 💰 | -20 ⚡</p>
-                            <p class="text-green-400 text-xs">+30 XP</p>
-                        </div>
-                        <div class="text-2xl">▶️</div>
-                    </div>
-                </div>
-                <div class="glass rounded-2xl p-4 card-hover cursor-pointer" onclick="doWork('business')">
-                    <div class="flex items-center gap-4">
-                        <div class="w-16 h-16 rounded-xl gradient-purple flex items-center justify-center text-3xl float">💼</div>
-                        <div class="flex-1">
-                            <h3 class="font-bold text-lg">Бизнес</h3>
-                            <p class="text-gray-400 text-sm">+200-500 💰 | -30 ⚡</p>
-                            <p class="text-green-400 text-xs">+50 XP</p>
-                        </div>
-                        <div class="text-2xl">▶️</div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Mine Section -->
-        <div id="mineTab" class="tab-content">
-            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-                <span class="text-3xl">⛏️</span> Шахта
-            </h2>
-            <div class="glass rounded-2xl p-6 text-center mb-4">
-                <div id="mineRock" class="text-8xl mb-4 cursor-pointer inline-block" onclick="mineRock()">🪨</div>
-                <p class="text-gray-400 mb-2">Нажми чтобы добыть ресурсы!</p>
-                <p class="text-sm">Каждый клик: -5 ⚡ | +5-20 💰 | Шанс 💎 5%</p>
-            </div>
-            <div class="glass rounded-2xl p-4">
-                <h3 class="font-bold mb-3">📦 Инвентарь руды</h3>
-                <div class="grid grid-cols-3 gap-2">
-                    <div class="bg-gray-800 rounded-xl p-3 text-center">
-                        <div class="text-2xl mb-1">�ite</div>
-                        <div class="text-xs text-gray-400">Уголь</div>
-                        <div id="coalCount" class="font-bold">0</div>
-                    </div>
-                    <div class="bg-gray-800 rounded-xl p-3 text-center">
-                        <div class="text-2xl mb-1">🔶</div>
-                        <div class="text-xs text-gray-400">Железо</div>
-                        <div id="ironCount" class="font-bold">0</div>
-                    </div>
-                    <div class="bg-gray-800 rounded-xl p-3 text-center">
-                        <div class="text-2xl mb-1">💎</div>
-                        <div class="text-xs text-gray-400">Алмазы</div>
-                        <div id="diamondCount" class="font-bold">0</div>
+                <!-- Daily Bonus -->
+                <div id="dailyBonusCard" class="card-game p-4 mb-4 cursor-pointer daily-bonus-available" onclick="claimDailyBonus()">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl gradient-green flex items-center justify-center text-3xl float">
+                            🎁
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-lg text-green-400">Ежедневный бонус</h3>
+                            <p class="text-gray-400 text-sm">День <span id="dailyStreak">1</span> 🔥</p>
+                            <p id="dailyBonusStatus" class="text-green-400 text-xs mt-1">Доступно!</p>
+                        </div>
+                        <div class="text-4xl">→</div>
                     </div>
                 </div>
-            </div>
-            <button onclick="sellOres()" class="w-full mt-4 gradient-green text-white font-bold py-3 rounded-xl card-hover">
-                💰 Продать всю руду
-            </button>
-        </div>
 
-        <!-- Shop Section -->
-        <div id="shopTab" class="tab-content">
-            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-                <span class="text-3xl">🛒</span> Магазин
-            </h2>
-            <div class="grid gap-3">
-                <div class="glass rounded-2xl p-4 card-hover">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center text-3xl">⚡</div>
-                        <div class="flex-1">
-                            <h3 class="font-bold">Энергетик</h3>
-                            <p class="text-gray-400 text-sm">+50 энергии</p>
-                        </div>
-                        <button onclick="buyItem('energy')" class="gradient-blue px-4 py-2 rounded-xl font-bold">
-                            200 💰
-                        </button>
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="card-game p-4 text-center">
+                        <div class="text-3xl mb-2">🏆</div>
+                        <div class="text-2xl font-black text-yellow-400" id="homeCoins">0</div>
+                        <div class="text-xs text-gray-500">Всего монет</div>
+                    </div>
+                    <div class="card-game p-4 text-center">
+                        <div class="text-3xl mb-2">⭐</div>
+                        <div class="text-2xl font-black text-purple-400" id="homeLevel">1</div>
+                        <div class="text-xs text-gray-500">Уровень</div>
                     </div>
                 </div>
-                <div class="glass rounded-2xl p-4 card-hover">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-xl bg-yellow-500/20 flex items-center justify-center text-3xl">⛏️</div>
-                        <div class="flex-1">
-                            <h3 class="font-bold">Улучшенная кирка</h3>
-                            <p class="text-gray-400 text-sm">+25% добычи в шахте</p>
-                            <p id="pickaxeLevel" class="text-green-400 text-xs">Уровень: 1</p>
-                        </div>
-                        <button onclick="buyItem('pickaxe')" class="gradient-gold px-4 py-2 rounded-xl font-bold">
-                            500 💰
-                        </button>
-                    </div>
-                </div>
-                <div class="glass rounded-2xl p-4 card-hover">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-xl bg-green-500/20 flex items-center justify-center text-3xl">🔋</div>
-                        <div class="flex-1">
-                            <h3 class="font-bold">Батарея</h3>
-                            <p class="text-gray-400 text-sm">+20 макс. энергии</p>
-                        </div>
-                        <button onclick="buyItem('battery')" class="gradient-green px-4 py-2 rounded-xl font-bold">
-                            1000 💰
-                        </button>
-                    </div>
-                </div>
-                <div class="glass rounded-2xl p-4 card-hover">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center text-3xl">💎</div>
-                        <div class="flex-1">
-                            <h3 class="font-bold">10 Гемов</h3>
-                            <p class="text-gray-400 text-sm">Премиум валюта</p>
-                        </div>
-                        <button onclick="buyItem('gems')" class="gradient-purple px-4 py-2 rounded-xl font-bold">
-                            5000 💰
-                        </button>
+
+                <!-- Achievements Preview -->
+                <div class="card-game p-4">
+                    <h3 class="font-bold mb-3 flex items-center gap-2">
+                        <span class="text-xl">🏅</span> Достижения
+                    </h3>
+                    <div id="achievementsList" class="grid grid-cols-4 gap-2">
+                        <!-- Filled by JS -->
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Games Section -->
-        <div id="gamesTab" class="tab-content">
-            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-                <span class="text-3xl">🎮</span> Игры
-            </h2>
-            <div class="grid gap-4">
-                <!-- Coin Flip -->
-                <div class="glass rounded-2xl p-4">
-                    <h3 class="font-bold text-lg mb-3 flex items-center gap-2">🪙 Подброс монеты</h3>
-                    <div class="text-center mb-4">
-                        <div id="coinFlipResult" class="text-6xl mb-4">🪙</div>
-                        <div class="flex justify-center gap-4 mb-4">
-                            <button onclick="playCoinFlip('heads')" class="gradient-gold px-6 py-3 rounded-xl font-bold">
-                                Орёл
-                            </button>
-                            <button onclick="playCoinFlip('tails')" class="gradient-purple px-6 py-3 rounded-xl font-bold">
-                                Решка
-                            </button>
+            <!-- Work Section -->
+            <div id="workTab" class="tab-content">
+                <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
+                    <span class="text-3xl">💼</span> 
+                    <span class="text-gradient">Работа</span>
+                </h2>
+                <div class="grid gap-4">
+                    <div class="card-game p-4 cursor-pointer" onclick="doWork('delivery')">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-3xl float shadow-lg shadow-green-500/30">🚴</div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg">Курьер</h3>
+                                <p class="text-gray-400 text-sm">+30-80 🪙 | -5 ⚡</p>
+                                <p class="text-green-400 text-xs">+10 XP</p>
+                            </div>
+                            <div class="text-2xl text-gray-600">▶</div>
                         </div>
-                        <p class="text-gray-400 text-sm">Ставка: 100 💰 | Выигрыш: x2</p>
+                    </div>
+                    <div class="card-game p-4 cursor-pointer" onclick="doWork('office')">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-3xl float shadow-lg shadow-blue-500/30">🏢</div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg">Офис</h3>
+                                <p class="text-gray-400 text-sm">+80-150 🪙 | -10 ⚡</p>
+                                <p class="text-green-400 text-xs">+20 XP</p>
+                            </div>
+                            <div class="text-2xl text-gray-600">▶</div>
+                        </div>
+                    </div>
+                    <div class="card-game p-4 cursor-pointer" onclick="doWork('business')">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-3xl float shadow-lg shadow-purple-500/30">💼</div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg">Бизнес</h3>
+                                <p class="text-gray-400 text-sm">+200-500 🪙 | -20 ⚡</p>
+                                <p class="text-green-400 text-xs">+40 XP</p>
+                            </div>
+                            <div class="text-2xl text-gray-600">▶</div>
+                        </div>
+                    </div>
+                    <div class="card-game p-4 cursor-pointer neon-border" onclick="doWork('crypto')">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 rounded-2xl prestige-glow flex items-center justify-center text-3xl float shadow-lg">₿</div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg text-purple-300">Криптотрейдинг</h3>
+                                <p class="text-gray-400 text-sm">+500-2000 🪙 | -40 ⚡</p>
+                                <p class="text-green-400 text-xs">+100 XP | Риск потери!</p>
+                            </div>
+                            <div class="text-2xl text-purple-400">⚡</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mine Section -->
+            <div id="mineTab" class="tab-content">
+                <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
+                    <span class="text-3xl">⛏️</span>
+                    <span class="text-gradient">Шахта</span>
+                </h2>
+                <div class="card-game p-6 text-center mb-4">
+                    <div id="mineArea" class="relative inline-block">
+                        <div id="mineRock" class="text-8xl cursor-pointer select-none transition-transform" onclick="mineRock()">🪨</div>
+                        <div id="mineParticles" class="absolute inset-0 pointer-events-none"></div>
+                    </div>
+                    <div class="mt-4 space-y-2">
+                        <p class="text-gray-400">Тапай чтобы добывать!</p>
+                        <div class="flex justify-center gap-4 text-sm">
+                            <span class="text-cyan-400">-3 ⚡</span>
+                            <span class="text-yellow-400">+5-30 🪙</span>
+                            <span class="text-purple-400">💎 3%</span>
+                        </div>
+                        <div class="text-xs text-gray-500">
+                            Кирка: Ур.<span id="pickaxeLevelDisplay">1</span> (x<span id="pickaxeMultiplier">1.0</span>)
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Dice Game -->
-                <div class="glass rounded-2xl p-4">
-                    <h3 class="font-bold text-lg mb-3 flex items-center gap-2">🎲 Кости</h3>
-                    <div class="text-center">
-                        <div class="flex justify-center gap-4 mb-4">
-                            <div id="dice1" class="text-5xl">🎲</div>
-                            <div id="dice2" class="text-5xl">🎲</div>
+                <div class="card-game p-4 mb-4">
+                    <h3 class="font-bold mb-3 flex items-center gap-2">
+                        <span>📦</span> Инвентарь руды
+                    </h3>
+                    <div class="grid grid-cols-4 gap-2">
+                        <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-gray-700">
+                            <div class="text-2xl mb-1">ite</div>
+                            <div class="text-xs text-gray-500">Уголь</div>
+                            <div id="coalCount" class="font-bold text-gray-300">0</div>
                         </div>
-                        <button onclick="playDice()" class="gradient-blue px-8 py-3 rounded-xl font-bold">
-                            Бросить (50 💰)
-                        </button>
-                        <p class="text-gray-400 text-sm mt-2">Дубль = x3 | Сумма 7 = x2 | 12 = x5</p>
-                    </div>
-                </div>
-
-                <!-- Lucky Number -->
-                <div class="glass rounded-2xl p-4">
-                    <h3 class="font-bold text-lg mb-3 flex items-center gap-2">🔢 Угадай число</h3>
-                    <div class="text-center">
-                        <div id="guessDisplay" class="text-4xl font-bold mb-4 text-cyan-400">?</div>
-                        <div class="grid grid-cols-5 gap-2 mb-4">
-                            ${[1,2,3,4,5,6,7,8,9,10].map(n => `
-                                <button onclick="guessNumber(${n})" class="bg-gray-700 hover:bg-gray-600 py-2 rounded-lg font-bold transition-colors">${n}</button>
-                            `).join('')}
+                        <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-orange-500/30">
+                            <div class="text-2xl mb-1">🔶</div>
+                            <div class="text-xs text-gray-500">Железо</div>
+                            <div id="ironCount" class="font-bold text-orange-400">0</div>
                         </div>
-                        <p class="text-gray-400 text-sm">Ставка: 100 💰 | Угадал = x10</p>
+                        <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-yellow-500/30">
+                            <div class="text-2xl mb-1">🥇</div>
+                            <div class="text-xs text-gray-500">Золото</div>
+                            <div id="goldCount" class="font-bold text-yellow-400">0</div>
+                        </div>
+                        <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-purple-500/30">
+                            <div class="text-2xl mb-1">💎</div>
+                            <div class="text-xs text-gray-500">Алмазы</div>
+                            <div id="diamondCount" class="font-bold text-purple-400">0</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Casino Section -->
-        <div id="casinoTab" class="tab-content">
-            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-                <span class="text-3xl">🎰</span> Казино
-            </h2>
-            
-            <!-- Slots -->
-            <div class="glass rounded-2xl p-6 mb-4">
-                <h3 class="font-bold text-lg mb-4 text-center">🎰 Слоты</h3>
-                <div class="flex justify-center gap-2 mb-6">
-                    <div class="w-20 h-24 bg-gray-800 rounded-xl flex items-center justify-center text-4xl border-2 border-yellow-500/50 slot-reel overflow-hidden">
-                        <span id="slot1">🍒</span>
-                    </div>
-                    <div class="w-20 h-24 bg-gray-800 rounded-xl flex items-center justify-center text-4xl border-2 border-yellow-500/50 slot-reel overflow-hidden">
-                        <span id="slot2">🍋</span>
-                    </div>
-                    <div class="w-20 h-24 bg-gray-800 rounded-xl flex items-center justify-center text-4xl border-2 border-yellow-500/50 slot-reel overflow-hidden">
-                        <span id="slot3">🍊</span>
-                    </div>
-                </div>
-                <div class="flex justify-center gap-3 mb-4">
-                    <button onclick="playSlots(50)" class="gradient-gold px-6 py-3 rounded-xl font-bold">
-                        50 💰
-                    </button>
-                    <button onclick="playSlots(100)" class="gradient-purple px-6 py-3 rounded-xl font-bold">
-                        100 💰
-                    </button>
-                    <button onclick="playSlots(500)" class="gradient-pink px-6 py-3 rounded-xl font-bold">
-                        500 💰
-                    </button>
-                </div>
-                <div class="text-center text-sm text-gray-400">
-                    <p>🍒🍒🍒 = x3 | 🍋🍋🍋 = x5 | 💎💎💎 = x20</p>
-                    <p>7️⃣7️⃣7️⃣ = x50 | Любые 2 = x1.5</p>
-                </div>
+                
+                <button onclick="sellOres()" class="w-full btn-game gradient-green text-white font-bold py-4 rounded-2xl text-lg shadow-lg shadow-green-500/30">
+                    💰 Продать всю руду
+                </button>
             </div>
 
-            <!-- Cases -->
-            <div class="glass rounded-2xl p-4">
-                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">📦 Кейсы</h3>
+            <!-- Shop Section -->
+            <div id="shopTab" class="tab-content">
+                <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🛒</span>
+                    <span class="text-gradient">Магазин</span>
+                </h2>
                 <div class="grid gap-3">
-                    <div class="bg-gray-800 rounded-xl p-4 card-hover cursor-pointer case-glow" onclick="openCase('common')">
+                    <div class="card-game p-4">
                         <div class="flex items-center gap-4">
-                            <div class="text-4xl">📦</div>
+                            <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center text-3xl border border-cyan-500/30">⚡</div>
                             <div class="flex-1">
-                                <h4 class="font-bold text-gray-300">Обычный кейс</h4>
-                                <p class="text-sm text-gray-500">50-200 💰 или предметы</p>
+                                <h3 class="font-bold">Энергетик</h3>
+                                <p class="text-gray-400 text-sm">+50 энергии</p>
                             </div>
-                            <div class="text-yellow-400 font-bold">100 💰</div>
+                            <button onclick="buyItem('energy')" class="btn-game gradient-blue px-4 py-2 rounded-xl font-bold">
+                                150 🪙
+                            </button>
                         </div>
                     </div>
-                    <div class="bg-blue-900/30 rounded-xl p-4 card-hover cursor-pointer border border-blue-500/30" onclick="openCase('rare')">
+                    <div class="card-game p-4">
                         <div class="flex items-center gap-4">
-                            <div class="text-4xl">🎁</div>
+                            <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center text-3xl border border-cyan-500/30">🔋</div>
                             <div class="flex-1">
-                                <h4 class="font-bold text-blue-300">Редкий кейс</h4>
-                                <p class="text-sm text-blue-400/70">100-500 💰 или редкие предметы</p>
+                                <h3 class="font-bold">Мега-энергия</h3>
+                                <p class="text-gray-400 text-sm">Полное восстановление</p>
                             </div>
-                            <div class="text-yellow-400 font-bold">500 💰</div>
+                            <button onclick="buyItem('fullEnergy')" class="btn-game gradient-purple px-4 py-2 rounded-xl font-bold">
+                                3 💎
+                            </button>
                         </div>
                     </div>
-                    <div class="bg-purple-900/30 rounded-xl p-4 card-hover cursor-pointer border border-purple-500/50" onclick="openCase('epic')">
+                    <div class="card-game p-4">
                         <div class="flex items-center gap-4">
-                            <div class="text-4xl">💜</div>
+                            <div class="w-14 h-14 rounded-xl bg-yellow-500/20 flex items-center justify-center text-3xl border border-yellow-500/30">⛏️</div>
                             <div class="flex-1">
-                                <h4 class="font-bold text-purple-300">Эпический кейс</h4>
-                                <p class="text-sm text-purple-400/70">500-2000 💰 или эпик предметы</p>
+                                <h3 class="font-bold">Улучшить кирку</h3>
+                                <p class="text-gray-400 text-sm">+25% к добыче</p>
+                                <p id="pickaxeLevel" class="text-yellow-400 text-xs">Уровень: 1</p>
                             </div>
-                            <div class="text-purple-400 font-bold">5 💎</div>
+                            <button onclick="buyItem('pickaxe')" class="btn-game gradient-gold px-4 py-2 rounded-xl font-bold">
+                                <span id="pickaxePrice">300</span> 🪙
+                            </button>
                         </div>
                     </div>
-                    <div class="bg-yellow-900/30 rounded-xl p-4 card-hover cursor-pointer border border-yellow-500/50 pulse-glow" onclick="openCase('legendary')">
+                    <div class="card-game p-4">
                         <div class="flex items-center gap-4">
-                            <div class="text-4xl">👑</div>
+                            <div class="w-14 h-14 rounded-xl bg-green-500/20 flex items-center justify-center text-3xl border border-green-500/30">🔋</div>
                             <div class="flex-1">
-                                <h4 class="font-bold text-yellow-300">Легендарный кейс</h4>
-                                <p class="text-sm text-yellow-400/70">1000-10000 💰 или легендарки!</p>
+                                <h3 class="font-bold">Батарея</h3>
+                                <p class="text-gray-400 text-sm">+25 макс. энергии</p>
                             </div>
-                            <div class="text-purple-400 font-bold">20 💎</div>
+                            <button onclick="buyItem('battery')" class="btn-game gradient-green px-4 py-2 rounded-xl font-bold">
+                                <span id="batteryPrice">500</span> 🪙
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-game p-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center text-3xl border border-purple-500/30">💎</div>
+                            <div class="flex-1">
+                                <h3 class="font-bold">10 Гемов</h3>
+                                <p class="text-gray-400 text-sm">Премиум валюта</p>
+                            </div>
+                            <button onclick="buyItem('gems')" class="btn-game gradient-purple px-4 py-2 rounded-xl font-bold">
+                                2500 🪙
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-game p-4 neon-border">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-xl prestige-glow flex items-center justify-center text-3xl">🍀</div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-green-300">Талисман удачи</h3>
+                                <p class="text-gray-400 text-sm">+10% шанс редкой руды</p>
+                                <p id="luckStatus" class="text-xs text-gray-500">Не активен</p>
+                            </div>
+                            <button onclick="buyItem('luck')" class="btn-game gradient-green px-4 py-2 rounded-xl font-bold">
+                                10 💎
+                            </button>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Games Section -->
+            <div id="gamesTab" class="tab-content">
+                <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🎮</span>
+                    <span class="text-gradient">Мини-игры</span>
+                </h2>
+                <div class="grid gap-4">
+                    <!-- Coin Flip -->
+                    <div class="card-game p-5">
+                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                            <span class="text-2xl">🪙</span> Подброс монеты
+                        </h3>
+                        <div class="text-center mb-4">
+                            <div id="coinFlipResult" class="text-7xl mb-4 inline-block">🪙</div>
+                            <div class="flex justify-center gap-3 mb-4">
+                                <button onclick="playCoinFlip('heads')" class="btn-game gradient-gold px-8 py-3 rounded-xl font-bold text-lg">
+                                    🦅 Орёл
+                                </button>
+                                <button onclick="playCoinFlip('tails')" class="btn-game gradient-purple px-8 py-3 rounded-xl font-bold text-lg">
+                                    🌟 Решка
+                                </button>
+                            </div>
+                            <p class="text-gray-500 text-sm">Ставка: 100 🪙 | Выигрыш: x2</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Dice Game -->
+                    <div class="card-game p-5">
+                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                            <span class="text-2xl">🎲</span> Кости
+                        </h3>
+                        <div class="text-center">
+                            <div class="flex justify-center gap-6 mb-4">
+                                <div id="dice1" class="text-6xl">🎲</div>
+                                <div id="dice2" class="text-6xl">🎲</div>
+                            </div>
+                            <button onclick="playDice()" class="btn-game gradient-blue px-8 py-3 rounded-xl font-bold text-lg">
+                                🎲 Бросить (50 🪙)
+                            </button>
+                            <p class="text-gray-500 text-sm mt-3">Дубль = x3 | Сумма 7 = x2 | 12 = x5</p>
+                        </div>
+                    </div>
+
+                    <!-- Lucky Wheel -->
+                    <div class="card-game p-5">
+                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                            <span class="text-2xl">🎡</span> Колесо фортуны
+                        </h3>
+                        <div class="text-center">
+                            <div id="wheelDisplay" class="text-6xl mb-4">🎡</div>
+                            <button onclick="spinWheel()" class="btn-game prestige-glow px-8 py-3 rounded-xl font-bold text-lg text-white">
+                                🎰 Крутить (200 🪙)
+                            </button>
+                            <p class="text-gray-500 text-sm mt-3">Призы: 50-1000 🪙 или 💎!</p>
+                        </div>
+                    </div>
+
+                    <!-- Number Guess -->
+                    <div class="card-game p-5">
+                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                            <span class="text-2xl">🔢</span> Угадай число
+                        </h3>
+                        <div class="text-center">
+                            <div id="guessDisplay" class="text-5xl font-black mb-4 text-cyan-400">?</div>
+                            <div class="grid grid-cols-5 gap-2 mb-4">
+                                <button onclick="guessNumber(1)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">1</button>
+                                <button onclick="guessNumber(2)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">2</button>
+                                <button onclick="guessNumber(3)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">3</button>
+                                <button onclick="guessNumber(4)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">4</button>
+                                <button onclick="guessNumber(5)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">5</button>
+                                <button onclick="guessNumber(6)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">6</button>
+                                <button onclick="guessNumber(7)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">7</button>
+                                <button onclick="guessNumber(8)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">8</button>
+                                <button onclick="guessNumber(9)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">9</button>
+                                <button onclick="guessNumber(10)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">10</button>
+                            </div>
+                            <p class="text-gray-500 text-sm">Ставка: 100 🪙 | Угадал = x10</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Casino Section -->
+            <div id="casinoTab" class="tab-content">
+                <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
+                    <span class="text-3xl">🎰</span>
+                    <span class="text-gradient">Казино</span>
+                </h2>
+                
+                <!-- Slots -->
+                <div class="card-game p-6 mb-4 slot-machine">
+                    <h3 class="font-bold text-xl mb-4 text-center text-yellow-400">🎰 Слот-машина</h3>
+                    <div class="flex justify-center gap-3 mb-6">
+                        <div class="w-20 h-24 bg-gray-900 rounded-xl flex items-center justify-center text-5xl border-2 border-yellow-500/50 overflow-hidden shadow-inner">
+                            <span id="slot1">🍒</span>
+                        </div>
+                        <div class="w-20 h-24 bg-gray-900 rounded-xl flex items-center justify-center text-5xl border-2 border-yellow-500/50 overflow-hidden shadow-inner">
+                            <span id="slot2">🍋</span>
+                        </div>
+                        <div class="w-20 h-24 bg-gray-900 rounded-xl flex items-center justify-center text-5xl border-2 border-yellow-500/50 overflow-hidden shadow-inner">
+                            <span id="slot3">🍊</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-center gap-2 mb-4 flex-wrap">
+                        <button onclick="playSlots(50)" class="btn-game bg-yellow-600 hover:bg-yellow-500 px-5 py-3 rounded-xl font-bold">
+                            50 🪙
+                        </button>
+                        <button onclick="playSlots(100)" class="btn-game bg-purple-600 hover:bg-purple-500 px-5 py-3 rounded-xl font-bold">
+                            100 🪙
+                        </button>
+                        <button onclick="playSlots(500)" class="btn-game bg-pink-600 hover:bg-pink-500 px-5 py-3 rounded-xl font-bold">
+                            500 🪙
+                        </button>
+                    </div>
+                    <div class="text-center text-xs text-gray-400 space-y-1">
+                        <p>🍒🍒🍒 = x3 | 🍋🍋🍋 = x5 | 💎💎💎 = x20</p>
+                        <p>7️⃣7️⃣7️⃣ = x50 | Любые 2 = x1.5</p>
+                    </div>
+                </div>
+
+                <!-- Cases -->
+                <div class="card-game p-4">
+                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                        <span class="text-xl">📦</span> Кейсы
+                    </h3>
+                    <div class="grid gap-3">
+                        <div class="bg-gray-800/50 rounded-xl p-4 cursor-pointer border border-gray-600 hover:border-gray-400 transition-all" onclick="openCase('common')">
+                            <div class="flex items-center gap-4">
+                                <div class="text-4xl">📦</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-gray-300">Обычный кейс</h4>
+                                    <p class="text-sm text-gray-500">50-200 🪙</p>
+                                </div>
+                                <div class="text-yellow-400 font-bold">100 🪙</div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-900/30 rounded-xl p-4 cursor-pointer border border-blue-500/50 rarity-rare" onclick="openCase('rare')">
+                            <div class="flex items-center gap-4">
+                                <div class="text-4xl">🎁</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-blue-300">Редкий кейс</h4>
+                                    <p class="text-sm text-blue-400/70">200-800 🪙 + шанс 💎</p>
+                                </div>
+                                <div class="text-yellow-400 font-bold">400 🪙</div>
+                            </div>
+                        </div>
+                        <div class="bg-purple-900/30 rounded-xl p-4 cursor-pointer border border-purple-500/50 rarity-epic" onclick="openCase('epic')">
+                            <div class="flex items-center gap-4">
+                                <div class="text-4xl">💜</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-purple-300">Эпический кейс</h4>
+                                    <p class="text-sm text-purple-400/70">500-2000 🪙 + 💎</p>
+                                </div>
+                                <div class="text-purple-400 font-bold">5 💎</div>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-900/30 rounded-xl p-4 cursor-pointer border-2 border-yellow-500 rarity-legendary" onclick="openCase('legendary')">
+                            <div class="flex items-center gap-4">
+                                <div class="text-4xl streak-fire">👑</div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-yellow-300">Легендарный кейс</h4>
+                                    <p class="text-sm text-yellow-400/70">2000-15000 🪙 + много 💎!</p>
+                                </div>
+                                <div class="text-purple-400 font-bold">25 💎</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Section -->
+            <div id="profileTab" class="tab-content">
+                <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
+                    <span class="text-3xl">👤</span>
+                    <span class="text-gradient">Профиль</span>
+                </h2>
+                <div class="card-game p-6 text-center mb-4">
+                    <div class="w-24 h-24 mx-auto rounded-3xl gradient-purple flex items-center justify-center text-5xl mb-4 shadow-lg shadow-purple-500/30">
+                        <span id="profileAvatar">🎮</span>
+                    </div>
+                    <h3 class="text-2xl font-black mb-1" id="playerName">Игрок</h3>
+                    <p class="text-purple-400 mb-4">Уровень <span id="profileLevel">1</span></p>
+                    <div class="bg-gray-800/50 rounded-xl p-3 mb-2">
+                        <div class="flex justify-between text-sm mb-2">
+                            <span class="text-gray-400">Опыт</span>
+                            <span class="text-green-400"><span id="currentXp">0</span> / <span id="neededXp">100</span></span>
+                        </div>
+                        <div class="w-full h-4 bg-gray-900 rounded-full overflow-hidden">
+                            <div id="profileXpBar" class="h-full xp-bar-fill progress-bar rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-game p-4 mb-4">
+                    <h3 class="font-bold mb-3 flex items-center gap-2">
+                        <span>📊</span> Статистика
+                    </h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-gray-800/50 rounded-xl p-3 text-center">
+                            <div class="text-2xl mb-1">🪙</div>
+                            <div class="text-xs text-gray-500">Всего заработано</div>
+                            <div id="totalEarned" class="font-bold text-yellow-400">0</div>
+                        </div>
+                        <div class="bg-gray-800/50 rounded-xl p-3 text-center">
+                            <div class="text-2xl mb-1">🎮</div>
+                            <div class="text-xs text-gray-500">Игр сыграно</div>
+                            <div id="gamesPlayed" class="font-bold text-blue-400">0</div>
+                        </div>
+                        <div class="bg-gray-800/50 rounded-xl p-3 text-center">
+                            <div class="text-2xl mb-1">⛏️</div>
+                            <div class="text-xs text-gray-500">Добыто руды</div>
+                            <div id="totalMined" class="font-bold text-orange-400">0</div>
+                        </div>
+                        <div class="bg-gray-800/50 rounded-xl p-3 text-center">
+                            <div class="text-2xl mb-1">🏆</div>
+                            <div class="text-xs text-gray-500">Побед в казино</div>
+                            <div id="casinoWins" class="font-bold text-green-400">0</div>
+                        </div>
+                        <div class="bg-gray-800/50 rounded-xl p-3 text-center">
+                            <div class="text-2xl mb-1">🔥</div>
+                            <div class="text-xs text-gray-500">Серия дней</div>
+                            <div id="profileStreak" class="font-bold text-red-400">0</div>
+                        </div>
+                        <div class="bg-gray-800/50 rounded-xl p-3 text-center">
+                            <div class="text-2xl mb-1">⏱️</div>
+                            <div class="text-xs text-gray-500">Время в игре</div>
+                            <div id="playTime" class="font-bold text-cyan-400">0м</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="resetProgress()" class="w-full bg-red-900/30 border border-red-500/30 text-red-400 font-bold py-3 rounded-xl hover:bg-red-900/50 transition-all">
+                    🔄 Сбросить прогресс
+                </button>
+            </div>
+        </main>
+
+        <!-- Navigation -->
+        <nav class="fixed bottom-0 left-0 right-0 glass-dark border-t border-white/5 px-2 py-3 z-50">
+            <div class="flex justify-around max-w-lg mx-auto">
+                <button onclick="showTab('home')" class="nav-item active flex flex-col items-center px-3 py-1" data-tab="home">
+                    <span class="nav-icon text-2xl transition-transform">🏠</span>
+                    <span class="text-xs mt-1">Дом</span>
+                </button>
+                <button onclick="showTab('work')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="work">
+                    <span class="nav-icon text-2xl transition-transform">💼</span>
+                    <span class="text-xs mt-1">Работа</span>
+                </button>
+                <button onclick="showTab('mine')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="mine">
+                    <span class="nav-icon text-2xl transition-transform">⛏️</span>
+                    <span class="text-xs mt-1">Шахта</span>
+                </button>
+                <button onclick="showTab('shop')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="shop">
+                    <span class="nav-icon text-2xl transition-transform">🛒</span>
+                    <span class="text-xs mt-1">Магазин</span>
+                </button>
+                <button onclick="showTab('games')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="games">
+                    <span class="nav-icon text-2xl transition-transform">🎮</span>
+                    <span class="text-xs mt-1">Игры</span>
+                </button>
+                <button onclick="showTab('casino')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="casino">
+                    <span class="nav-icon text-2xl transition-transform">🎰</span>
+                    <span class="text-xs mt-1">Казино</span>
+                </button>
+                <button onclick="showTab('profile')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="profile">
+                    <span class="nav-icon text-2xl transition-transform">👤</span>
+                    <span class="text-xs mt-1">Профиль</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Modal -->
+        <div id="modal" class="fixed inset-0 modal-backdrop z-50 hidden items-center justify-center p-4" style="display: none;">
+            <div class="card-game p-6 max-w-sm w-full bounce-in">
+                <div id="modalContent" class="text-center">
+                    <!-- Dynamic content -->
+                </div>
+                <button onclick="closeModal()" class="w-full mt-4 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-bold transition-all">
+                    Закрыть
+                </button>
             </div>
         </div>
 
-        <!-- Profile Section -->
-        <div id="profileTab" class="tab-content">
-            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
-                <span class="text-3xl">👤</span> Профиль
-            </h2>
-            <div class="glass rounded-2xl p-6 text-center mb-4">
-                <div class="w-24 h-24 mx-auto rounded-full gradient-purple flex items-center justify-center text-5xl mb-4">
-                    🎮
-                </div>
-                <h3 class="text-2xl font-bold mb-1">Игрок</h3>
-                <p class="text-gray-400 mb-4">Уровень <span id="profileLevel">1</span></p>
-                <div class="w-full h-4 bg-gray-700 rounded-full overflow-hidden mb-2">
-                    <div id="profileXpBar" class="h-full gradient-blue progress-bar" style="width: 0%"></div>
-                </div>
-                <p class="text-sm text-gray-400"><span id="currentXp">0</span> / <span id="neededXp">100</span> XP</p>
-            </div>
-            
-            <div class="glass rounded-2xl p-4 mb-4">
-                <h3 class="font-bold mb-3">📊 Статистика</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-gray-800 rounded-xl p-3 text-center">
-                        <div class="text-2xl mb-1">💰</div>
-                        <div class="text-xs text-gray-400">Всего заработано</div>
-                        <div id="totalEarned" class="font-bold text-yellow-400">0</div>
-                    </div>
-                    <div class="bg-gray-800 rounded-xl p-3 text-center">
-                        <div class="text-2xl mb-1">🎮</div>
-                        <div class="text-xs text-gray-400">Игр сыграно</div>
-                        <div id="gamesPlayed" class="font-bold text-blue-400">0</div>
-                    </div>
-                    <div class="bg-gray-800 rounded-xl p-3 text-center">
-                        <div class="text-2xl mb-1">⛏️</div>
-                        <div class="text-xs text-gray-400">Добыто руды</div>
-                        <div id="totalMined" class="font-bold text-orange-400">0</div>
-                    </div>
-                    <div class="bg-gray-800 rounded-xl p-3 text-center">
-                        <div class="text-2xl mb-1">🏆</div>
-                        <div class="text-xs text-gray-400">Побед в казино</div>
-                        <div id="casinoWins" class="font-bold text-green-400">0</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass rounded-2xl p-4">
-                <h3 class="font-bold mb-3">🎒 Инвентарь</h3>
-                <div id="inventory" class="grid grid-cols-4 gap-2">
-                    <div class="bg-gray-800 rounded-lg p-3 text-center text-2xl opacity-30">📦</div>
-                    <div class="bg-gray-800 rounded-lg p-3 text-center text-2xl opacity-30">📦</div>
-                    <div class="bg-gray-800 rounded-lg p-3 text-center text-2xl opacity-30">📦</div>
-                    <div class="bg-gray-800 rounded-lg p-3 text-center text-2xl opacity-30">📦</div>
-                </div>
-            </div>
+        <!-- Toast -->
+        <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 glass-dark px-6 py-3 rounded-2xl z-50 transition-all duration-300 opacity-0 pointer-events-none border border-white/10">
+            <span id="toastText"></span>
         </div>
-    </main>
-
-    <!-- Navigation -->
-    <nav class="fixed bottom-0 left-0 right-0 glass border-t border-white/10 px-2 py-2">
-        <div class="flex justify-around">
-            <button onclick="showTab('work')" class="nav-item active flex flex-col items-center px-4 py-2 rounded-xl" data-tab="work">
-                <span class="text-xl">💼</span>
-                <span class="text-xs mt-1">Работа</span>
-            </button>
-            <button onclick="showTab('mine')" class="nav-item flex flex-col items-center px-4 py-2 rounded-xl" data-tab="mine">
-                <span class="text-xl">⛏️</span>
-                <span class="text-xs mt-1">Шахта</span>
-            </button>
-            <button onclick="showTab('shop')" class="nav-item flex flex-col items-center px-4 py-2 rounded-xl" data-tab="shop">
-                <span class="text-xl">🛒</span>
-                <span class="text-xs mt-1">Магазин</span>
-            </button>
-            <button onclick="showTab('games')" class="nav-item flex flex-col items-center px-4 py-2 rounded-xl" data-tab="games">
-                <span class="text-xl">🎮</span>
-                <span class="text-xs mt-1">Игры</span>
-            </button>
-            <button onclick="showTab('casino')" class="nav-item flex flex-col items-center px-4 py-2 rounded-xl" data-tab="casino">
-                <span class="text-xl">🎰</span>
-                <span class="text-xs mt-1">Казино</span>
-            </button>
-            <button onclick="showTab('profile')" class="nav-item flex flex-col items-center px-4 py-2 rounded-xl" data-tab="profile">
-                <span class="text-xl">👤</span>
-                <span class="text-xs mt-1">Профиль</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Modal -->
-    <div id="modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
-        <div class="glass rounded-2xl p-6 max-w-sm w-full bounce-in">
-            <div id="modalContent" class="text-center">
-                <!-- Dynamic content -->
-            </div>
-            <button onclick="closeModal()" class="w-full mt-4 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-bold transition-colors">
-                Закрыть
-            </button>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 glass px-6 py-3 rounded-full z-50 hidden transition-all duration-300">
-        <span id="toastText"></span>
     </div>
 
     <script>
-        // Game State
-        let gameState = {
-            coins: 1000,
-            gems: 10,
+        // ============ GAME STATE ============
+        const DEFAULT_STATE = {
+            coins: 500,
+            gems: 5,
             energy: 100,
             maxEnergy: 100,
             level: 1,
             xp: 0,
             xpNeeded: 100,
             pickaxeLevel: 1,
-            ores: { coal: 0, iron: 0, diamond: 0 },
+            batteryLevel: 1,
+            hasLuckCharm: false,
+            ores: { coal: 0, iron: 0, gold: 0, diamond: 0 },
             stats: {
                 totalEarned: 0,
                 gamesPlayed: 0,
                 totalMined: 0,
-                casinoWins: 0
+                casinoWins: 0,
+                dailyStreak: 0,
+                playTimeMinutes: 0
             },
-            inventory: []
+            lastDaily: null,
+            lastEnergyRegen: Date.now(),
+            achievements: [],
+            createdAt: Date.now()
         };
 
-        // Load saved game
-        function loadGame() {
-            const saved = localStorage.getItem('telegramMiniGame');
-            if (saved) {
-                gameState = { ...gameState, ...JSON.parse(saved) };
-            }
-            updateUI();
-        }
+        let gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        let isAnimating = false;
+        let playTimeInterval = null;
 
-        // Save game
+        // ============ STORAGE ============
+        const STORAGE_KEY = 'gemrush_save_v2';
+
         function saveGame() {
-            localStorage.setItem('telegramMiniGame', JSON.stringify(gameState));
+            try {
+                gameState.lastSave = Date.now();
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
+            } catch (e) {
+                console.error('Save failed:', e);
+            }
         }
 
-        // Update UI
-        function updateUI() {
+        function loadGame() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    // Merge with defaults to handle new properties
+                    gameState = { ...JSON.parse(JSON.stringify(DEFAULT_STATE)), ...parsed };
+                    // Ensure nested objects are merged
+                    gameState.ores = { ...DEFAULT_STATE.ores, ...parsed.ores };
+                    gameState.stats = { ...DEFAULT_STATE.stats, ...parsed.stats };
+                    
+                    // Calculate offline energy regeneration
+                    calculateOfflineProgress();
+                }
+                updateAllUI();
+                checkDailyBonus();
+            } catch (e) {
+                console.error('Load failed:', e);
+                gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+            }
+        }
+
+        function calculateOfflineProgress() {
+            const now = Date.now();
+            const lastRegen = gameState.lastEnergyRegen || now;
+            const offlineSeconds = Math.floor((now - lastRegen) / 1000);
+            const energyGained = Math.floor(offlineSeconds / 6); // 1 energy per 6 seconds
+            
+            if (energyGained > 0) {
+                const oldEnergy = gameState.energy;
+                gameState.energy = Math.min(gameState.energy + energyGained, gameState.maxEnergy);
+                const actualGain = gameState.energy - oldEnergy;
+                
+                if (actualGain > 0) {
+                    setTimeout(() => {
+                        showToast(`⚡ +${actualGain} энергии за время отсутствия!`, 'success');
+                    }, 1000);
+                }
+            }
+            gameState.lastEnergyRegen = now;
+        }
+
+        function resetProgress() {
+            if (confirm('Вы уверены? Весь прогресс будет потерян!')) {
+                localStorage.removeItem(STORAGE_KEY);
+                gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+                updateAllUI();
+                showToast('Прогресс сброшен', 'info');
+            }
+        }
+
+        // ============ UI UPDATES ============
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return Math.floor(num).toString();
+        }
+
+        function updateAllUI() {
+            // Header
             document.getElementById('coins').textContent = formatNumber(gameState.coins);
             document.getElementById('gems').textContent = gameState.gems;
-            document.getElementById('currentEnergy').textContent = gameState.energy;
+            document.getElementById('currentEnergy').textContent = Math.floor(gameState.energy);
             document.getElementById('maxEnergy').textContent = gameState.maxEnergy;
             document.getElementById('energyBar').style.width = (gameState.energy / gameState.maxEnergy * 100) + '%';
             document.getElementById('playerLevel').textContent = gameState.level;
-            document.getElementById('profileLevel').textContent = gameState.level;
+            document.getElementById('headerLevel').textContent = gameState.level;
             document.getElementById('xpBar').style.width = (gameState.xp / gameState.xpNeeded * 100) + '%';
-            document.getElementById('profileXpBar').style.width = (gameState.xp / gameState.xpNeeded * 100) + '%';
-            document.getElementById('currentXp').textContent = gameState.xp;
-            document.getElementById('neededXp').textContent = gameState.xpNeeded;
-            document.getElementById('pickaxeLevel').textContent = 'Уровень: ' + gameState.pickaxeLevel;
+            
+            // Home
+            document.getElementById('homeCoins').textContent = formatNumber(gameState.coins);
+            document.getElementById('homeLevel').textContent = gameState.level;
+            document.getElementById('dailyStreak').textContent = gameState.stats.dailyStreak;
+            
+            // Mine
             document.getElementById('coalCount').textContent = gameState.ores.coal;
             document.getElementById('ironCount').textContent = gameState.ores.iron;
+            document.getElementById('goldCount').textContent = gameState.ores.gold;
             document.getElementById('diamondCount').textContent = gameState.ores.diamond;
+            document.getElementById('pickaxeLevelDisplay').textContent = gameState.pickaxeLevel;
+            document.getElementById('pickaxeMultiplier').textContent = (1 + (gameState.pickaxeLevel - 1) * 0.25).toFixed(2);
+            
+            // Shop
+            document.getElementById('pickaxeLevel').textContent = 'Уровень: ' + gameState.pickaxeLevel;
+            document.getElementById('pickaxePrice').textContent = 300 * gameState.pickaxeLevel;
+            document.getElementById('batteryPrice').textContent = 500 * gameState.batteryLevel;
+            document.getElementById('luckStatus').textContent = gameState.hasLuckCharm ? '✅ Активен!' : 'Не активен';
+            
+            // Profile
+            document.getElementById('profileLevel').textContent = gameState.level;
+            document.getElementById('currentXp').textContent = gameState.xp;
+            document.getElementById('neededXp').textContent = gameState.xpNeeded;
+            document.getElementById('profileXpBar').style.width = (gameState.xp / gameState.xpNeeded * 100) + '%';
             document.getElementById('totalEarned').textContent = formatNumber(gameState.stats.totalEarned);
             document.getElementById('gamesPlayed').textContent = gameState.stats.gamesPlayed;
             document.getElementById('totalMined').textContent = gameState.stats.totalMined;
             document.getElementById('casinoWins').textContent = gameState.stats.casinoWins;
+            document.getElementById('profileStreak').textContent = gameState.stats.dailyStreak;
+            document.getElementById('playTime').textContent = formatPlayTime(gameState.stats.playTimeMinutes);
+            
+            updateAchievements();
             saveGame();
         }
 
-        function formatNumber(num) {
-            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-            return num.toString();
+        function formatPlayTime(minutes) {
+            if (minutes < 60) return minutes + 'м';
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return hours + 'ч ' + mins + 'м';
         }
 
-        // Add XP
-        function addXP(amount) {
-            gameState.xp += amount;
-            while (gameState.xp >= gameState.xpNeeded) {
-                gameState.xp -= gameState.xpNeeded;
-                gameState.level++;
-                gameState.xpNeeded = Math.floor(gameState.xpNeeded * 1.5);
-                showModal('🎉 Уровень повышен!', `Поздравляем! Вы достигли уровня ${gameState.level}!`, '⬆️');
-            }
-            updateUI();
-        }
-
-        // Show Tab
+        // ============ TABS ============
         function showTab(tab) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(tab + 'Tab').classList.add('active');
             document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            hapticFeedback('light');
         }
 
-        // Toast
+        // ============ NOTIFICATIONS ============
         function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
             const toastText = document.getElementById('toastText');
             toastText.textContent = message;
-            toast.classList.remove('hidden');
-            toast.style.background = type === 'success' ? 'rgba(34, 197, 94, 0.2)' : 
-                                     type === 'error' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.1)';
-            setTimeout(() => toast.classList.add('hidden'), 2000);
+            
+            toast.className = 'fixed top-24 left-1/2 -translate-x-1/2 glass-dark px-6 py-3 rounded-2xl z-50 transition-all duration-300 border';
+            
+            if (type === 'success') {
+                toast.classList.add('border-green-500/50');
+            } else if (type === 'error') {
+                toast.classList.add('border-red-500/50');
+            } else {
+                toast.classList.add('border-white/10');
+            }
+            
+            toast.style.opacity = '1';
+            toast.style.pointerEvents = 'auto';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.pointerEvents = 'none';
+            }, 2500);
         }
 
-        // Modal
         function showModal(title, message, emoji = '🎉') {
             const modal = document.getElementById('modal');
             const content = document.getElementById('modalContent');
             content.innerHTML = `
-                <div class="text-6xl mb-4">${emoji}</div>
-                <h3 class="text-xl font-bold mb-2">${title}</h3>
+                <div class="text-7xl mb-4 reward-text">${emoji}</div>
+                <h3 class="text-2xl font-black mb-2">${title}</h3>
                 <p class="text-gray-400">${message}</p>
             `;
-            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            hapticFeedback('success');
         }
 
         function closeModal() {
-            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('modal').style.display = 'none';
         }
 
-        // Work
+        // ============ XP & LEVELING ============
+        function addXP(amount) {
+            gameState.xp += amount;
+            
+            while (gameState.xp >= gameState.xpNeeded) {
+                gameState.xp -= gameState.xpNeeded;
+                gameState.level++;
+                gameState.xpNeeded = Math.floor(100 * Math.pow(1.4, gameState.level - 1));
+                
+                // Level up rewards
+                const coinBonus = gameState.level * 100;
+                const gemBonus = gameState.level >= 5 ? Math.floor(gameState.level / 5) : 0;
+                gameState.coins += coinBonus;
+                gameState.gems += gemBonus;
+                
+                let rewardText = `+${coinBonus} 🪙`;
+                if (gemBonus > 0) rewardText += ` +${gemBonus} 💎`;
+                
+                showModal('🎉 Уровень ' + gameState.level + '!', rewardText, '⬆️');
+                hapticFeedback('success');
+            }
+            
+            updateAllUI();
+        }
+
+        // ============ DAILY BONUS ============
+        function checkDailyBonus() {
+            const now = new Date();
+            const today = now.toDateString();
+            const card = document.getElementById('dailyBonusCard');
+            const status = document.getElementById('dailyBonusStatus');
+            
+            if (gameState.lastDaily === today) {
+                card.classList.remove('daily-bonus-available');
+                card.style.opacity = '0.5';
+                status.textContent = 'Уже получено!';
+                status.className = 'text-gray-500 text-xs mt-1';
+            } else {
+                card.classList.add('daily-bonus-available');
+                card.style.opacity = '1';
+                status.textContent = 'Забрать награду!';
+                status.className = 'text-green-400 text-xs mt-1';
+            }
+        }
+
+        function claimDailyBonus() {
+            const now = new Date();
+            const today = now.toDateString();
+            
+            if (gameState.lastDaily === today) {
+                showToast('Бонус уже получен сегодня!', 'error');
+                return;
+            }
+            
+            // Check streak
+            const yesterday = new Date(now);
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            if (gameState.lastDaily === yesterday.toDateString()) {
+                gameState.stats.dailyStreak++;
+            } else if (gameState.lastDaily !== today) {
+                gameState.stats.dailyStreak = 1;
+            }
+            
+            gameState.lastDaily = today;
+            
+            // Calculate rewards based on streak
+            const streak = gameState.stats.dailyStreak;
+            const coinReward = 100 * streak;
+            const gemReward = streak >= 7 ? Math.floor(streak / 7) * 2 : 0;
+            const energyReward = 50;
+            
+            gameState.coins += coinReward;
+            gameState.gems += gemReward;
+            gameState.energy = Math.min(gameState.energy + energyReward, gameState.maxEnergy);
+            
+            let msg = `+${coinReward} 🪙 +${energyReward} ⚡`;
+            if (gemReward > 0) msg += ` +${gemReward} 💎`;
+            
+            showModal(`🔥 День ${streak}!`, msg, '🎁');
+            checkDailyBonus();
+            updateAllUI();
+        }
+
+        // ============ WORK ============
         function doWork(type) {
             const works = {
-                office: { min: 50, max: 100, energy: 10, xp: 15 },
-                factory: { min: 100, max: 200, energy: 20, xp: 30 },
-                business: { min: 200, max: 500, energy: 30, xp: 50 }
+                delivery: { min: 30, max: 80, energy: 5, xp: 10, risk: 0 },
+                office: { min: 80, max: 150, energy: 10, xp: 20, risk: 0 },
+                business: { min: 200, max: 500, energy: 20, xp: 40, risk: 0 },
+                crypto: { min: -500, max: 2000, energy: 40, xp: 100, risk: 0.3 }
             };
+            
             const work = works[type];
             
             if (gameState.energy < work.energy) {
                 showToast('Недостаточно энергии!', 'error');
+                hapticFeedback('error');
                 return;
             }
-
+            
             gameState.energy -= work.energy;
-            const reward = Math.floor(Math.random() * (work.max - work.min + 1)) + work.min;
-            gameState.coins += reward;
-            gameState.stats.totalEarned += reward;
+            
+            let reward;
+            if (type === 'crypto' && Math.random() < work.risk) {
+                // Lost money in crypto
+                reward = Math.floor(Math.random() * 300) * -1;
+                gameState.coins = Math.max(0, gameState.coins + reward);
+                showToast(`📉 Крипто упало! ${reward} 🪙`, 'error');
+            } else {
+                reward = Math.floor(Math.random() * (work.max - work.min + 1)) + work.min;
+                if (reward < 0) reward = 0;
+                gameState.coins += reward;
+                gameState.stats.totalEarned += reward;
+                showToast(`+${reward} 🪙 | +${work.xp} XP`, 'success');
+            }
+            
             addXP(work.xp);
-            showToast(`+${reward} 💰 | +${work.xp} XP`, 'success');
-            updateUI();
+            hapticFeedback('medium');
+            updateAllUI();
         }
 
-        // Mine
+        // ============ MINING ============
         function mineRock() {
-            if (gameState.energy < 5) {
+            if (isAnimating) return;
+            
+            if (gameState.energy < 3) {
                 showToast('Недостаточно энергии!', 'error');
+                hapticFeedback('error');
                 return;
             }
-
-            gameState.energy -= 5;
+            
+            isAnimating = true;
+            gameState.energy -= 3;
             gameState.stats.totalMined++;
             
             const rock = document.getElementById('mineRock');
-            rock.classList.add('mining-effect');
-            setTimeout(() => rock.classList.remove('mining-effect'), 300);
-
+            rock.classList.add('mining-hit');
+            
+            // Create particles
+            createMiningParticles();
+            
+            setTimeout(() => {
+                rock.classList.remove('mining-hit');
+                isAnimating = false;
+            }, 200);
+            
             const bonus = 1 + (gameState.pickaxeLevel - 1) * 0.25;
+            const luckBonus = gameState.hasLuckCharm ? 0.1 : 0;
             const roll = Math.random();
-
-            if (roll < 0.05) {
+            
+            let message = '';
+            
+            if (roll < 0.03 + luckBonus) {
+                // Diamond!
                 gameState.ores.diamond++;
-                showToast('💎 Найден алмаз!', 'success');
-            } else if (roll < 0.25) {
-                const amount = Math.ceil((Math.floor(Math.random() * 3) + 1) * bonus);
-                gameState.ores.iron += amount;
-                showToast(`+${amount} 🔶 Железо`, 'success');
+                gameState.gems += Math.random() < 0.2 ? 1 : 0;
+                message = '💎 Алмаз найден!';
+                hapticFeedback('success');
+            } else if (roll < 0.10 + luckBonus) {
+                const amt = Math.ceil((Math.floor(Math.random() * 2) + 1) * bonus);
+                gameState.ores.gold += amt;
+                message = `+${amt} 🥇 Золото!`;
+                hapticFeedback('medium');
+            } else if (roll < 0.30 + luckBonus) {
+                const amt = Math.ceil((Math.floor(Math.random() * 3) + 1) * bonus);
+                gameState.ores.iron += amt;
+                message = `+${amt} 🔶 Железо`;
+                hapticFeedback('light');
             } else {
-                const amount = Math.ceil((Math.floor(Math.random() * 5) + 2) * bonus);
-                gameState.ores.coal += amount;
-                showToast(`+${amount} ite Уголь`, 'success');
+                const amt = Math.ceil((Math.floor(Math.random() * 5) + 2) * bonus);
+                gameState.ores.coal += amt;
+                message = `+${amt} ite Уголь`;
+                hapticFeedback('light');
             }
+            
+            // Direct coin reward
+            const coinReward = Math.floor((Math.random() * 25 + 5) * bonus);
+            gameState.coins += coinReward;
+            gameState.stats.totalEarned += coinReward;
+            
+            showToast(`${message} +${coinReward} 🪙`, 'success');
+            addXP(3);
+            updateAllUI();
+        }
 
-            addXP(5);
-            updateUI();
+        function createMiningParticles() {
+            const container = document.getElementById('mineParticles');
+            const particles = ['✨', '💫', '⭐', '🪙'];
+            
+            for (let i = 0; i < 5; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.setProperty('--tx', (Math.random() * 100 - 50) + 'px');
+                particle.style.setProperty('--ty', (Math.random() * -80 - 20) + 'px');
+                particle.style.fontSize = '20px';
+                container.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1000);
+            }
         }
 
         function sellOres() {
-            const total = gameState.ores.coal * 5 + gameState.ores.iron * 15 + gameState.ores.diamond * 100;
+            const prices = { coal: 3, iron: 12, gold: 50, diamond: 150 };
+            let total = 0;
+            
+            for (const [ore, count] of Object.entries(gameState.ores)) {
+                total += count * prices[ore];
+            }
+            
             if (total === 0) {
                 showToast('Нет руды для продажи!', 'error');
                 return;
             }
+            
             gameState.coins += total;
             gameState.stats.totalEarned += total;
-            gameState.ores = { coal: 0, iron: 0, diamond: 0 };
-            showToast(`+${total} 💰 от продажи!`, 'success');
-            updateUI();
+            gameState.ores = { coal: 0, iron: 0, gold: 0, diamond: 0 };
+            
+            showToast(`+${total} 🪙 от продажи!`, 'success');
+            hapticFeedback('success');
+            addXP(Math.floor(total / 10));
+            updateAllUI();
         }
 
-        // Shop
+        // ============ SHOP ============
         function buyItem(item) {
-            const items = {
-                energy: { cost: 200, currency: 'coins' },
-                pickaxe: { cost: 500, currency: 'coins' },
-                battery: { cost: 1000, currency: 'coins' },
-                gems: { cost: 5000, currency: 'coins' }
-            };
-
-            const i = items[item];
-            if (gameState.coins < i.cost) {
-                showToast('Недостаточно монет!', 'error');
-                return;
-            }
-
-            gameState.coins -= i.cost;
-
             switch(item) {
                 case 'energy':
+                    if (gameState.coins < 150) {
+                        showToast('Недостаточно монет!', 'error');
+                        return;
+                    }
+                    gameState.coins -= 150;
                     gameState.energy = Math.min(gameState.energy + 50, gameState.maxEnergy);
-                    showToast('+50 ⚡ Энергии!', 'success');
+                    showToast('+50 ⚡', 'success');
                     break;
+                    
+                case 'fullEnergy':
+                    if (gameState.gems < 3) {
+                        showToast('Недостаточно гемов!', 'error');
+                        return;
+                    }
+                    gameState.gems -= 3;
+                    gameState.energy = gameState.maxEnergy;
+                    showToast('⚡ Полная энергия!', 'success');
+                    break;
+                    
                 case 'pickaxe':
+                    const pickPrice = 300 * gameState.pickaxeLevel;
+                    if (gameState.coins < pickPrice) {
+                        showToast('Недостаточно монет!', 'error');
+                        return;
+                    }
+                    gameState.coins -= pickPrice;
                     gameState.pickaxeLevel++;
-                    showToast(`Кирка улучшена до уровня ${gameState.pickaxeLevel}!`, 'success');
+                    showToast(`⛏️ Кирка Ур.${gameState.pickaxeLevel}!`, 'success');
                     break;
+                    
                 case 'battery':
-                    gameState.maxEnergy += 20;
-                    showToast('+20 к максимуму энергии!', 'success');
+                    const batPrice = 500 * gameState.batteryLevel;
+                    if (gameState.coins < batPrice) {
+                        showToast('Недостаточно монет!', 'error');
+                        return;
+                    }
+                    gameState.coins -= batPrice;
+                    gameState.maxEnergy += 25;
+                    gameState.batteryLevel++;
+                    showToast(`+25 макс ⚡ (${gameState.maxEnergy})`, 'success');
                     break;
+                    
                 case 'gems':
+                    if (gameState.coins < 2500) {
+                        showToast('Недостаточно монет!', 'error');
+                        return;
+                    }
+                    gameState.coins -= 2500;
                     gameState.gems += 10;
-                    showToast('+10 💎 Гемов!', 'success');
+                    showToast('+10 💎', 'success');
+                    break;
+                    
+                case 'luck':
+                    if (gameState.hasLuckCharm) {
+                        showToast('Уже активен!', 'error');
+                        return;
+                    }
+                    if (gameState.gems < 10) {
+                        showToast('Недостаточно гемов!', 'error');
+                        return;
+                    }
+                    gameState.gems -= 10;
+                    gameState.hasLuckCharm = true;
+                    showToast('🍀 Талисман активирован!', 'success');
                     break;
             }
-            updateUI();
+            
+            hapticFeedback('medium');
+            updateAllUI();
         }
 
-        // Coin Flip
+        // ============ GAMES ============
         function playCoinFlip(choice) {
+            if (isAnimating) return;
             if (gameState.coins < 100) {
                 showToast('Недостаточно монет!', 'error');
                 return;
             }
-
+            
+            isAnimating = true;
             gameState.coins -= 100;
             gameState.stats.gamesPlayed++;
             
             const coin = document.getElementById('coinFlipResult');
-            coin.classList.add('coin-flip');
+            coin.classList.add('coin-flip-anim');
             
             setTimeout(() => {
-                coin.classList.remove('coin-flip');
+                coin.classList.remove('coin-flip-anim');
                 const result = Math.random() < 0.5 ? 'heads' : 'tails';
                 coin.textContent = result === 'heads' ? '🦅' : '🌟';
                 
@@ -905,26 +1526,34 @@
                     gameState.coins += 200;
                     gameState.stats.totalEarned += 200;
                     gameState.stats.casinoWins++;
-                    showToast('+200 💰 Победа!', 'success');
+                    showToast('+200 🪙 Победа!', 'success');
+                    hapticFeedback('success');
                 } else {
                     showToast('Не повезло!', 'error');
+                    hapticFeedback('error');
                 }
+                
                 addXP(10);
-                updateUI();
-            }, 600);
+                updateAllUI();
+                isAnimating = false;
+                
+                setTimeout(() => coin.textContent = '🪙', 2000);
+            }, 800);
         }
 
-        // Dice
         const diceEmojis = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+        
         function playDice() {
+            if (isAnimating) return;
             if (gameState.coins < 50) {
                 showToast('Недостаточно монет!', 'error');
                 return;
             }
-
+            
+            isAnimating = true;
             gameState.coins -= 50;
             gameState.stats.gamesPlayed++;
-
+            
             const dice1 = document.getElementById('dice1');
             const dice2 = document.getElementById('dice2');
             
@@ -932,9 +1561,15 @@
             const rollInterval = setInterval(() => {
                 dice1.textContent = diceEmojis[Math.floor(Math.random() * 6)];
                 dice2.textContent = diceEmojis[Math.floor(Math.random() * 6)];
+                dice1.classList.add('shake');
+                dice2.classList.add('shake');
                 rolls++;
-                if (rolls > 10) {
+                
+                if (rolls > 12) {
                     clearInterval(rollInterval);
+                    dice1.classList.remove('shake');
+                    dice2.classList.remove('shake');
+                    
                     const r1 = Math.floor(Math.random() * 6) + 1;
                     const r2 = Math.floor(Math.random() * 6) + 1;
                     dice1.textContent = diceEmojis[r1 - 1];
@@ -942,77 +1577,146 @@
                     
                     let win = 0;
                     if (r1 === r2) {
-                        if (r1 === 6) win = 250; // Double 6 = x5
-                        else win = 150; // Double = x3
+                        win = r1 === 6 ? 250 : 150;
                     } else if (r1 + r2 === 7) {
-                        win = 100; // Sum 7 = x2
+                        win = 100;
                     } else if (r1 + r2 === 12) {
-                        win = 250; // Sum 12 = x5
+                        win = 250;
                     }
-
+                    
                     if (win > 0) {
                         gameState.coins += win;
                         gameState.stats.totalEarned += win;
                         gameState.stats.casinoWins++;
-                        showToast(`+${win} 💰 Победа!`, 'success');
+                        showToast(`+${win} 🪙 Победа!`, 'success');
+                        hapticFeedback('success');
                     } else {
-                        showToast('Не повезло!', 'error');
+                        showToast(`Сумма: ${r1 + r2}. Не повезло!`, 'error');
+                        hapticFeedback('error');
                     }
+                    
                     addXP(10);
-                    updateUI();
-                }
-            }, 100);
-        }
-
-        // Guess Number
-        function guessNumber(num) {
-            if (gameState.coins < 100) {
-                showToast('Недостаточно монет!', 'error');
-                return;
-            }
-
-            gameState.coins -= 100;
-            gameState.stats.gamesPlayed++;
-
-            const display = document.getElementById('guessDisplay');
-            let rolls = 0;
-            const rollInterval = setInterval(() => {
-                display.textContent = Math.floor(Math.random() * 10) + 1;
-                rolls++;
-                if (rolls > 15) {
-                    clearInterval(rollInterval);
-                    const result = Math.floor(Math.random() * 10) + 1;
-                    display.textContent = result;
-
-                    if (result === num) {
-                        gameState.coins += 1000;
-                        gameState.stats.totalEarned += 1000;
-                        gameState.stats.casinoWins++;
-                        showModal('🎉 ДЖЕКПОТ!', '+1000 💰 Вы угадали число!', '🔢');
-                    } else {
-                        showToast(`Загадано: ${result}. Не повезло!`, 'error');
-                    }
-                    addXP(10);
-                    updateUI();
+                    updateAllUI();
+                    isAnimating = false;
                 }
             }, 80);
         }
 
-        // Slots
+        function spinWheel() {
+            if (isAnimating) return;
+            if (gameState.coins < 200) {
+                showToast('Недостаточно монет!', 'error');
+                return;
+            }
+            
+            isAnimating = true;
+            gameState.coins -= 200;
+            gameState.stats.gamesPlayed++;
+            
+            const wheel = document.getElementById('wheelDisplay');
+            const prizes = [50, 100, 150, 200, 300, 500, 1000];
+            const gemPrize = Math.random() < 0.1;
+            
+            let spins = 0;
+            const spinInterval = setInterval(() => {
+                wheel.textContent = ['🎡', '🎠', '🎪', '🎯'][spins % 4];
+                wheel.style.transform = `rotate(${spins * 30}deg)`;
+                spins++;
+                
+                if (spins > 20) {
+                    clearInterval(spinInterval);
+                    wheel.style.transform = 'rotate(0deg)';
+                    
+                    if (gemPrize) {
+                        const gems = Math.floor(Math.random() * 3) + 1;
+                        gameState.gems += gems;
+                        wheel.textContent = '💎';
+                        showModal('💎 ГЕМЫ!', `+${gems} 💎`, '🎡');
+                    } else {
+                        const prize = prizes[Math.floor(Math.random() * prizes.length)];
+                        gameState.coins += prize;
+                        gameState.stats.totalEarned += prize;
+                        wheel.textContent = '🏆';
+                        
+                        if (prize >= 500) {
+                            showModal('🎉 Большой приз!', `+${prize} 🪙`, '🎡');
+                            gameState.stats.casinoWins++;
+                        } else {
+                            showToast(`+${prize} 🪙`, 'success');
+                        }
+                    }
+                    
+                    hapticFeedback('success');
+                    addXP(20);
+                    updateAllUI();
+                    isAnimating = false;
+                    
+                    setTimeout(() => wheel.textContent = '🎡', 2000);
+                }
+            }, 100);
+        }
+
+        function guessNumber(num) {
+            if (isAnimating) return;
+            if (gameState.coins < 100) {
+                showToast('Недостаточно монет!', 'error');
+                return;
+            }
+            
+            isAnimating = true;
+            gameState.coins -= 100;
+            gameState.stats.gamesPlayed++;
+            
+            const display = document.getElementById('guessDisplay');
+            let rolls = 0;
+            
+            const rollInterval = setInterval(() => {
+                display.textContent = Math.floor(Math.random() * 10) + 1;
+                rolls++;
+                
+                if (rolls > 15) {
+                    clearInterval(rollInterval);
+                    const result = Math.floor(Math.random() * 10) + 1;
+                    display.textContent = result;
+                    
+                    if (result === num) {
+                        gameState.coins += 1000;
+                        gameState.stats.totalEarned += 1000;
+                        gameState.stats.casinoWins++;
+                        showModal('🎉 ДЖЕКПОТ!', '+1000 🪙 Угадал!', '🔢');
+                        hapticFeedback('success');
+                    } else {
+                        showToast(`Было: ${result}. Не повезло!`, 'error');
+                        hapticFeedback('error');
+                    }
+                    
+                    addXP(10);
+                    updateAllUI();
+                    isAnimating = false;
+                    
+                    setTimeout(() => display.textContent = '?', 2000);
+                }
+            }, 80);
+        }
+
+        // ============ CASINO ============
         const slotSymbols = ['🍒', '🍋', '🍊', '🍇', '⭐', '💎', '7️⃣'];
+        
         function playSlots(bet) {
+            if (isAnimating) return;
             if (gameState.coins < bet) {
                 showToast('Недостаточно монет!', 'error');
                 return;
             }
-
+            
+            isAnimating = true;
             gameState.coins -= bet;
             gameState.stats.gamesPlayed++;
-
+            
             const slot1 = document.getElementById('slot1');
             const slot2 = document.getElementById('slot2');
             const slot3 = document.getElementById('slot3');
-
+            
             let rolls = 0;
             const rollInterval = setInterval(() => {
                 slot1.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
@@ -1022,54 +1726,57 @@
                 
                 if (rolls > 20) {
                     clearInterval(rollInterval);
+                    
                     const r1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
                     const r2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
                     const r3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                    
                     slot1.textContent = r1;
                     slot2.textContent = r2;
                     slot3.textContent = r3;
-
+                    
                     let multiplier = 0;
+                    
                     if (r1 === r2 && r2 === r3) {
-                        if (r1 === '7️⃣') multiplier = 50;
-                        else if (r1 === '💎') multiplier = 20;
-                        else if (r1 === '⭐') multiplier = 10;
-                        else if (r1 === '🍇') multiplier = 7;
-                        else if (r1 === '🍋') multiplier = 5;
-                        else multiplier = 3;
+                        multiplier = r1 === '7️⃣' ? 50 : r1 === '💎' ? 20 : r1 === '⭐' ? 10 : r1 === '🍇' ? 7 : r1 === '🍋' ? 5 : 3;
                     } else if (r1 === r2 || r2 === r3 || r1 === r3) {
                         multiplier = 1.5;
                     }
-
+                    
                     if (multiplier > 0) {
                         const win = Math.floor(bet * multiplier);
                         gameState.coins += win;
                         gameState.stats.totalEarned += win;
                         gameState.stats.casinoWins++;
+                        
                         if (multiplier >= 10) {
-                            showModal('🎰 БОЛЬШОЙ ВЫИГРЫШ!', `+${win} 💰 (x${multiplier})`, '🎉');
+                            showModal('🎰 ДЖЕКПОТ!', `+${win} 🪙 (x${multiplier})`, '🎉');
                         } else {
-                            showToast(`+${win} 💰 (x${multiplier})`, 'success');
+                            showToast(`+${win} 🪙 (x${multiplier})`, 'success');
                         }
+                        hapticFeedback('success');
                     } else {
                         showToast('Не повезло!', 'error');
+                        hapticFeedback('error');
                     }
+                    
                     addXP(15);
-                    updateUI();
+                    updateAllUI();
+                    isAnimating = false;
                 }
             }, 80);
         }
 
-        // Cases
         function openCase(type) {
             const cases = {
-                common: { cost: 100, currency: 'coins', minReward: 50, maxReward: 200, gemChance: 0.05 },
-                rare: { cost: 500, currency: 'coins', minReward: 100, maxReward: 500, gemChance: 0.15 },
-                epic: { cost: 5, currency: 'gems', minReward: 500, maxReward: 2000, gemChance: 0.3 },
-                legendary: { cost: 20, currency: 'gems', minReward: 1000, maxReward: 10000, gemChance: 0.5 }
+                common: { cost: 100, currency: 'coins', min: 50, max: 200, gemChance: 0.05, gemCount: 1 },
+                rare: { cost: 400, currency: 'coins', min: 200, max: 800, gemChance: 0.15, gemCount: 2 },
+                epic: { cost: 5, currency: 'gems', min: 500, max: 2000, gemChance: 0.3, gemCount: 3 },
+                legendary: { cost: 25, currency: 'gems', min: 2000, max: 15000, gemChance: 0.5, gemCount: 8 }
             };
-
+            
             const c = cases[type];
+            
             if (c.currency === 'coins' && gameState.coins < c.cost) {
                 showToast('Недостаточно монет!', 'error');
                 return;
@@ -1078,136 +1785,156 @@
                 showToast('Недостаточно гемов!', 'error');
                 return;
             }
-
+            
             if (c.currency === 'coins') gameState.coins -= c.cost;
             else gameState.gems -= c.cost;
-
+            
             gameState.stats.gamesPlayed++;
-
-            const reward = Math.floor(Math.random() * (c.maxReward - c.minReward + 1)) + c.minReward;
+            
+            const reward = Math.floor(Math.random() * (c.max - c.min + 1)) + c.min;
             const gotGem = Math.random() < c.gemChance;
-            const gemCount = type === 'legendary' ? Math.floor(Math.random() * 10) + 5 : 
-                            type === 'epic' ? Math.floor(Math.random() * 5) + 2 : 1;
-
+            const gemCount = gotGem ? Math.floor(Math.random() * c.gemCount) + 1 : 0;
+            
             gameState.coins += reward;
             gameState.stats.totalEarned += reward;
             
-            let message = `+${reward} 💰`;
+            let msg = `+${formatNumber(reward)} 🪙`;
             if (gotGem) {
                 gameState.gems += gemCount;
-                message += ` и +${gemCount} 💎`;
+                msg += ` +${gemCount} 💎`;
             }
-
-            const rarityNames = {
-                common: 'Обычный',
-                rare: 'Редкий',
-                epic: 'Эпический',
-                legendary: 'Легендарный'
-            };
-
-            showModal(`📦 ${rarityNames[type]} кейс`, message, gotGem ? '💎' : '💰');
+            
+            const names = { common: 'Обычный', rare: 'Редкий', epic: 'Эпический', legendary: 'Легендарный' };
+            const emojis = { common: '📦', rare: '🎁', epic: '💜', legendary: '👑' };
+            
+            showModal(`${emojis[type]} ${names[type]} кейс`, msg, gotGem ? '💎' : '🪙');
+            hapticFeedback('success');
+            
             addXP(type === 'legendary' ? 100 : type === 'epic' ? 50 : type === 'rare' ? 25 : 10);
-            updateUI();
+            updateAllUI();
         }
 
-        // Energy regeneration
-        setInterval(() => {
-            if (gameState.energy < gameState.maxEnergy) {
-                gameState.energy = Math.min(gameState.energy + 1, gameState.maxEnergy);
-                updateUI();
-            }
-        }, 10000); // +1 energy every 10 seconds
+        // ============ ACHIEVEMENTS ============
+        const ACHIEVEMENTS = [
+            { id: 'first_coin', name: 'Первая монета', icon: '🪙', condition: s => s.stats.totalEarned >= 100 },
+            { id: 'rich', name: 'Богач', icon: '💰', condition: s => s.coins >= 10000 },
+            { id: 'miner', name: 'Шахтёр', icon: '⛏️', condition: s => s.stats.totalMined >= 100 },
+            { id: 'gambler', name: 'Игрок', icon: '🎮', condition: s => s.stats.gamesPlayed >= 50 },
+            { id: 'lucky', name: 'Везунчик', icon: '🍀', condition: s => s.stats.casinoWins >= 25 },
+            { id: 'veteran', name: 'Ветеран', icon: '🏅', condition: s => s.level >= 10 },
+            { id: 'dedicated', name: 'Преданный', icon: '🔥', condition: s => s.stats.dailyStreak >= 7 },
+            { id: 'collector', name: 'Коллекционер', icon: '💎', condition: s => s.gems >= 50 }
+        ];
 
-        // Initialize
-        loadGame();
+        function updateAchievements() {
+            const container = document.getElementById('achievementsList');
+            container.innerHTML = '';
+            
+            ACHIEVEMENTS.forEach(ach => {
+                const unlocked = ach.condition(gameState);
+                const div = document.createElement('div');
+                div.className = `bg-gray-800/50 rounded-xl p-3 text-center text-2xl ${unlocked ? '' : 'opacity-30 grayscale'}`;
+                div.textContent = unlocked ? ach.icon : '❓';
+                div.title = ach.name;
+                container.appendChild(div);
+                
+                if (unlocked && !gameState.achievements.includes(ach.id)) {
+                    gameState.achievements.push(ach.id);
+                    setTimeout(() => {
+                        showToast(`🏆 Достижение: ${ach.name}!`, 'success');
+                    }, 500);
+                }
+            });
+        }
 
-        // Telegram WebApp integration
-        const tg = window.Telegram?.WebApp;
-        
-        if (tg) {
-            // Инициализация
-            tg.ready();
-            tg.expand();
-            
-            // Получаем данные пользователя
-            const user = tg.initDataUnsafe?.user;
-            if (user) {
-                // Устанавливаем имя пользователя
-                const playerInitial = document.getElementById('playerInitial');
-                playerInitial.textContent = (user.first_name || 'U')[0].toUpperCase();
-                
-                // Загружаем прогресс по ID пользователя
-                const savedKey = `telegramMiniGame_${user.id}`;
-                const userSave = localStorage.getItem(savedKey);
-                if (userSave) {
-                    gameState = { ...gameState, ...JSON.parse(userSave) };
-                    updateUI();
-                }
-                
-                // Переопределяем saveGame для сохранения по ID
-                window.saveGameOriginal = saveGame;
-                window.saveGame = function() {
-                    localStorage.setItem(savedKey, JSON.stringify(gameState));
+        // ============ HAPTIC FEEDBACK ============
+        function hapticFeedback(type = 'light') {
+            if (window.Telegram?.WebApp?.HapticFeedback) {
+                if (type === 'success') {
+                    window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                } else if (type === 'error') {
+                    window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+                } else {
+                    window.Telegram.WebApp.HapticFeedback.impactOccurred(type);
                 }
             }
-            
-            // Тема Telegram
-            document.body.style.setProperty('--tg-theme-bg-color', tg.backgroundColor);
-            document.body.style.setProperty('--tg-theme-text-color', tg.textColor);
-            
-            // Haptic feedback при действиях
-            window.hapticFeedback = function(type = 'light') {
-                if (tg.HapticFeedback) {
-                    tg.HapticFeedback.impactOccurred(type);
+        }
+
+        // ============ ENERGY REGENERATION ============
+        function startEnergyRegen() {
+            setInterval(() => {
+                if (gameState.energy < gameState.maxEnergy) {
+                    gameState.energy = Math.min(gameState.energy + 1, gameState.maxEnergy);
+                    gameState.lastEnergyRegen = Date.now();
+                    updateAllUI();
                 }
-            }
+            }, 6000); // 1 energy per 6 seconds
+        }
+
+        // ============ PLAY TIME TRACKER ============
+        function startPlayTimeTracker() {
+            playTimeInterval = setInterval(() => {
+                gameState.stats.playTimeMinutes++;
+                saveGame();
+            }, 60000); // Every minute
+        }
+
+        // ============ TELEGRAM INTEGRATION ============
+        function initTelegram() {
+            const tg = window.Telegram?.WebApp;
             
-            // Добавляем вибрацию к действиям
-            const originalDoWork = doWork;
-            window.doWork = function(type) {
-                hapticFeedback('medium');
-                originalDoWork(type);
-            }
-            
-            const originalMineRock = mineRock;
-            window.mineRock = function() {
-                hapticFeedback('light');
-                originalMineRock();
-            }
-            
-            // Главная кнопка для сохранения
-            if (tg.MainButton) {
-                tg.MainButton.setText('💾 Сохранить и выйти');
-                tg.MainButton.color = '#8B5CF6';
-                tg.MainButton.textColor = '#FFFFFF';
+            if (tg) {
+                tg.ready();
+                tg.expand();
                 
-                tg.MainButton.onClick(() => {
-                    saveGame();
-                    tg.HapticFeedback?.notificationOccurred('success');
-                    tg.showAlert('Прогресс сохранён!', () => {
-                        tg.close();
-                    });
-                });
-                
-                // Показываем кнопку только на странице профиля
-                const originalShowTab = showTab;
-                window.showTab = function(tab) {
-                    originalShowTab(tab);
-                    if (tab === 'profile') {
-                        tg.MainButton.show();
-                    } else {
-                        tg.MainButton.hide();
+                const user = tg.initDataUnsafe?.user;
+                if (user) {
+                    document.getElementById('playerInitial').textContent = (user.first_name || 'G')[0].toUpperCase();
+                    document.getElementById('playerName').textContent = user.first_name || 'Игрок';
+                    
+                    // Use user-specific storage key
+                    const userKey = `gemrush_${user.id}_v2`;
+                    const userSave = localStorage.getItem(userKey);
+                    if (userSave) {
+                        try {
+                            const parsed = JSON.parse(userSave);
+                            gameState = { ...JSON.parse(JSON.stringify(DEFAULT_STATE)), ...parsed };
+                            gameState.ores = { ...DEFAULT_STATE.ores, ...parsed.ores };
+                            gameState.stats = { ...DEFAULT_STATE.stats, ...parsed.stats };
+                            calculateOfflineProgress();
+                            updateAllUI();
+                        } catch (e) {}
                     }
+                    
+                    // Override save function
+                    const originalSave = saveGame;
+                    window.saveGame = function() {
+                        originalSave();
+                        localStorage.setItem(userKey, JSON.stringify(gameState));
+                    };
                 }
+                
+                tg.enableClosingConfirmation();
             }
-            
-            // Подтверждение закрытия
-            tg.enableClosingConfirmation();
-            
-        } else {
-            // Заглушка для браузера
-            window.hapticFeedback = function() {};
         }
+
+        // ============ INIT ============
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGame();
+            initTelegram();
+            startEnergyRegen();
+            startPlayTimeTracker();
+            checkDailyBonus();
+        });
+
+        // Save on page hide
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                saveGame();
+            }
+        });
+
+        window.addEventListener('beforeunload', saveGame);
     </script>
 </body>
 </html>
