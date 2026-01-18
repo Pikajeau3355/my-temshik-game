@@ -3,1224 +3,1211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>LoveMeet - Знакомства</title>
+    <title>CryptoMiner - Telegram Game</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
+        
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
             min-height: 100vh;
-            overscroll-behavior: none;
+            overflow-x: hidden;
         }
-        .card {
-            transition: transform 0.3s ease;
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .card.swiping-left {
-            transform: translateX(-100%) rotate(-20deg);
-            opacity: 0;
+
+        .gradient-gold {
+            background: linear-gradient(135deg, #f5af19 0%, #f12711 100%);
         }
-        .card.swiping-right {
-            transform: translateX(100%) rotate(20deg);
-            opacity: 0;
+
+        .gradient-blue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        .photo-dot {
-            transition: all 0.3s ease;
+
+        .gradient-green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
         }
-        .photo-dot.active {
-            width: 24px;
-            background: white;
+
+        .gradient-purple {
+            background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%);
         }
-        .match-animation {
-            animation: matchPop 0.5s ease;
+
+        .gradient-pink {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
-        @keyframes matchPop {
+
+        .text-glow {
+            text-shadow: 0 0 20px currentColor;
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-hover:active {
+            transform: scale(0.98);
+        }
+
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(245, 175, 25, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(245, 175, 25, 0.6); }
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .spin-slow {
+            animation: spin 8s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px) rotate(-5deg); }
+            75% { transform: translateX(5px) rotate(5deg); }
+        }
+
+        .slot-spin {
+            animation: slotSpin 0.1s linear infinite;
+        }
+
+        @keyframes slotSpin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+
+        .bounce-in {
+            animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes bounceIn {
             0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.2); }
             100% { transform: scale(1); opacity: 1; }
         }
-        .heart-float {
-            animation: floatUp 1s ease forwards;
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out;
         }
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+
+        @keyframes slideUp {
+            0% { transform: translateY(100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
-        .tab-active {
-            background: white;
-            color: #764ba2;
+
+        .progress-bar {
+            transition: width 0.5s ease-out;
         }
-        .message-bubble {
-            max-width: 80%;
-        }
-        input[type="file"] {
-            display: none;
-        }
-        .photo-placeholder {
-            border: 2px dashed #ccc;
+
+        .nav-item {
             transition: all 0.3s ease;
         }
-        .photo-placeholder:hover {
-            border-color: #764ba2;
-            background: rgba(118, 75, 162, 0.1);
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scale(1.1);
+        }
+
+        .energy-bar {
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+        }
+
+        .coin-flip {
+            animation: coinFlip 0.6s ease-in-out;
+        }
+
+        @keyframes coinFlip {
+            0% { transform: rotateY(0); }
+            50% { transform: rotateY(180deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #fff 0%, transparent 70%);
+            border-radius: 50%;
+            animation: sparkle 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .mining-effect {
+            animation: miningPulse 0.3s ease-out;
+        }
+
+        @keyframes miningPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .case-glow {
+            animation: caseGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes caseGlow {
+            0% { filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.5)); }
+            100% { filter: drop-shadow(0 0 30px rgba(138, 43, 226, 0.9)); }
+        }
+
+        .rarity-common { border-color: #9ca3af; }
+        .rarity-rare { border-color: #3b82f6; }
+        .rarity-epic { border-color: #8b5cf6; }
+        .rarity-legendary { border-color: #f59e0b; }
+
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slot-reel {
+            height: 80px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slot-symbols {
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .xp-gain {
+            animation: xpFloat 1s ease-out forwards;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        @keyframes xpFloat {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
         }
     </style>
 </head>
-<body class="pb-20">
-    <div id="app" class="max-w-md mx-auto">
-        <!-- Splash Screen -->
-        <div id="splash" class="fixed inset-0 bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center z-50">
-            <div class="text-center text-white">
-                <div class="text-6xl mb-4">💜</div>
-                <h1 class="text-3xl font-bold mb-2">LoveMeet</h1>
-                <p class="opacity-80">Найди свою любовь</p>
+<body class="text-white pb-24">
+    <!-- Header -->
+    <header class="glass sticky top-0 z-50 px-4 py-3">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 rounded-full gradient-purple flex items-center justify-center font-bold text-lg">
+                    <span id="playerInitial">M</span>
+                </div>
+                <div>
+                    <div class="text-sm font-semibold">Уровень <span id="playerLevel">1</span></div>
+                    <div class="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
+                        <div id="xpBar" class="h-full gradient-blue progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <div class="glass px-3 py-1.5 rounded-full flex items-center gap-1">
+                    <span class="text-yellow-400">💰</span>
+                    <span id="coins" class="font-bold">1000</span>
+                </div>
+                <div class="glass px-3 py-1.5 rounded-full flex items-center gap-1">
+                    <span class="text-purple-400">💎</span>
+                    <span id="gems" class="font-bold">10</span>
+                </div>
+            </div>
+        </div>
+        <!-- Energy Bar -->
+        <div class="mt-3">
+            <div class="flex justify-between text-xs mb-1">
+                <span class="text-cyan-400">⚡ Энергия</span>
+                <span><span id="currentEnergy">100</span>/<span id="maxEnergy">100</span></span>
+            </div>
+            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                <div id="energyBar" class="h-full energy-bar progress-bar" style="width: 100%"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="px-4 py-4">
+        <!-- Work Section -->
+        <div id="workTab" class="tab-content active">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                <span class="text-3xl">💼</span> Работа
+            </h2>
+            <div class="grid gap-4">
+                <div class="glass rounded-2xl p-4 card-hover cursor-pointer" onclick="doWork('office')">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-xl gradient-blue flex items-center justify-center text-3xl float">🏢</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-lg">Офис</h3>
+                            <p class="text-gray-400 text-sm">+50-100 💰 | -10 ⚡</p>
+                            <p class="text-green-400 text-xs">+15 XP</p>
+                        </div>
+                        <div class="text-2xl">▶️</div>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-4 card-hover cursor-pointer" onclick="doWork('factory')">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-xl gradient-gold flex items-center justify-center text-3xl float">🏭</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-lg">Завод</h3>
+                            <p class="text-gray-400 text-sm">+100-200 💰 | -20 ⚡</p>
+                            <p class="text-green-400 text-xs">+30 XP</p>
+                        </div>
+                        <div class="text-2xl">▶️</div>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-4 card-hover cursor-pointer" onclick="doWork('business')">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-xl gradient-purple flex items-center justify-center text-3xl float">💼</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-lg">Бизнес</h3>
+                            <p class="text-gray-400 text-sm">+200-500 💰 | -30 ⚡</p>
+                            <p class="text-green-400 text-xs">+50 XP</p>
+                        </div>
+                        <div class="text-2xl">▶️</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Profile Setup -->
-        <div id="profileSetup" class="hidden min-h-screen p-4">
-            <div class="bg-white rounded-3xl p-6 shadow-2xl">
-                <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Создай профиль</h2>
+        <!-- Mine Section -->
+        <div id="mineTab" class="tab-content">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                <span class="text-3xl">⛏️</span> Шахта
+            </h2>
+            <div class="glass rounded-2xl p-6 text-center mb-4">
+                <div id="mineRock" class="text-8xl mb-4 cursor-pointer inline-block" onclick="mineRock()">🪨</div>
+                <p class="text-gray-400 mb-2">Нажми чтобы добыть ресурсы!</p>
+                <p class="text-sm">Каждый клик: -5 ⚡ | +5-20 💰 | Шанс 💎 5%</p>
+            </div>
+            <div class="glass rounded-2xl p-4">
+                <h3 class="font-bold mb-3">📦 Инвентарь руды</h3>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="bg-gray-800 rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">�ite</div>
+                        <div class="text-xs text-gray-400">Уголь</div>
+                        <div id="coalCount" class="font-bold">0</div>
+                    </div>
+                    <div class="bg-gray-800 rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">🔶</div>
+                        <div class="text-xs text-gray-400">Железо</div>
+                        <div id="ironCount" class="font-bold">0</div>
+                    </div>
+                    <div class="bg-gray-800 rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">💎</div>
+                        <div class="text-xs text-gray-400">Алмазы</div>
+                        <div id="diamondCount" class="font-bold">0</div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="sellOres()" class="w-full mt-4 gradient-green text-white font-bold py-3 rounded-xl card-hover">
+                💰 Продать всю руду
+            </button>
+        </div>
+
+        <!-- Shop Section -->
+        <div id="shopTab" class="tab-content">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                <span class="text-3xl">🛒</span> Магазин
+            </h2>
+            <div class="grid gap-3">
+                <div class="glass rounded-2xl p-4 card-hover">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center text-3xl">⚡</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold">Энергетик</h3>
+                            <p class="text-gray-400 text-sm">+50 энергии</p>
+                        </div>
+                        <button onclick="buyItem('energy')" class="gradient-blue px-4 py-2 rounded-xl font-bold">
+                            200 💰
+                        </button>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-4 card-hover">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-yellow-500/20 flex items-center justify-center text-3xl">⛏️</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold">Улучшенная кирка</h3>
+                            <p class="text-gray-400 text-sm">+25% добычи в шахте</p>
+                            <p id="pickaxeLevel" class="text-green-400 text-xs">Уровень: 1</p>
+                        </div>
+                        <button onclick="buyItem('pickaxe')" class="gradient-gold px-4 py-2 rounded-xl font-bold">
+                            500 💰
+                        </button>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-4 card-hover">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-green-500/20 flex items-center justify-center text-3xl">🔋</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold">Батарея</h3>
+                            <p class="text-gray-400 text-sm">+20 макс. энергии</p>
+                        </div>
+                        <button onclick="buyItem('battery')" class="gradient-green px-4 py-2 rounded-xl font-bold">
+                            1000 💰
+                        </button>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-4 card-hover">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center text-3xl">💎</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold">10 Гемов</h3>
+                            <p class="text-gray-400 text-sm">Премиум валюта</p>
+                        </div>
+                        <button onclick="buyItem('gems')" class="gradient-purple px-4 py-2 rounded-xl font-bold">
+                            5000 💰
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Games Section -->
+        <div id="gamesTab" class="tab-content">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                <span class="text-3xl">🎮</span> Игры
+            </h2>
+            <div class="grid gap-4">
+                <!-- Coin Flip -->
+                <div class="glass rounded-2xl p-4">
+                    <h3 class="font-bold text-lg mb-3 flex items-center gap-2">🪙 Подброс монеты</h3>
+                    <div class="text-center mb-4">
+                        <div id="coinFlipResult" class="text-6xl mb-4">🪙</div>
+                        <div class="flex justify-center gap-4 mb-4">
+                            <button onclick="playCoinFlip('heads')" class="gradient-gold px-6 py-3 rounded-xl font-bold">
+                                Орёл
+                            </button>
+                            <button onclick="playCoinFlip('tails')" class="gradient-purple px-6 py-3 rounded-xl font-bold">
+                                Решка
+                            </button>
+                        </div>
+                        <p class="text-gray-400 text-sm">Ставка: 100 💰 | Выигрыш: x2</p>
+                    </div>
+                </div>
                 
-                <!-- Photos -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-600 mb-3">Фотографии (1-3)</label>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="photo-upload aspect-square rounded-xl photo-placeholder flex items-center justify-center cursor-pointer overflow-hidden" data-index="0">
-                            <span class="text-4xl text-gray-400">+</span>
+                <!-- Dice Game -->
+                <div class="glass rounded-2xl p-4">
+                    <h3 class="font-bold text-lg mb-3 flex items-center gap-2">🎲 Кости</h3>
+                    <div class="text-center">
+                        <div class="flex justify-center gap-4 mb-4">
+                            <div id="dice1" class="text-5xl">🎲</div>
+                            <div id="dice2" class="text-5xl">🎲</div>
                         </div>
-                        <div class="photo-upload aspect-square rounded-xl photo-placeholder flex items-center justify-center cursor-pointer overflow-hidden" data-index="1">
-                            <span class="text-4xl text-gray-400">+</span>
+                        <button onclick="playDice()" class="gradient-blue px-8 py-3 rounded-xl font-bold">
+                            Бросить (50 💰)
+                        </button>
+                        <p class="text-gray-400 text-sm mt-2">Дубль = x3 | Сумма 7 = x2 | 12 = x5</p>
+                    </div>
+                </div>
+
+                <!-- Lucky Number -->
+                <div class="glass rounded-2xl p-4">
+                    <h3 class="font-bold text-lg mb-3 flex items-center gap-2">🔢 Угадай число</h3>
+                    <div class="text-center">
+                        <div id="guessDisplay" class="text-4xl font-bold mb-4 text-cyan-400">?</div>
+                        <div class="grid grid-cols-5 gap-2 mb-4">
+                            ${[1,2,3,4,5,6,7,8,9,10].map(n => `
+                                <button onclick="guessNumber(${n})" class="bg-gray-700 hover:bg-gray-600 py-2 rounded-lg font-bold transition-colors">${n}</button>
+                            `).join('')}
                         </div>
-                        <div class="photo-upload aspect-square rounded-xl photo-placeholder flex items-center justify-center cursor-pointer overflow-hidden" data-index="2">
-                            <span class="text-4xl text-gray-400">+</span>
-                        </div>
+                        <p class="text-gray-400 text-sm">Ставка: 100 💰 | Угадал = x10</p>
                     </div>
-                    <input type="file" id="photoInput" accept="image/*">
-                </div>
-
-                <!-- Name -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-600 mb-2">Имя</label>
-                    <input type="text" id="nameInput" placeholder="Как тебя зовут?" 
-                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition">
-                </div>
-
-                <!-- Age -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-600 mb-2">Возраст</label>
-                    <input type="number" id="ageInput" placeholder="Сколько тебе лет?" min="18" max="100"
-                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition">
-                </div>
-
-                <!-- Gender -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-600 mb-2">Пол</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button type="button" class="gender-btn px-4 py-3 rounded-xl border-2 border-gray-200 font-medium transition" data-gender="male">
-                            👨 Мужской
-                        </button>
-                        <button type="button" class="gender-btn px-4 py-3 rounded-xl border-2 border-gray-200 font-medium transition" data-gender="female">
-                            👩 Женский
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Looking for -->
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-600 mb-2">Ищу</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button type="button" class="looking-btn px-4 py-3 rounded-xl border-2 border-gray-200 font-medium transition" data-looking="male">
-                            👨 Мужчин
-                        </button>
-                        <button type="button" class="looking-btn px-4 py-3 rounded-xl border-2 border-gray-200 font-medium transition" data-looking="female">
-                            👩 Женщин
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Description -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-600 mb-2">О себе</label>
-                    <textarea id="bioInput" placeholder="Расскажи о себе..." rows="3"
-                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition resize-none"></textarea>
-                </div>
-
-                <!-- Save Button -->
-                <button id="saveProfile" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-[1.02]">
-                    Начать знакомства 💜
-                </button>
-            </div>
-        </div>
-
-        <!-- Main App -->
-        <div id="mainApp" class="hidden">
-            <!-- Header -->
-            <div class="bg-white/10 backdrop-blur-lg p-4 flex items-center justify-between">
-                <h1 class="text-xl font-bold text-white">💜 LoveMeet</h1>
-                <button id="editProfileBtn" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                    <span class="text-white">⚙️</span>
-                </button>
-            </div>
-
-            <!-- Cards Section -->
-            <div id="cardsSection" class="p-4">
-                <div id="cardStack" class="relative h-[500px]">
-                    <!-- Cards will be inserted here -->
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex justify-center gap-6 mt-6">
-                    <button id="dislikeBtn" class="w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center text-3xl hover:scale-110 transition transform">
-                        ❌
-                    </button>
-                    <button id="superlikeBtn" class="w-14 h-14 bg-blue-500 rounded-full shadow-lg flex items-center justify-center text-2xl hover:scale-110 transition transform">
-                        ⭐
-                    </button>
-                    <button id="likeBtn" class="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full shadow-lg flex items-center justify-center text-3xl hover:scale-110 transition transform">
-                        ❤️
-                    </button>
-                </div>
-
-                <!-- No More Cards -->
-                <div id="noCards" class="hidden text-center py-20">
-                    <div class="text-6xl mb-4">😔</div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Анкеты закончились</h3>
-                    <p class="text-white/70">Загляни позже, появятся новые люди!</p>
-                </div>
-            </div>
-
-            <!-- Matches Section -->
-            <div id="matchesSection" class="hidden p-4">
-                <h2 class="text-xl font-bold text-white mb-4">Взаимные симпатии</h2>
-                <div id="matchesList" class="space-y-3">
-                    <!-- Matches will be inserted here -->
-                </div>
-                <div id="noMatches" class="hidden text-center py-20">
-                    <div class="text-6xl mb-4">💫</div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Пока нет совпадений</h3>
-                    <p class="text-white/70">Продолжай листать анкеты!</p>
-                </div>
-            </div>
-
-            <!-- Chat Section -->
-            <div id="chatSection" class="hidden fixed inset-0 bg-white z-40">
-                <div class="bg-gradient-to-r from-purple-600 to-pink-500 p-4 flex items-center gap-3">
-                    <button id="backFromChat" class="text-white text-2xl">←</button>
-                    <img id="chatAvatar" class="w-10 h-10 rounded-full object-cover" src="" alt="">
-                    <span id="chatName" class="text-white font-semibold"></span>
-                </div>
-                <div id="chatMessages" class="h-[calc(100vh-140px)] overflow-y-auto p-4 space-y-3 bg-gray-50">
-                    <!-- Messages will be inserted here -->
-                </div>
-                <div class="absolute bottom-0 left-0 right-0 p-4 bg-white border-t">
-                    <div class="flex gap-2">
-                        <input type="text" id="messageInput" placeholder="Написать сообщение..." 
-                            class="flex-1 px-4 py-3 rounded-full border border-gray-200 focus:border-purple-500 outline-none">
-                        <button id="sendMessage" class="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-500 rounded-full flex items-center justify-center text-white">
-                            ➤
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Profile View Section -->
-            <div id="myProfileSection" class="hidden p-4">
-                <div class="bg-white rounded-3xl p-6 shadow-xl">
-                    <div id="myProfileContent">
-                        <!-- Profile content will be inserted here -->
-                    </div>
-                    <button id="editMyProfile" class="w-full mt-4 py-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold rounded-xl">
-                        Редактировать профиль
-                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Match Popup -->
-        <div id="matchPopup" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-            <div class="match-animation bg-white rounded-3xl p-8 text-center max-w-sm w-full">
-                <div class="text-6xl mb-4">🎉</div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Это взаимно!</h2>
-                <p class="text-gray-600 mb-4">Вы понравились друг другу</p>
-                <div class="flex justify-center gap-4 mb-6">
-                    <img id="matchMyPhoto" class="w-20 h-20 rounded-full object-cover border-4 border-pink-500" src="" alt="">
-                    <div class="text-4xl self-center">❤️</div>
-                    <img id="matchTheirPhoto" class="w-20 h-20 rounded-full object-cover border-4 border-purple-500" src="" alt="">
+        <!-- Casino Section -->
+        <div id="casinoTab" class="tab-content">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                <span class="text-3xl">🎰</span> Казино
+            </h2>
+            
+            <!-- Slots -->
+            <div class="glass rounded-2xl p-6 mb-4">
+                <h3 class="font-bold text-lg mb-4 text-center">🎰 Слоты</h3>
+                <div class="flex justify-center gap-2 mb-6">
+                    <div class="w-20 h-24 bg-gray-800 rounded-xl flex items-center justify-center text-4xl border-2 border-yellow-500/50 slot-reel overflow-hidden">
+                        <span id="slot1">🍒</span>
+                    </div>
+                    <div class="w-20 h-24 bg-gray-800 rounded-xl flex items-center justify-center text-4xl border-2 border-yellow-500/50 slot-reel overflow-hidden">
+                        <span id="slot2">🍋</span>
+                    </div>
+                    <div class="w-20 h-24 bg-gray-800 rounded-xl flex items-center justify-center text-4xl border-2 border-yellow-500/50 slot-reel overflow-hidden">
+                        <span id="slot3">🍊</span>
+                    </div>
                 </div>
-                <button id="sendMessageMatch" class="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold rounded-xl mb-3">
-                    Написать сообщение
-                </button>
-                <button id="continueSwipe" class="w-full py-3 border-2 border-gray-200 text-gray-600 font-semibold rounded-xl">
-                    Продолжить просмотр
-                </button>
+                <div class="flex justify-center gap-3 mb-4">
+                    <button onclick="playSlots(50)" class="gradient-gold px-6 py-3 rounded-xl font-bold">
+                        50 💰
+                    </button>
+                    <button onclick="playSlots(100)" class="gradient-purple px-6 py-3 rounded-xl font-bold">
+                        100 💰
+                    </button>
+                    <button onclick="playSlots(500)" class="gradient-pink px-6 py-3 rounded-xl font-bold">
+                        500 💰
+                    </button>
+                </div>
+                <div class="text-center text-sm text-gray-400">
+                    <p>🍒🍒🍒 = x3 | 🍋🍋🍋 = x5 | 💎💎💎 = x20</p>
+                    <p>7️⃣7️⃣7️⃣ = x50 | Любые 2 = x1.5</p>
+                </div>
+            </div>
+
+            <!-- Cases -->
+            <div class="glass rounded-2xl p-4">
+                <h3 class="font-bold text-lg mb-4 flex items-center gap-2">📦 Кейсы</h3>
+                <div class="grid gap-3">
+                    <div class="bg-gray-800 rounded-xl p-4 card-hover cursor-pointer case-glow" onclick="openCase('common')">
+                        <div class="flex items-center gap-4">
+                            <div class="text-4xl">📦</div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-gray-300">Обычный кейс</h4>
+                                <p class="text-sm text-gray-500">50-200 💰 или предметы</p>
+                            </div>
+                            <div class="text-yellow-400 font-bold">100 💰</div>
+                        </div>
+                    </div>
+                    <div class="bg-blue-900/30 rounded-xl p-4 card-hover cursor-pointer border border-blue-500/30" onclick="openCase('rare')">
+                        <div class="flex items-center gap-4">
+                            <div class="text-4xl">🎁</div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-blue-300">Редкий кейс</h4>
+                                <p class="text-sm text-blue-400/70">100-500 💰 или редкие предметы</p>
+                            </div>
+                            <div class="text-yellow-400 font-bold">500 💰</div>
+                        </div>
+                    </div>
+                    <div class="bg-purple-900/30 rounded-xl p-4 card-hover cursor-pointer border border-purple-500/50" onclick="openCase('epic')">
+                        <div class="flex items-center gap-4">
+                            <div class="text-4xl">💜</div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-purple-300">Эпический кейс</h4>
+                                <p class="text-sm text-purple-400/70">500-2000 💰 или эпик предметы</p>
+                            </div>
+                            <div class="text-purple-400 font-bold">5 💎</div>
+                        </div>
+                    </div>
+                    <div class="bg-yellow-900/30 rounded-xl p-4 card-hover cursor-pointer border border-yellow-500/50 pulse-glow" onclick="openCase('legendary')">
+                        <div class="flex items-center gap-4">
+                            <div class="text-4xl">👑</div>
+                            <div class="flex-1">
+                                <h4 class="font-bold text-yellow-300">Легендарный кейс</h4>
+                                <p class="text-sm text-yellow-400/70">1000-10000 💰 или легендарки!</p>
+                            </div>
+                            <div class="text-purple-400 font-bold">20 💎</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Bottom Navigation -->
-        <div id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-100 z-30">
-            <div class="max-w-md mx-auto flex">
-                <button class="nav-tab flex-1 py-4 flex flex-col items-center gap-1 tab-active" data-tab="cards">
-                    <span class="text-xl">🔥</span>
-                    <span class="text-xs font-medium">Поиск</span>
-                </button>
-                <button class="nav-tab flex-1 py-4 flex flex-col items-center gap-1" data-tab="matches">
-                    <span class="text-xl">💬</span>
-                    <span class="text-xs font-medium">Чаты</span>
-                    <span id="matchBadge" class="hidden absolute -mt-2 ml-6 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
-                </button>
-                <button class="nav-tab flex-1 py-4 flex flex-col items-center gap-1" data-tab="profile">
-                    <span class="text-xl">👤</span>
-                    <span class="text-xs font-medium">Профиль</span>
-                </button>
+        <!-- Profile Section -->
+        <div id="profileTab" class="tab-content">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                <span class="text-3xl">👤</span> Профиль
+            </h2>
+            <div class="glass rounded-2xl p-6 text-center mb-4">
+                <div class="w-24 h-24 mx-auto rounded-full gradient-purple flex items-center justify-center text-5xl mb-4">
+                    🎮
+                </div>
+                <h3 class="text-2xl font-bold mb-1">Игрок</h3>
+                <p class="text-gray-400 mb-4">Уровень <span id="profileLevel">1</span></p>
+                <div class="w-full h-4 bg-gray-700 rounded-full overflow-hidden mb-2">
+                    <div id="profileXpBar" class="h-full gradient-blue progress-bar" style="width: 0%"></div>
+                </div>
+                <p class="text-sm text-gray-400"><span id="currentXp">0</span> / <span id="neededXp">100</span> XP</p>
             </div>
+            
+            <div class="glass rounded-2xl p-4 mb-4">
+                <h3 class="font-bold mb-3">📊 Статистика</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-gray-800 rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">💰</div>
+                        <div class="text-xs text-gray-400">Всего заработано</div>
+                        <div id="totalEarned" class="font-bold text-yellow-400">0</div>
+                    </div>
+                    <div class="bg-gray-800 rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">🎮</div>
+                        <div class="text-xs text-gray-400">Игр сыграно</div>
+                        <div id="gamesPlayed" class="font-bold text-blue-400">0</div>
+                    </div>
+                    <div class="bg-gray-800 rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">⛏️</div>
+                        <div class="text-xs text-gray-400">Добыто руды</div>
+                        <div id="totalMined" class="font-bold text-orange-400">0</div>
+                    </div>
+                    <div class="bg-gray-800 rounded-xl p-3 text-center">
+                        <div class="text-2xl mb-1">🏆</div>
+                        <div class="text-xs text-gray-400">Побед в казино</div>
+                        <div id="casinoWins" class="font-bold text-green-400">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass rounded-2xl p-4">
+                <h3 class="font-bold mb-3">🎒 Инвентарь</h3>
+                <div id="inventory" class="grid grid-cols-4 gap-2">
+                    <div class="bg-gray-800 rounded-lg p-3 text-center text-2xl opacity-30">📦</div>
+                    <div class="bg-gray-800 rounded-lg p-3 text-center text-2xl opacity-30">📦</div>
+                    <div class="bg-gray-800 rounded-lg p-3 text-center text-2xl opacity-30">📦</div>
+                    <div class="bg-gray-800 rounded-lg p-3 text-center text-2xl opacity-30">📦</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 glass border-t border-white/10 px-2 py-2">
+        <div class="flex justify-around">
+            <button onclick="showTab('work')" class="nav-item active flex flex-col items-center px-4 py-2 rounded-xl" data-tab="work">
+                <span class="text-xl">💼</span>
+                <span class="text-xs mt-1">Работа</span>
+            </button>
+            <button onclick="showTab('mine')" class="nav-item flex flex-col items-center px-4 py-2 rounded-xl" data-tab="mine">
+                <span class="text-xl">⛏️</span>
+                <span class="text-xs mt-1">Шахта</span>
+            </button>
+            <button onclick="showTab('shop')" class="nav-item flex flex-col items-center px-4 py-2 rounded-xl" data-tab="shop">
+                <span class="text-xl">🛒</span>
+                <span class="text-xs mt-1">Магазин</span>
+            </button>
+            <button onclick="showTab('games')" class="nav-item flex flex-col items-center px-4 py-2 rounded-xl" data-tab="games">
+                <span class="text-xl">🎮</span>
+                <span class="text-xs mt-1">Игры</span>
+            </button>
+            <button onclick="showTab('casino')" class="nav-item flex flex-col items-center px-4 py-2 rounded-xl" data-tab="casino">
+                <span class="text-xl">🎰</span>
+                <span class="text-xs mt-1">Казино</span>
+            </button>
+            <button onclick="showTab('profile')" class="nav-item flex flex-col items-center px-4 py-2 rounded-xl" data-tab="profile">
+                <span class="text-xl">👤</span>
+                <span class="text-xs mt-1">Профиль</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 modal-backdrop z-50 hidden flex items-center justify-center p-4">
+        <div class="glass rounded-2xl p-6 max-w-sm w-full bounce-in">
+            <div id="modalContent" class="text-center">
+                <!-- Dynamic content -->
+            </div>
+            <button onclick="closeModal()" class="w-full mt-4 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-bold transition-colors">
+                Закрыть
+            </button>
         </div>
     </div>
 
+    <!-- Toast -->
+    <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 glass px-6 py-3 rounded-full z-50 hidden transition-all duration-300">
+        <span id="toastText"></span>
+    </div>
+
     <script>
-        // =============================================
-        // FIREBASE CONFIGURATION
-        // =============================================
-        // ВАЖНО: Замените на свои данные из Firebase Console!
-        // 1. Перейдите на https://console.firebase.google.com/
-        // 2. Создайте новый проект
-        // 3. Добавьте Web App
-        // 4. Скопируйте конфигурацию сюда
-        // 5. Включите Firestore Database и Storage
-        // =============================================
-        
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+        // Game State
+        let gameState = {
+            coins: 1000,
+            gems: 10,
+            energy: 100,
+            maxEnergy: 100,
+            level: 1,
+            xp: 0,
+            xpNeeded: 100,
+            pickaxeLevel: 1,
+            ores: { coal: 0, iron: 0, diamond: 0 },
+            stats: {
+                totalEarned: 0,
+                gamesPlayed: 0,
+                totalMined: 0,
+                casinoWins: 0
+            },
+            inventory: []
         };
 
-        // Initialize Firebase
-        let db, storage;
-        let firebaseEnabled = false;
-        
-        try {
-            if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
-                firebase.initializeApp(firebaseConfig);
-                db = firebase.firestore();
-                storage = firebase.storage();
-                firebaseEnabled = true;
-                console.log('✅ Firebase подключен');
-            } else {
-                console.log('⚠️ Firebase не настроен - работаем в демо-режиме');
-            }
-        } catch (e) {
-            console.log('⚠️ Ошибка Firebase:', e);
-        }
-
-        // Initialize Telegram WebApp
-        const tg = window.Telegram?.WebApp;
-        let tgUser = null;
-        
-        if (tg) {
-            tg.ready();
-            tg.expand();
-            tgUser = tg.initDataUnsafe?.user;
-        }
-
-        // Generate unique user ID
-        function getUserId() {
-            if (tgUser?.id) return 'tg_' + tgUser.id;
-            let id = localStorage.getItem('lovemeet_device_id');
-            if (!id) {
-                id = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('lovemeet_device_id', id);
-            }
-            return id;
-        }
-
-        // App State
-        let state = {
-            userId: getUserId(),
-            currentUser: null,
-            users: [],
-            matches: [],
-            messages: {},
-            swipedUsers: [],
-            currentPhotoIndex: 0,
-            editingPhotoIndex: 0,
-            tempPhotos: [null, null, null],
-            currentChatUser: null,
-            unsubscribeMessages: null
-        };
-
-        // Demo Users (used when Firebase is not configured)
-        const demoUsers = [
-            {
-                id: 'demo_1',
-                name: "Анна",
-                age: 24,
-                gender: "female",
-                looking: "male",
-                bio: "Люблю путешествия и хорошую музыку 🎵",
-                photos: ["https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=500&fit=crop"]
-            },
-            {
-                id: 'demo_2',
-                name: "Михаил",
-                age: 28,
-                gender: "male",
-                looking: "female",
-                bio: "Программист, люблю спорт ☕",
-                photos: ["https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=500&fit=crop"]
-            },
-            {
-                id: 'demo_3',
-                name: "Екатерина",
-                age: 26,
-                gender: "female",
-                looking: "male",
-                bio: "Дизайнер, обожаю искусство 🎨",
-                photos: ["https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=500&fit=crop"]
-            },
-            {
-                id: 'demo_4',
-                name: "Александр",
-                age: 30,
-                gender: "male",
-                looking: "female",
-                bio: "Предприниматель 🌍",
-                photos: ["https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop"]
-            },
-            {
-                id: 'demo_5',
-                name: "Мария",
-                age: 23,
-                gender: "female",
-                looking: "male",
-                bio: "Студентка, йога 🧘‍♀️",
-                photos: ["https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=500&fit=crop"]
-            }
-        ];
-
-        // =============================================
-        // FIREBASE FUNCTIONS
-        // =============================================
-
-        // Upload photo to Firebase Storage
-        async function uploadPhoto(dataUrl, index) {
-            if (!firebaseEnabled) return dataUrl;
-            
-            showLoading('Загрузка фото...');
-            try {
-                const response = await fetch(dataUrl);
-                const blob = await response.blob();
-                const ref = storage.ref(`photos/${state.userId}/photo_${index}_${Date.now()}.jpg`);
-                await ref.put(blob);
-                const url = await ref.getDownloadURL();
-                hideLoading();
-                return url;
-            } catch (e) {
-                console.error('Ошибка загрузки фото:', e);
-                hideLoading();
-                return dataUrl;
-            }
-        }
-
-        // Save user profile to Firestore
-        async function saveUserToFirebase(userData) {
-            if (!firebaseEnabled) return;
-            
-            try {
-                await db.collection('users').doc(state.userId).set({
-                    ...userData,
-                    oderId: state.userId,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
-                console.log('✅ Профиль сохранен');
-            } catch (e) {
-                console.error('Ошибка сохранения профиля:', e);
-            }
-        }
-
-        // Load users from Firestore
-        async function loadUsersFromFirebase() {
-            if (!firebaseEnabled) {
-                state.users = demoUsers.filter(u => 
-                    u.gender === state.currentUser?.looking && 
-                    u.looking === state.currentUser?.gender
-                );
-                return;
-            }
-            
-            showLoading('Поиск людей...');
-            try {
-                const snapshot = await db.collection('users')
-                    .where('gender', '==', state.currentUser.looking)
-                    .where('looking', '==', state.currentUser.gender)
-                    .limit(50)
-                    .get();
-                
-                state.users = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    if (data.userId !== state.userId && !state.swipedUsers.includes(data.userId)) {
-                        state.users.push({ id: doc.id, oderId: data.userId, ...data });
-                    }
-                });
-                
-                console.log(`✅ Найдено ${state.users.length} пользователей`);
-                hideLoading();
-            } catch (e) {
-                console.error('Ошибка загрузки пользователей:', e);
-                hideLoading();
-            }
-        }
-
-        // Record a swipe (like/dislike)
-        async function recordSwipe(targetUserId, isLike) {
-            state.swipedUsers.push(targetUserId);
-            localStorage.setItem('lovemeet_swiped', JSON.stringify(state.swipedUsers));
-            
-            if (!firebaseEnabled) {
-                // Demo mode: random match
-                if (isLike && Math.random() > 0.5) {
-                    const user = state.users.find(u => u.oderId === targetUserId || u.id === targetUserId);
-                    if (user) {
-                        state.matches.push(user);
-                        showMatchPopup(user);
-                    }
-                }
-                return;
-            }
-            
-            if (!isLike) return;
-            
-            try {
-                // Save like
-                await db.collection('likes').add({
-                    fromUserId: state.userId,
-                    toUserId: targetUserId,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                // Check if mutual like exists
-                const mutual = await db.collection('likes')
-                    .where('fromUserId', '==', targetUserId)
-                    .where('toUserId', '==', state.userId)
-                    .get();
-                
-                if (!mutual.empty) {
-                    // Create match!
-                    const matchId = [state.userId, targetUserId].sort().join('_');
-                    await db.collection('matches').doc(matchId).set({
-                        users: [state.userId, targetUserId],
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    
-                    const user = state.users.find(u => u.oderId === targetUserId);
-                    if (user) {
-                        state.matches.push(user);
-                        showMatchPopup(user);
-                        saveState();
-                    }
-                }
-            } catch (e) {
-                console.error('Ошибка записи лайка:', e);
-            }
-        }
-
-        // Load matches from Firestore
-        async function loadMatchesFromFirebase() {
-            if (!firebaseEnabled) return;
-            
-            try {
-                const snapshot = await db.collection('matches')
-                    .where('users', 'array-contains', state.userId)
-                    .get();
-                
-                const matchUserIds = [];
-                snapshot.forEach(doc => {
-                    const users = doc.data().users;
-                    const otherId = users.find(id => id !== state.userId);
-                    if (otherId) matchUserIds.push(otherId);
-                });
-                
-                // Load matched user profiles
-                for (const oderId of matchUserIds) {
-                    if (!state.matches.find(m => m.oderId === oderId)) {
-                        const userDoc = await db.collection('users').where('oderId', '==', oderId).limit(1).get();
-                        if (!userDoc.empty) {
-                            state.matches.push({ id: userDoc.docs[0].id, ...userDoc.docs[0].data() });
-                        }
-                    }
-                }
-                
-                updateMatchBadge();
-            } catch (e) {
-                console.error('Ошибка загрузки матчей:', e);
-            }
-        }
-
-        // Send message via Firebase
-        async function sendMessageToFirebase(toUserId, text) {
-            if (!firebaseEnabled) return;
-            
-            const chatId = [state.userId, toUserId].sort().join('_');
-            
-            try {
-                await db.collection('chats').doc(chatId).collection('messages').add({
-                    senderId: state.userId,
-                    text: text,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            } catch (e) {
-                console.error('Ошибка отправки сообщения:', e);
-            }
-        }
-
-        // Subscribe to chat messages
-        function subscribeToMessages(toUserId) {
-            if (!firebaseEnabled) return;
-            
-            if (state.unsubscribeMessages) {
-                state.unsubscribeMessages();
-            }
-            
-            const chatId = [state.userId, toUserId].sort().join('_');
-            
-            state.unsubscribeMessages = db.collection('chats').doc(chatId)
-                .collection('messages')
-                .orderBy('createdAt', 'asc')
-                .onSnapshot(snapshot => {
-                    const messages = [];
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        messages.push({
-                            text: data.text,
-                            fromMe: data.senderId === state.userId,
-                            timestamp: data.createdAt?.toMillis() || Date.now()
-                        });
-                    });
-                    state.messages[toUserId] = messages;
-                    if (state.currentChatUser?.userId === toUserId || state.currentChatUser?.id === toUserId) {
-                        renderMessages();
-                    }
-                });
-        }
-
-        // =============================================
-        // UI FUNCTIONS
-        // =============================================
-
-        function showLoading(text = 'Загрузка...') {
-            let loader = document.getElementById('loader');
-            if (!loader) {
-                loader = document.createElement('div');
-                loader.id = 'loader';
-                loader.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-[100]';
-                loader.innerHTML = `
-                    <div class="bg-white rounded-2xl p-6 text-center">
-                        <div class="animate-spin text-4xl mb-2">💜</div>
-                        <p class="text-gray-600" id="loaderText">${text}</p>
-                    </div>
-                `;
-                document.body.appendChild(loader);
-            } else {
-                document.getElementById('loaderText').textContent = text;
-                loader.classList.remove('hidden');
-            }
-        }
-
-        function hideLoading() {
-            const loader = document.getElementById('loader');
-            if (loader) loader.classList.add('hidden');
-        }
-
-        // Load local state
-        function loadState() {
-            const saved = localStorage.getItem('lovemeet_state_v2');
+        // Load saved game
+        function loadGame() {
+            const saved = localStorage.getItem('telegramMiniGame');
             if (saved) {
-                const parsed = JSON.parse(saved);
-                state = { ...state, ...parsed, userId: state.userId };
+                gameState = { ...gameState, ...JSON.parse(saved) };
             }
-            
-            const swiped = localStorage.getItem('lovemeet_swiped');
-            if (swiped) {
-                state.swipedUsers = JSON.parse(swiped);
-            }
+            updateUI();
         }
 
-        // Save local state
-        function saveState() {
-            const toSave = {
-                currentUser: state.currentUser,
-                matches: state.matches,
-                messages: state.messages
+        // Save game
+        function saveGame() {
+            localStorage.setItem('telegramMiniGame', JSON.stringify(gameState));
+        }
+
+        // Update UI
+        function updateUI() {
+            document.getElementById('coins').textContent = formatNumber(gameState.coins);
+            document.getElementById('gems').textContent = gameState.gems;
+            document.getElementById('currentEnergy').textContent = gameState.energy;
+            document.getElementById('maxEnergy').textContent = gameState.maxEnergy;
+            document.getElementById('energyBar').style.width = (gameState.energy / gameState.maxEnergy * 100) + '%';
+            document.getElementById('playerLevel').textContent = gameState.level;
+            document.getElementById('profileLevel').textContent = gameState.level;
+            document.getElementById('xpBar').style.width = (gameState.xp / gameState.xpNeeded * 100) + '%';
+            document.getElementById('profileXpBar').style.width = (gameState.xp / gameState.xpNeeded * 100) + '%';
+            document.getElementById('currentXp').textContent = gameState.xp;
+            document.getElementById('neededXp').textContent = gameState.xpNeeded;
+            document.getElementById('pickaxeLevel').textContent = 'Уровень: ' + gameState.pickaxeLevel;
+            document.getElementById('coalCount').textContent = gameState.ores.coal;
+            document.getElementById('ironCount').textContent = gameState.ores.iron;
+            document.getElementById('diamondCount').textContent = gameState.ores.diamond;
+            document.getElementById('totalEarned').textContent = formatNumber(gameState.stats.totalEarned);
+            document.getElementById('gamesPlayed').textContent = gameState.stats.gamesPlayed;
+            document.getElementById('totalMined').textContent = gameState.stats.totalMined;
+            document.getElementById('casinoWins').textContent = gameState.stats.casinoWins;
+            saveGame();
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        // Add XP
+        function addXP(amount) {
+            gameState.xp += amount;
+            while (gameState.xp >= gameState.xpNeeded) {
+                gameState.xp -= gameState.xpNeeded;
+                gameState.level++;
+                gameState.xpNeeded = Math.floor(gameState.xpNeeded * 1.5);
+                showModal('🎉 Уровень повышен!', `Поздравляем! Вы достигли уровня ${gameState.level}!`, '⬆️');
+            }
+            updateUI();
+        }
+
+        // Show Tab
+        function showTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+        }
+
+        // Toast
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toastText');
+            toastText.textContent = message;
+            toast.classList.remove('hidden');
+            toast.style.background = type === 'success' ? 'rgba(34, 197, 94, 0.2)' : 
+                                     type === 'error' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.1)';
+            setTimeout(() => toast.classList.add('hidden'), 2000);
+        }
+
+        // Modal
+        function showModal(title, message, emoji = '🎉') {
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `
+                <div class="text-6xl mb-4">${emoji}</div>
+                <h3 class="text-xl font-bold mb-2">${title}</h3>
+                <p class="text-gray-400">${message}</p>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        // Work
+        function doWork(type) {
+            const works = {
+                office: { min: 50, max: 100, energy: 10, xp: 15 },
+                factory: { min: 100, max: 200, energy: 20, xp: 30 },
+                business: { min: 200, max: 500, energy: 30, xp: 50 }
             };
-            localStorage.setItem('lovemeet_state_v2', JSON.stringify(toSave));
-        }
-
-        // Initialize App
-        async function init() {
-            loadState();
+            const work = works[type];
             
-            setTimeout(async () => {
-                document.getElementById('splash').classList.add('hidden');
-                
-                if (state.currentUser) {
-                    await showMainApp();
-                } else {
-                    showProfileSetup();
-                }
-            }, 1500);
-
-            setupEventListeners();
-        }
-
-        // Show Profile Setup
-        function showProfileSetup(editing = false) {
-            document.getElementById('profileSetup').classList.remove('hidden');
-            document.getElementById('mainApp').classList.add('hidden');
-            document.getElementById('bottomNav').classList.add('hidden');
-
-            if (editing && state.currentUser) {
-                document.getElementById('nameInput').value = state.currentUser.name;
-                document.getElementById('ageInput').value = state.currentUser.age;
-                document.getElementById('bioInput').value = state.currentUser.bio || '';
-                state.tempPhotos = [...(state.currentUser.photos || []), null, null, null].slice(0, 3);
-                
-                document.querySelectorAll('.gender-btn').forEach(btn => {
-                    btn.classList.remove('border-purple-500', 'bg-purple-50');
-                    if (btn.dataset.gender === state.currentUser.gender) {
-                        btn.classList.add('border-purple-500', 'bg-purple-50');
-                    }
-                });
-                
-                document.querySelectorAll('.looking-btn').forEach(btn => {
-                    btn.classList.remove('border-purple-500', 'bg-purple-50');
-                    if (btn.dataset.looking === state.currentUser.looking) {
-                        btn.classList.add('border-purple-500', 'bg-purple-50');
-                    }
-                });
-                
-                updatePhotoPreview();
-            } else {
-                state.tempPhotos = [null, null, null];
-            }
-        }
-
-        // Show Main App
-        async function showMainApp() {
-            document.getElementById('profileSetup').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
-            document.getElementById('bottomNav').classList.remove('hidden');
-            
-            await loadUsersFromFirebase();
-            await loadMatchesFromFirebase();
-            renderCards();
-            updateMatchBadge();
-        }
-
-        // Render Cards
-        function renderCards() {
-            const stack = document.getElementById('cardStack');
-            const noCards = document.getElementById('noCards');
-            
-            stack.innerHTML = '';
-            
-            // Filter out already swiped users
-            const availableUsers = state.users.filter(u => 
-                !state.swipedUsers.includes(u.userId) && !state.swipedUsers.includes(u.id)
-            );
-            
-            if (availableUsers.length === 0) {
-                noCards.classList.remove('hidden');
+            if (gameState.energy < work.energy) {
+                showToast('Недостаточно энергии!', 'error');
                 return;
             }
-            
-            noCards.classList.add('hidden');
-            
-            const cardsToShow = availableUsers.slice(0, 3).reverse();
-            
-            cardsToShow.forEach((user, index) => {
-                const card = createCard(user, index === cardsToShow.length - 1);
-                stack.appendChild(card);
-            });
+
+            gameState.energy -= work.energy;
+            const reward = Math.floor(Math.random() * (work.max - work.min + 1)) + work.min;
+            gameState.coins += reward;
+            gameState.stats.totalEarned += reward;
+            addXP(work.xp);
+            showToast(`+${reward} 💰 | +${work.xp} XP`, 'success');
+            updateUI();
         }
 
-        // Create Card Element
-        function createCard(user, isTop) {
-            const card = document.createElement('div');
-            card.className = `card absolute inset-0 bg-white rounded-3xl shadow-2xl overflow-hidden ${isTop ? 'z-10' : ''}`;
-            card.dataset.userId = user.userId || user.id;
-            
-            const photos = user.photos || [];
-            const photoHtml = photos.map((photo, idx) => `
-                <img src="${photo}" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${idx === 0 ? 'opacity-100' : 'opacity-0'}" data-photo-idx="${idx}">
-            `).join('');
-            
-            const dotsHtml = photos.length > 1 ? photos.map((_, idx) => `
-                <div class="photo-dot w-2 h-2 rounded-full bg-white/50 ${idx === 0 ? 'active' : ''}" data-dot-idx="${idx}"></div>
-            `).join('') : '';
-            
-            card.innerHTML = `
-                <div class="relative h-full">
-                    ${photoHtml}
-                    <div class="absolute top-4 left-0 right-0 flex justify-center gap-1">
-                        ${dotsHtml}
-                    </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                        <h3 class="text-2xl font-bold">${user.name}, ${user.age}</h3>
-                        <p class="text-white/80 mt-2 line-clamp-2">${user.bio || ''}</p>
-                    </div>
-                    <div class="absolute top-1/2 left-4 transform -translate-y-1/2 text-5xl font-bold text-green-500 opacity-0 like-indicator rotate-[-20deg]">LIKE</div>
-                    <div class="absolute top-1/2 right-4 transform -translate-y-1/2 text-5xl font-bold text-red-500 opacity-0 nope-indicator rotate-[20deg]">NOPE</div>
-                </div>
-            `;
-            
-            if (isTop && photos.length > 1) {
-                card.addEventListener('click', (e) => {
-                    if (e.target.closest('.like-indicator') || e.target.closest('.nope-indicator')) return;
-                    
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const width = rect.width;
-                    
-                    const photoEls = card.querySelectorAll('[data-photo-idx]');
-                    const dots = card.querySelectorAll('[data-dot-idx]');
-                    let currentIdx = Array.from(photoEls).findIndex(p => p.classList.contains('opacity-100'));
-                    
-                    if (x < width / 2) {
-                        currentIdx = Math.max(0, currentIdx - 1);
-                    } else {
-                        currentIdx = Math.min(photoEls.length - 1, currentIdx + 1);
-                    }
-                    
-                    photoEls.forEach((p, i) => {
-                        p.classList.toggle('opacity-100', i === currentIdx);
-                        p.classList.toggle('opacity-0', i !== currentIdx);
-                    });
-                    
-                    dots.forEach((d, i) => {
-                        d.classList.toggle('active', i === currentIdx);
-                    });
-                });
+        // Mine
+        function mineRock() {
+            if (gameState.energy < 5) {
+                showToast('Недостаточно энергии!', 'error');
+                return;
             }
+
+            gameState.energy -= 5;
+            gameState.stats.totalMined++;
             
-            return card;
+            const rock = document.getElementById('mineRock');
+            rock.classList.add('mining-effect');
+            setTimeout(() => rock.classList.remove('mining-effect'), 300);
+
+            const bonus = 1 + (gameState.pickaxeLevel - 1) * 0.25;
+            const roll = Math.random();
+
+            if (roll < 0.05) {
+                gameState.ores.diamond++;
+                showToast('💎 Найден алмаз!', 'success');
+            } else if (roll < 0.25) {
+                const amount = Math.ceil((Math.floor(Math.random() * 3) + 1) * bonus);
+                gameState.ores.iron += amount;
+                showToast(`+${amount} 🔶 Железо`, 'success');
+            } else {
+                const amount = Math.ceil((Math.floor(Math.random() * 5) + 2) * bonus);
+                gameState.ores.coal += amount;
+                showToast(`+${amount} ite Уголь`, 'success');
+            }
+
+            addXP(5);
+            updateUI();
         }
 
-        // Swipe Card
-        async function swipeCard(direction) {
-            const stack = document.getElementById('cardStack');
-            const topCard = stack.querySelector('.card.z-10');
+        function sellOres() {
+            const total = gameState.ores.coal * 5 + gameState.ores.iron * 15 + gameState.ores.diamond * 100;
+            if (total === 0) {
+                showToast('Нет руды для продажи!', 'error');
+                return;
+            }
+            gameState.coins += total;
+            gameState.stats.totalEarned += total;
+            gameState.ores = { coal: 0, iron: 0, diamond: 0 };
+            showToast(`+${total} 💰 от продажи!`, 'success');
+            updateUI();
+        }
+
+        // Shop
+        function buyItem(item) {
+            const items = {
+                energy: { cost: 200, currency: 'coins' },
+                pickaxe: { cost: 500, currency: 'coins' },
+                battery: { cost: 1000, currency: 'coins' },
+                gems: { cost: 5000, currency: 'coins' }
+            };
+
+            const i = items[item];
+            if (gameState.coins < i.cost) {
+                showToast('Недостаточно монет!', 'error');
+                return;
+            }
+
+            gameState.coins -= i.cost;
+
+            switch(item) {
+                case 'energy':
+                    gameState.energy = Math.min(gameState.energy + 50, gameState.maxEnergy);
+                    showToast('+50 ⚡ Энергии!', 'success');
+                    break;
+                case 'pickaxe':
+                    gameState.pickaxeLevel++;
+                    showToast(`Кирка улучшена до уровня ${gameState.pickaxeLevel}!`, 'success');
+                    break;
+                case 'battery':
+                    gameState.maxEnergy += 20;
+                    showToast('+20 к максимуму энергии!', 'success');
+                    break;
+                case 'gems':
+                    gameState.gems += 10;
+                    showToast('+10 💎 Гемов!', 'success');
+                    break;
+            }
+            updateUI();
+        }
+
+        // Coin Flip
+        function playCoinFlip(choice) {
+            if (gameState.coins < 100) {
+                showToast('Недостаточно монет!', 'error');
+                return;
+            }
+
+            gameState.coins -= 100;
+            gameState.stats.gamesPlayed++;
             
-            if (!topCard) return;
-            
-            const oderId = topCard.dataset.userId;
-            
-            topCard.classList.add(direction === 'right' ? 'swiping-right' : 'swiping-left');
-            
-            await recordSwipe(oderId, direction === 'right');
+            const coin = document.getElementById('coinFlipResult');
+            coin.classList.add('coin-flip');
             
             setTimeout(() => {
-                renderCards();
-                saveState();
-            }, 300);
-        }
-
-        // Show Match Popup
-        function showMatchPopup(user) {
-            const popup = document.getElementById('matchPopup');
-            document.getElementById('matchMyPhoto').src = state.currentUser.photos[0];
-            document.getElementById('matchTheirPhoto').src = user.photos?.[0] || '';
-            popup.classList.remove('hidden');
-            state.currentChatUser = user;
-            updateMatchBadge();
-        }
-
-        // Render Matches
-        function renderMatches() {
-            const list = document.getElementById('matchesList');
-            const noMatches = document.getElementById('noMatches');
-            
-            if (state.matches.length === 0) {
-                list.innerHTML = '';
-                noMatches.classList.remove('hidden');
-                return;
-            }
-            
-            noMatches.classList.add('hidden');
-            
-            list.innerHTML = state.matches.map(match => {
-                const oderId = match.oderId || match.id;
-                const lastMsg = state.messages[oderId]?.slice(-1)[0]?.text || 'Новое совпадение! 👋';
-                return `
-                    <div class="match-item bg-white rounded-2xl p-4 flex items-center gap-4 cursor-pointer hover:shadow-lg transition" data-match-id="${oderId}">
-                        <img src="${match.photos?.[0] || ''}" class="w-14 h-14 rounded-full object-cover">
-                        <div class="flex-1 min-w-0">
-                            <h4 class="font-semibold text-gray-800">${match.name}, ${match.age}</h4>
-                            <p class="text-sm text-gray-500 truncate">${lastMsg}</p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Open Chat
-        function openChat(oderId) {
-            const user = state.matches.find(m => (m.oderId || m.id) === oderId);
-            if (!user) return;
-            
-            state.currentChatUser = user;
-            
-            document.getElementById('chatAvatar').src = user.photos?.[0] || '';
-            document.getElementById('chatName').textContent = `${user.name}, ${user.age}`;
-            document.getElementById('chatSection').classList.remove('hidden');
-            
-            subscribeToMessages(user.oderId || user.id);
-            renderMessages();
-        }
-
-        // Render Messages
-        function renderMessages() {
-            const container = document.getElementById('chatMessages');
-            const oderId = state.currentChatUser?.oderId || state.currentChatUser?.id;
-            const messages = state.messages[oderId] || [];
-            
-            if (messages.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-10">
-                        <div class="text-4xl mb-2">👋</div>
-                        <p class="text-gray-500">Напишите первое сообщение!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = messages.map(msg => `
-                <div class="flex ${msg.fromMe ? 'justify-end' : 'justify-start'}">
-                    <div class="message-bubble px-4 py-2 rounded-2xl ${msg.fromMe ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white' : 'bg-gray-200 text-gray-800'}">
-                        ${msg.text}
-                    </div>
-                </div>
-            `).join('');
-            
-            container.scrollTop = container.scrollHeight;
-        }
-
-        // Send Message
-        async function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const text = input.value.trim();
-            
-            if (!text || !state.currentChatUser) return;
-            
-            const oderId = state.currentChatUser.oderId || state.currentChatUser.id;
-            
-            if (!state.messages[oderId]) {
-                state.messages[oderId] = [];
-            }
-            
-            // Add message locally
-            state.messages[oderId].push({
-                text,
-                fromMe: true,
-                timestamp: Date.now()
-            });
-            
-            input.value = '';
-            renderMessages();
-            
-            // Send to Firebase
-            await sendMessageToFirebase(oderId, text);
-            
-            // Demo mode: simulate reply
-            if (!firebaseEnabled) {
-                setTimeout(() => {
-                    const replies = ["Привет! 😊", "Как дела?", "Расскажи о себе 🙂", "Интересно! 😊❤️"];
-                    state.messages[oderId].push({
-                        text: replies[Math.floor(Math.random() * replies.length)],
-                        fromMe: false,
-                        timestamp: Date.now()
-                    });
-                    renderMessages();
-                }, 1500);
-            }
-            
-            saveState();
-        }
-
-        // Update Match Badge
-        function updateMatchBadge() {
-            const badge = document.getElementById('matchBadge');
-            if (state.matches.length > 0) {
-                badge.textContent = state.matches.length;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        // Update Photo Preview
-        function updatePhotoPreview() {
-            document.querySelectorAll('.photo-upload').forEach((el, idx) => {
-                if (state.tempPhotos[idx]) {
-                    el.innerHTML = `<img src="${state.tempPhotos[idx]}" class="w-full h-full object-cover">`;
+                coin.classList.remove('coin-flip');
+                const result = Math.random() < 0.5 ? 'heads' : 'tails';
+                coin.textContent = result === 'heads' ? '🦅' : '🌟';
+                
+                if (result === choice) {
+                    gameState.coins += 200;
+                    gameState.stats.totalEarned += 200;
+                    gameState.stats.casinoWins++;
+                    showToast('+200 💰 Победа!', 'success');
                 } else {
-                    el.innerHTML = '<span class="text-4xl text-gray-400">+</span>';
+                    showToast('Не повезло!', 'error');
                 }
-            });
+                addXP(10);
+                updateUI();
+            }, 600);
         }
 
-        // Render My Profile
-        function renderMyProfile() {
-            const container = document.getElementById('myProfileContent');
-            if (!state.currentUser) return;
+        // Dice
+        const diceEmojis = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+        function playDice() {
+            if (gameState.coins < 50) {
+                showToast('Недостаточно монет!', 'error');
+                return;
+            }
+
+            gameState.coins -= 50;
+            gameState.stats.gamesPlayed++;
+
+            const dice1 = document.getElementById('dice1');
+            const dice2 = document.getElementById('dice2');
             
-            const photosHtml = (state.currentUser.photos || []).map(photo => 
-                `<img src="${photo}" class="w-full aspect-square rounded-xl object-cover">`
-            ).join('');
-            
-            const modeText = firebaseEnabled ? '🟢 Онлайн режим' : '🟡 Демо режим';
-            
-            container.innerHTML = `
-                <div class="text-center text-xs text-gray-400 mb-4">${modeText}</div>
-                <div class="flex justify-center mb-4">
-                    <img src="${state.currentUser.photos?.[0] || ''}" class="w-32 h-32 rounded-full object-cover border-4 border-purple-500">
-                </div>
-                <h3 class="text-xl font-bold text-center text-gray-800">${state.currentUser.name}, ${state.currentUser.age}</h3>
-                <p class="text-center text-gray-600 mt-2">${state.currentUser.bio || ''}</p>
-                <div class="grid grid-cols-3 gap-2 mt-4">${photosHtml}</div>
-            `;
-        }
-
-        // Setup Event Listeners
-        function setupEventListeners() {
-            // Gender buttons
-            document.querySelectorAll('.gender-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.gender-btn').forEach(b => {
-                        b.classList.remove('border-purple-500', 'bg-purple-50');
-                    });
-                    btn.classList.add('border-purple-500', 'bg-purple-50');
-                });
-            });
-
-            // Looking for buttons
-            document.querySelectorAll('.looking-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.looking-btn').forEach(b => {
-                        b.classList.remove('border-purple-500', 'bg-purple-50');
-                    });
-                    btn.classList.add('border-purple-500', 'bg-purple-50');
-                });
-            });
-
-            // Photo upload
-            document.querySelectorAll('.photo-upload').forEach(el => {
-                el.addEventListener('click', () => {
-                    state.editingPhotoIndex = parseInt(el.dataset.index);
-                    document.getElementById('photoInput').click();
-                });
-            });
-
-            document.getElementById('photoInput').addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    if (file.size > 5 * 1024 * 1024) {
-                        alert('Фото слишком большое. Максимум 5 МБ');
-                        return;
-                    }
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        state.tempPhotos[state.editingPhotoIndex] = e.target.result;
-                        updatePhotoPreview();
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // Save Profile
-            document.getElementById('saveProfile').addEventListener('click', async () => {
-                const name = document.getElementById('nameInput').value.trim();
-                const age = parseInt(document.getElementById('ageInput').value);
-                const bio = document.getElementById('bioInput').value.trim();
-                const gender = document.querySelector('.gender-btn.border-purple-500')?.dataset.gender;
-                const looking = document.querySelector('.looking-btn.border-purple-500')?.dataset.looking;
-                const photos = state.tempPhotos.filter(p => p !== null);
-
-                if (!name || !age || !gender || !looking || photos.length === 0) {
-                    alert('Заполните все поля и добавьте фото');
-                    return;
-                }
-
-                if (age < 18) {
-                    alert('Вам должно быть 18+');
-                    return;
-                }
-
-                showLoading('Сохранение профиля...');
-                
-                // Upload photos to Firebase Storage
-                const uploadedPhotos = [];
-                for (let i = 0; i < photos.length; i++) {
-                    const url = await uploadPhoto(photos[i], i);
-                    uploadedPhotos.push(url);
-                }
-
-                state.currentUser = {
-                    oderId: state.userId,
-                    name,
-                    age,
-                    bio,
-                    gender,
-                    looking,
-                    photos: uploadedPhotos
-                };
-
-                await saveUserToFirebase(state.currentUser);
-                saveState();
-                hideLoading();
-                await showMainApp();
-            });
-
-            // Action Buttons
-            document.getElementById('likeBtn').addEventListener('click', () => swipeCard('right'));
-            document.getElementById('dislikeBtn').addEventListener('click', () => swipeCard('left'));
-            document.getElementById('superlikeBtn').addEventListener('click', () => swipeCard('right'));
-
-            // Navigation
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.addEventListener('click', async () => {
-                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('tab-active'));
-                    tab.classList.add('tab-active');
-
-                    const tabName = tab.dataset.tab;
+            let rolls = 0;
+            const rollInterval = setInterval(() => {
+                dice1.textContent = diceEmojis[Math.floor(Math.random() * 6)];
+                dice2.textContent = diceEmojis[Math.floor(Math.random() * 6)];
+                rolls++;
+                if (rolls > 10) {
+                    clearInterval(rollInterval);
+                    const r1 = Math.floor(Math.random() * 6) + 1;
+                    const r2 = Math.floor(Math.random() * 6) + 1;
+                    dice1.textContent = diceEmojis[r1 - 1];
+                    dice2.textContent = diceEmojis[r2 - 1];
                     
-                    document.getElementById('cardsSection').classList.add('hidden');
-                    document.getElementById('matchesSection').classList.add('hidden');
-                    document.getElementById('myProfileSection').classList.add('hidden');
-
-                    if (tabName === 'cards') {
-                        document.getElementById('cardsSection').classList.remove('hidden');
-                    } else if (tabName === 'matches') {
-                        document.getElementById('matchesSection').classList.remove('hidden');
-                        await loadMatchesFromFirebase();
-                        renderMatches();
-                    } else if (tabName === 'profile') {
-                        document.getElementById('myProfileSection').classList.remove('hidden');
-                        renderMyProfile();
+                    let win = 0;
+                    if (r1 === r2) {
+                        if (r1 === 6) win = 250; // Double 6 = x5
+                        else win = 150; // Double = x3
+                    } else if (r1 + r2 === 7) {
+                        win = 100; // Sum 7 = x2
+                    } else if (r1 + r2 === 12) {
+                        win = 250; // Sum 12 = x5
                     }
-                });
-            });
 
-            // Match item click
-            document.getElementById('matchesList').addEventListener('click', (e) => {
-                const matchItem = e.target.closest('.match-item');
-                if (matchItem) {
-                    openChat(matchItem.dataset.matchId);
-                }
-            });
-
-            // Chat
-            document.getElementById('backFromChat').addEventListener('click', () => {
-                document.getElementById('chatSection').classList.add('hidden');
-                if (state.unsubscribeMessages) {
-                    state.unsubscribeMessages();
-                }
-            });
-
-            document.getElementById('sendMessage').addEventListener('click', sendMessage);
-            document.getElementById('messageInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') sendMessage();
-            });
-
-            // Match Popup
-            document.getElementById('continueSwipe').addEventListener('click', () => {
-                document.getElementById('matchPopup').classList.add('hidden');
-            });
-
-            document.getElementById('sendMessageMatch').addEventListener('click', () => {
-                document.getElementById('matchPopup').classList.add('hidden');
-                openChat(state.currentChatUser.oderId || state.currentChatUser.id);
-            });
-
-            // Edit Profile
-            document.getElementById('editProfileBtn').addEventListener('click', () => {
-                showProfileSetup(true);
-            });
-
-            document.getElementById('editMyProfile').addEventListener('click', () => {
-                showProfileSetup(true);
-            });
-
-            // Touch swipe on cards
-            let startX = 0;
-            let currentX = 0;
-            let isDragging = false;
-
-            document.getElementById('cardStack').addEventListener('touchstart', (e) => {
-                const card = e.target.closest('.card.z-10');
-                if (!card) return;
-                startX = e.touches[0].clientX;
-                isDragging = true;
-            });
-
-            document.getElementById('cardStack').addEventListener('touchmove', (e) => {
-                if (!isDragging) return;
-                currentX = e.touches[0].clientX;
-                const diff = currentX - startX;
-                const card = document.querySelector('.card.z-10');
-                
-                if (card) {
-                    card.style.transform = `translateX(${diff}px) rotate(${diff * 0.05}deg)`;
-                    const likeIndicator = card.querySelector('.like-indicator');
-                    const nopeIndicator = card.querySelector('.nope-indicator');
-                    
-                    if (diff > 50) {
-                        likeIndicator.style.opacity = Math.min(1, (diff - 50) / 100);
-                        nopeIndicator.style.opacity = 0;
-                    } else if (diff < -50) {
-                        nopeIndicator.style.opacity = Math.min(1, (-diff - 50) / 100);
-                        likeIndicator.style.opacity = 0;
+                    if (win > 0) {
+                        gameState.coins += win;
+                        gameState.stats.totalEarned += win;
+                        gameState.stats.casinoWins++;
+                        showToast(`+${win} 💰 Победа!`, 'success');
                     } else {
-                        likeIndicator.style.opacity = 0;
-                        nopeIndicator.style.opacity = 0;
+                        showToast('Не повезло!', 'error');
                     }
+                    addXP(10);
+                    updateUI();
                 }
-            });
-
-            document.getElementById('cardStack').addEventListener('touchend', () => {
-                if (!isDragging) return;
-                isDragging = false;
-                
-                const diff = currentX - startX;
-                const card = document.querySelector('.card.z-10');
-                
-                if (Math.abs(diff) > 100) {
-                    swipeCard(diff > 0 ? 'right' : 'left');
-                } else if (card) {
-                    card.style.transform = '';
-                    card.querySelector('.like-indicator').style.opacity = 0;
-                    card.querySelector('.nope-indicator').style.opacity = 0;
-                }
-                
-                startX = 0;
-                currentX = 0;
-            });
+            }, 100);
         }
+
+        // Guess Number
+        function guessNumber(num) {
+            if (gameState.coins < 100) {
+                showToast('Недостаточно монет!', 'error');
+                return;
+            }
+
+            gameState.coins -= 100;
+            gameState.stats.gamesPlayed++;
+
+            const display = document.getElementById('guessDisplay');
+            let rolls = 0;
+            const rollInterval = setInterval(() => {
+                display.textContent = Math.floor(Math.random() * 10) + 1;
+                rolls++;
+                if (rolls > 15) {
+                    clearInterval(rollInterval);
+                    const result = Math.floor(Math.random() * 10) + 1;
+                    display.textContent = result;
+
+                    if (result === num) {
+                        gameState.coins += 1000;
+                        gameState.stats.totalEarned += 1000;
+                        gameState.stats.casinoWins++;
+                        showModal('🎉 ДЖЕКПОТ!', '+1000 💰 Вы угадали число!', '🔢');
+                    } else {
+                        showToast(`Загадано: ${result}. Не повезло!`, 'error');
+                    }
+                    addXP(10);
+                    updateUI();
+                }
+            }, 80);
+        }
+
+        // Slots
+        const slotSymbols = ['🍒', '🍋', '🍊', '🍇', '⭐', '💎', '7️⃣'];
+        function playSlots(bet) {
+            if (gameState.coins < bet) {
+                showToast('Недостаточно монет!', 'error');
+                return;
+            }
+
+            gameState.coins -= bet;
+            gameState.stats.gamesPlayed++;
+
+            const slot1 = document.getElementById('slot1');
+            const slot2 = document.getElementById('slot2');
+            const slot3 = document.getElementById('slot3');
+
+            let rolls = 0;
+            const rollInterval = setInterval(() => {
+                slot1.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                slot2.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                slot3.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                rolls++;
+                
+                if (rolls > 20) {
+                    clearInterval(rollInterval);
+                    const r1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                    const r2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                    const r3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                    slot1.textContent = r1;
+                    slot2.textContent = r2;
+                    slot3.textContent = r3;
+
+                    let multiplier = 0;
+                    if (r1 === r2 && r2 === r3) {
+                        if (r1 === '7️⃣') multiplier = 50;
+                        else if (r1 === '💎') multiplier = 20;
+                        else if (r1 === '⭐') multiplier = 10;
+                        else if (r1 === '🍇') multiplier = 7;
+                        else if (r1 === '🍋') multiplier = 5;
+                        else multiplier = 3;
+                    } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+                        multiplier = 1.5;
+                    }
+
+                    if (multiplier > 0) {
+                        const win = Math.floor(bet * multiplier);
+                        gameState.coins += win;
+                        gameState.stats.totalEarned += win;
+                        gameState.stats.casinoWins++;
+                        if (multiplier >= 10) {
+                            showModal('🎰 БОЛЬШОЙ ВЫИГРЫШ!', `+${win} 💰 (x${multiplier})`, '🎉');
+                        } else {
+                            showToast(`+${win} 💰 (x${multiplier})`, 'success');
+                        }
+                    } else {
+                        showToast('Не повезло!', 'error');
+                    }
+                    addXP(15);
+                    updateUI();
+                }
+            }, 80);
+        }
+
+        // Cases
+        function openCase(type) {
+            const cases = {
+                common: { cost: 100, currency: 'coins', minReward: 50, maxReward: 200, gemChance: 0.05 },
+                rare: { cost: 500, currency: 'coins', minReward: 100, maxReward: 500, gemChance: 0.15 },
+                epic: { cost: 5, currency: 'gems', minReward: 500, maxReward: 2000, gemChance: 0.3 },
+                legendary: { cost: 20, currency: 'gems', minReward: 1000, maxReward: 10000, gemChance: 0.5 }
+            };
+
+            const c = cases[type];
+            if (c.currency === 'coins' && gameState.coins < c.cost) {
+                showToast('Недостаточно монет!', 'error');
+                return;
+            }
+            if (c.currency === 'gems' && gameState.gems < c.cost) {
+                showToast('Недостаточно гемов!', 'error');
+                return;
+            }
+
+            if (c.currency === 'coins') gameState.coins -= c.cost;
+            else gameState.gems -= c.cost;
+
+            gameState.stats.gamesPlayed++;
+
+            const reward = Math.floor(Math.random() * (c.maxReward - c.minReward + 1)) + c.minReward;
+            const gotGem = Math.random() < c.gemChance;
+            const gemCount = type === 'legendary' ? Math.floor(Math.random() * 10) + 5 : 
+                            type === 'epic' ? Math.floor(Math.random() * 5) + 2 : 1;
+
+            gameState.coins += reward;
+            gameState.stats.totalEarned += reward;
+            
+            let message = `+${reward} 💰`;
+            if (gotGem) {
+                gameState.gems += gemCount;
+                message += ` и +${gemCount} 💎`;
+            }
+
+            const rarityNames = {
+                common: 'Обычный',
+                rare: 'Редкий',
+                epic: 'Эпический',
+                legendary: 'Легендарный'
+            };
+
+            showModal(`📦 ${rarityNames[type]} кейс`, message, gotGem ? '💎' : '💰');
+            addXP(type === 'legendary' ? 100 : type === 'epic' ? 50 : type === 'rare' ? 25 : 10);
+            updateUI();
+        }
+
+        // Energy regeneration
+        setInterval(() => {
+            if (gameState.energy < gameState.maxEnergy) {
+                gameState.energy = Math.min(gameState.energy + 1, gameState.maxEnergy);
+                updateUI();
+            }
+        }, 10000); // +1 energy every 10 seconds
 
         // Initialize
-        init();
+        loadGame();
+
+        // Telegram WebApp integration
+        const tg = window.Telegram?.WebApp;
+        
+        if (tg) {
+            // Инициализация
+            tg.ready();
+            tg.expand();
+            
+            // Получаем данные пользователя
+            const user = tg.initDataUnsafe?.user;
+            if (user) {
+                // Устанавливаем имя пользователя
+                const playerInitial = document.getElementById('playerInitial');
+                playerInitial.textContent = (user.first_name || 'U')[0].toUpperCase();
+                
+                // Загружаем прогресс по ID пользователя
+                const savedKey = `telegramMiniGame_${user.id}`;
+                const userSave = localStorage.getItem(savedKey);
+                if (userSave) {
+                    gameState = { ...gameState, ...JSON.parse(userSave) };
+                    updateUI();
+                }
+                
+                // Переопределяем saveGame для сохранения по ID
+                window.saveGameOriginal = saveGame;
+                window.saveGame = function() {
+                    localStorage.setItem(savedKey, JSON.stringify(gameState));
+                }
+            }
+            
+            // Тема Telegram
+            document.body.style.setProperty('--tg-theme-bg-color', tg.backgroundColor);
+            document.body.style.setProperty('--tg-theme-text-color', tg.textColor);
+            
+            // Haptic feedback при действиях
+            window.hapticFeedback = function(type = 'light') {
+                if (tg.HapticFeedback) {
+                    tg.HapticFeedback.impactOccurred(type);
+                }
+            }
+            
+            // Добавляем вибрацию к действиям
+            const originalDoWork = doWork;
+            window.doWork = function(type) {
+                hapticFeedback('medium');
+                originalDoWork(type);
+            }
+            
+            const originalMineRock = mineRock;
+            window.mineRock = function() {
+                hapticFeedback('light');
+                originalMineRock();
+            }
+            
+            // Главная кнопка для сохранения
+            if (tg.MainButton) {
+                tg.MainButton.setText('💾 Сохранить и выйти');
+                tg.MainButton.color = '#8B5CF6';
+                tg.MainButton.textColor = '#FFFFFF';
+                
+                tg.MainButton.onClick(() => {
+                    saveGame();
+                    tg.HapticFeedback?.notificationOccurred('success');
+                    tg.showAlert('Прогресс сохранён!', () => {
+                        tg.close();
+                    });
+                });
+                
+                // Показываем кнопку только на странице профиля
+                const originalShowTab = showTab;
+                window.showTab = function(tab) {
+                    originalShowTab(tab);
+                    if (tab === 'profile') {
+                        tg.MainButton.show();
+                    } else {
+                        tg.MainButton.hide();
+                    }
+                }
+            }
+            
+            // Подтверждение закрытия
+            tg.enableClosingConfirmation();
+            
+        } else {
+            // Заглушка для браузера
+            window.hapticFeedback = function() {};
+        }
     </script>
 </body>
 </html>
