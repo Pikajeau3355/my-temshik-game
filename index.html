@@ -61,39 +61,19 @@
             border: 1px solid rgba(139, 92, 246, 0.5);
         }
 
-        .gradient-gold {
-            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 50%, #ff6347 100%);
-        }
-
-        .gradient-blue {
-            background: linear-gradient(135deg, #00d4ff 0%, #5b7cfa 50%, #8b5cf6 100%);
-        }
-
-        .gradient-green {
-            background: linear-gradient(135deg, #00ff87 0%, #00d4aa 50%, #00b894 100%);
-        }
-
-        .gradient-purple {
-            background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #6366f1 100%);
-        }
-
-        .gradient-pink {
-            background: linear-gradient(135deg, #ff006e 0%, #fb5607 100%);
-        }
-
-        .gradient-cyber {
-            background: linear-gradient(135deg, #00f5d4 0%, #00bbf9 50%, #9b5de5 100%);
-        }
+        .gradient-gold { background: linear-gradient(135deg, #ffd700 0%, #ff8c00 50%, #ff6347 100%); }
+        .gradient-blue { background: linear-gradient(135deg, #00d4ff 0%, #5b7cfa 50%, #8b5cf6 100%); }
+        .gradient-green { background: linear-gradient(135deg, #00ff87 0%, #00d4aa 50%, #00b894 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 50%, #6366f1 100%); }
+        .gradient-pink { background: linear-gradient(135deg, #ff006e 0%, #fb5607 100%); }
+        .gradient-red { background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%); }
+        .gradient-cyber { background: linear-gradient(135deg, #00f5d4 0%, #00bbf9 50%, #9b5de5 100%); }
 
         .text-gradient {
             background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-        }
-
-        .text-glow {
-            text-shadow: 0 0 30px currentColor, 0 0 60px currentColor;
         }
 
         .card-game {
@@ -104,14 +84,12 @@
         }
 
         .card-game:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.3);
-            border-color: rgba(139, 92, 246, 0.5);
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.4);
         }
 
-        .card-game:active {
-            transform: scale(0.98);
-        }
+        .card-game:active { transform: scale(0.98); }
 
         .btn-game {
             position: relative;
@@ -130,32 +108,17 @@
             transition: left 0.5s ease;
         }
 
-        .btn-game:hover::before {
-            left: 100%;
-        }
+        .btn-game:hover::before { left: 100%; }
+        .btn-game:active { transform: scale(0.95); }
 
-        .btn-game:active {
-            transform: scale(0.95);
-        }
-
-        .pulse-glow {
-            animation: pulseGlow 2s ease-in-out infinite;
-        }
+        .pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
 
         @keyframes pulseGlow {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(255, 215, 0, 0.4),
-                            0 0 40px rgba(255, 215, 0, 0.2);
-            }
-            50% { 
-                box-shadow: 0 0 40px rgba(255, 215, 0, 0.6),
-                            0 0 80px rgba(255, 215, 0, 0.4);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), 0 0 40px rgba(255, 215, 0, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6), 0 0 80px rgba(255, 215, 0, 0.4); }
         }
 
-        .float {
-            animation: float 4s ease-in-out infinite;
-        }
+        .float { animation: float 4s ease-in-out infinite; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -163,9 +126,7 @@
             75% { transform: translateY(4px) rotate(-2deg); }
         }
 
-        .bounce-in {
-            animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
+        .bounce-in { animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
 
         @keyframes bounceIn {
             0% { transform: scale(0) rotate(-10deg); opacity: 0; }
@@ -173,18 +134,7 @@
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
-        .slide-up {
-            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes slideUp {
-            0% { transform: translateY(100px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-
-        .shake {
-            animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
-        }
+        .shake { animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both; }
 
         @keyframes shake {
             10%, 90% { transform: translate3d(-2px, 0, 0) rotate(-1deg); }
@@ -193,33 +143,12 @@
             40%, 60% { transform: translate3d(6px, 0, 0) rotate(3deg); }
         }
 
-        .mining-hit {
-            animation: miningHit 0.2s ease-out;
-        }
+        .mining-hit { animation: miningHit 0.2s ease-out; }
 
         @keyframes miningHit {
             0% { transform: scale(1); }
             50% { transform: scale(1.3) rotate(10deg); }
             100% { transform: scale(1); }
-        }
-
-        .coin-pop {
-            animation: coinPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-        }
-
-        @keyframes coinPop {
-            0% { transform: scale(0) translateY(0); opacity: 1; }
-            50% { transform: scale(1.5) translateY(-30px); opacity: 1; }
-            100% { transform: scale(0) translateY(-60px); opacity: 0; }
-        }
-
-        .spin-slot {
-            animation: spinSlot 0.1s linear infinite;
-        }
-
-        @keyframes spinSlot {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50px); }
         }
 
         .coin-flip-anim {
@@ -233,9 +162,7 @@
             100% { transform: rotateY(1800deg) scale(1); }
         }
 
-        .progress-bar {
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        .progress-bar { transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
 
         .energy-bar-fill {
             background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
@@ -265,9 +192,7 @@
             transform: translateX(-50%);
         }
 
-        .nav-item.active::after {
-            width: 30px;
-        }
+        .nav-item.active::after { width: 30px; }
 
         .nav-item.active {
             color: #a78bfa;
@@ -284,9 +209,7 @@
             animation: fadeIn 0.4s ease-out;
         }
 
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -298,9 +221,7 @@
             backdrop-filter: blur(10px);
         }
 
-        .reward-text {
-            animation: rewardPulse 0.5s ease-out;
-        }
+        .reward-text { animation: rewardPulse 0.5s ease-out; }
 
         @keyframes rewardPulse {
             0% { transform: scale(0); }
@@ -319,24 +240,9 @@
             100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
         }
 
-        .level-badge {
-            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
-            border: 2px solid;
-            border-image: linear-gradient(135deg, #8b5cf6, #06b6d4) 1;
-        }
-
-        .rarity-common { 
-            border-color: #6b7280; 
-            box-shadow: 0 0 15px rgba(107, 114, 128, 0.3);
-        }
-        .rarity-rare { 
-            border-color: #3b82f6; 
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-        }
-        .rarity-epic { 
-            border-color: #8b5cf6; 
-            box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
-        }
+        .rarity-common { border-color: #6b7280; box-shadow: 0 0 15px rgba(107, 114, 128, 0.3); }
+        .rarity-rare { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+        .rarity-epic { border-color: #8b5cf6; box-shadow: 0 0 25px rgba(139, 92, 246, 0.5); }
         .rarity-legendary { 
             border-color: #f59e0b; 
             box-shadow: 0 0 30px rgba(245, 158, 11, 0.6);
@@ -348,50 +254,20 @@
             100% { box-shadow: 0 0 40px rgba(245, 158, 11, 0.8); }
         }
 
-        .streak-fire {
-            animation: firePulse 0.5s ease-in-out infinite alternate;
-        }
+        .streak-fire { animation: firePulse 0.5s ease-in-out infinite alternate; }
 
         @keyframes firePulse {
             0% { transform: scale(1); filter: brightness(1); }
             100% { transform: scale(1.1); filter: brightness(1.3); }
         }
 
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #8b5cf6, #06b6d4);
-            border-radius: 3px;
-        }
-
-        .achievement-unlock {
-            animation: achievementPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        @keyframes achievementPop {
-            0% { transform: translateY(100px) scale(0); opacity: 0; }
-            60% { transform: translateY(-20px) scale(1.1); opacity: 1; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
-        }
-
         .slot-machine {
             background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
             border: 3px solid #ffd700;
-            box-shadow: 
-                0 0 30px rgba(255, 215, 0, 0.3),
-                inset 0 0 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3), inset 0 0 50px rgba(0, 0, 0, 0.5);
         }
 
-        .daily-bonus-available {
-            animation: dailyPulse 1.5s ease-in-out infinite;
-        }
+        .daily-bonus-available { animation: dailyPulse 1.5s ease-in-out infinite; }
 
         @keyframes dailyPulse {
             0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
@@ -409,9 +285,84 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        .pet-bounce { animation: petBounce 2s ease-in-out infinite; }
+
+        @keyframes petBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .boss-shake { animation: bossShake 0.3s ease-in-out; }
+
+        @keyframes bossShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px) rotate(-5deg); }
+            75% { transform: translateX(10px) rotate(5deg); }
+        }
+
+        .roulette-spin { animation: rouletteSpin 3s cubic-bezier(0.17, 0.67, 0.12, 0.99); }
+
+        @keyframes rouletteSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(1800deg); }
+        }
+
+        .quest-complete { animation: questComplete 0.5s ease-out; }
+
+        @keyframes questComplete {
+            0% { transform: scale(1); background-color: transparent; }
+            50% { transform: scale(1.05); background-color: rgba(34, 197, 94, 0.3); }
+            100% { transform: scale(1); background-color: transparent; }
+        }
+
+        .expedition-progress {
+            background: repeating-linear-gradient(
+                90deg,
+                #4f46e5 0px,
+                #4f46e5 10px,
+                #6366f1 10px,
+                #6366f1 20px
+            );
+            background-size: 200% 100%;
+            animation: expeditionMove 1s linear infinite;
+        }
+
+        @keyframes expeditionMove {
+            0% { background-position: 0% 0%; }
+            100% { background-position: -40px 0%; }
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8b5cf6, #06b6d4); border-radius: 3px; }
+
+        .sub-nav {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+        .sub-nav::-webkit-scrollbar { display: none; }
+        
+        .sub-nav-btn {
+            flex-shrink: 0;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .sub-nav-btn.active {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            border-color: #8b5cf6;
+        }
     </style>
 </head>
-<body class="text-white pb-28">
+<body class="text-white pb-24">
     <div class="game-container">
         <!-- Header -->
         <header class="glass-dark sticky top-0 z-50 px-4 py-3 border-b border-white/5">
@@ -434,12 +385,12 @@
                 </div>
                 <div class="flex gap-2">
                     <div class="glass px-3 py-2 rounded-xl flex items-center gap-2 border border-yellow-500/30">
-                        <span class="text-xl">🪙</span>
-                        <span id="coins" class="font-bold text-yellow-400">0</span>
+                        <span class="text-lg">🪙</span>
+                        <span id="coins" class="font-bold text-yellow-400 text-sm">0</span>
                     </div>
                     <div class="glass px-3 py-2 rounded-xl flex items-center gap-2 border border-purple-500/30">
-                        <span class="text-xl">💎</span>
-                        <span id="gems" class="font-bold text-purple-400">0</span>
+                        <span class="text-lg">💎</span>
+                        <span id="gems" class="font-bold text-purple-400 text-sm">0</span>
                     </div>
                 </div>
             </div>
@@ -450,12 +401,10 @@
                         <span class="text-base">⚡</span> Энергия
                     </span>
                     <span class="text-gray-400">
-                        <span id="currentEnergy" class="text-cyan-400 font-bold">100</span>
-                        <span class="text-gray-600">/</span>
-                        <span id="maxEnergy">100</span>
+                        <span id="currentEnergy" class="text-cyan-400 font-bold">100</span>/<span id="maxEnergy">100</span>
                     </span>
                 </div>
-                <div class="w-full h-4 bg-gray-900 rounded-full overflow-hidden border border-gray-700">
+                <div class="w-full h-3 bg-gray-900 rounded-full overflow-hidden border border-gray-700">
                     <div id="energyBar" class="h-full energy-bar-fill progress-bar rounded-full" style="width: 100%"></div>
                 </div>
             </div>
@@ -463,474 +412,396 @@
 
         <!-- Main Content -->
         <main class="px-4 py-4">
-            <!-- Home Section -->
+            <!-- Home Tab -->
             <div id="homeTab" class="tab-content active">
-                <div class="text-center mb-6">
-                    <h1 class="text-3xl font-black text-gradient mb-2">💎 GemRush</h1>
-                    <p class="text-gray-500 text-sm">Добывай, играй, побеждай!</p>
+                <div class="text-center mb-5">
+                    <h1 class="text-3xl font-black text-gradient mb-1">💎 GemRush</h1>
+                    <p class="text-gray-500 text-sm">Добывай • Играй • Побеждай!</p>
                 </div>
 
                 <!-- Daily Bonus -->
                 <div id="dailyBonusCard" class="card-game p-4 mb-4 cursor-pointer daily-bonus-available" onclick="claimDailyBonus()">
                     <div class="flex items-center gap-4">
-                        <div class="w-16 h-16 rounded-2xl gradient-green flex items-center justify-center text-3xl float">
-                            🎁
-                        </div>
+                        <div class="w-14 h-14 rounded-2xl gradient-green flex items-center justify-center text-3xl float">🎁</div>
                         <div class="flex-1">
-                            <h3 class="font-bold text-lg text-green-400">Ежедневный бонус</h3>
+                            <h3 class="font-bold text-green-400">Ежедневный бонус</h3>
                             <p class="text-gray-400 text-sm">День <span id="dailyStreak">1</span> 🔥</p>
-                            <p id="dailyBonusStatus" class="text-green-400 text-xs mt-1">Доступно!</p>
                         </div>
-                        <div class="text-4xl">→</div>
+                        <div id="dailyBonusStatus" class="text-green-400 text-sm font-bold">Забрать!</div>
                     </div>
                 </div>
 
                 <!-- Quick Stats -->
-                <div class="grid grid-cols-2 gap-3 mb-4">
-                    <div class="card-game p-4 text-center">
-                        <div class="text-3xl mb-2">🏆</div>
-                        <div class="text-2xl font-black text-yellow-400" id="homeCoins">0</div>
-                        <div class="text-xs text-gray-500">Всего монет</div>
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <div class="card-game p-3 text-center">
+                        <div class="text-2xl mb-1">🏆</div>
+                        <div class="text-lg font-black text-yellow-400" id="homeCoins">0</div>
+                        <div class="text-xs text-gray-500">Монеты</div>
                     </div>
-                    <div class="card-game p-4 text-center">
-                        <div class="text-3xl mb-2">⭐</div>
-                        <div class="text-2xl font-black text-purple-400" id="homeLevel">1</div>
+                    <div class="card-game p-3 text-center">
+                        <div class="text-2xl mb-1">⭐</div>
+                        <div class="text-lg font-black text-purple-400" id="homeLevel">1</div>
                         <div class="text-xs text-gray-500">Уровень</div>
+                    </div>
+                    <div class="card-game p-3 text-center">
+                        <div class="text-2xl mb-1" id="activePetIcon">🐣</div>
+                        <div class="text-lg font-black text-cyan-400" id="activePetBonus">+0%</div>
+                        <div class="text-xs text-gray-500">Питомец</div>
                     </div>
                 </div>
 
-                <!-- Achievements Preview -->
-                <div class="card-game p-4">
+                <!-- Active Quests Preview -->
+                <div class="card-game p-4 mb-4">
                     <h3 class="font-bold mb-3 flex items-center gap-2">
-                        <span class="text-xl">🏅</span> Достижения
+                        <span>📋</span> Ежедневные квесты
+                        <span id="questsComplete" class="ml-auto text-sm text-gray-400">0/4</span>
                     </h3>
-                    <div id="achievementsList" class="grid grid-cols-4 gap-2">
+                    <div id="questsPreview" class="space-y-2">
                         <!-- Filled by JS -->
                     </div>
                 </div>
+
+                <!-- Achievements -->
+                <div class="card-game p-4">
+                    <h3 class="font-bold mb-3 flex items-center gap-2">
+                        <span>🏅</span> Достижения
+                    </h3>
+                    <div id="achievementsList" class="grid grid-cols-5 gap-2"></div>
+                </div>
             </div>
 
-            <!-- Work Section -->
+            <!-- Work Tab -->
             <div id="workTab" class="tab-content">
                 <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
-                    <span class="text-3xl">💼</span> 
-                    <span class="text-gradient">Работа</span>
+                    <span>💼</span> <span class="text-gradient">Работа</span>
                 </h2>
-                <div class="grid gap-4">
-                    <div class="card-game p-4 cursor-pointer" onclick="doWork('delivery')">
-                        <div class="flex items-center gap-4">
-                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-3xl float shadow-lg shadow-green-500/30">🚴</div>
-                            <div class="flex-1">
-                                <h3 class="font-bold text-lg">Курьер</h3>
-                                <p class="text-gray-400 text-sm">+30-80 🪙 | -5 ⚡</p>
-                                <p class="text-green-400 text-xs">+10 XP</p>
-                            </div>
-                            <div class="text-2xl text-gray-600">▶</div>
-                        </div>
-                    </div>
-                    <div class="card-game p-4 cursor-pointer" onclick="doWork('office')">
-                        <div class="flex items-center gap-4">
-                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-3xl float shadow-lg shadow-blue-500/30">🏢</div>
-                            <div class="flex-1">
-                                <h3 class="font-bold text-lg">Офис</h3>
-                                <p class="text-gray-400 text-sm">+80-150 🪙 | -10 ⚡</p>
-                                <p class="text-green-400 text-xs">+20 XP</p>
-                            </div>
-                            <div class="text-2xl text-gray-600">▶</div>
-                        </div>
-                    </div>
-                    <div class="card-game p-4 cursor-pointer" onclick="doWork('business')">
-                        <div class="flex items-center gap-4">
-                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-3xl float shadow-lg shadow-purple-500/30">💼</div>
-                            <div class="flex-1">
-                                <h3 class="font-bold text-lg">Бизнес</h3>
-                                <p class="text-gray-400 text-sm">+200-500 🪙 | -20 ⚡</p>
-                                <p class="text-green-400 text-xs">+40 XP</p>
-                            </div>
-                            <div class="text-2xl text-gray-600">▶</div>
-                        </div>
-                    </div>
-                    <div class="card-game p-4 cursor-pointer neon-border" onclick="doWork('crypto')">
-                        <div class="flex items-center gap-4">
-                            <div class="w-16 h-16 rounded-2xl prestige-glow flex items-center justify-center text-3xl float shadow-lg">₿</div>
-                            <div class="flex-1">
-                                <h3 class="font-bold text-lg text-purple-300">Криптотрейдинг</h3>
-                                <p class="text-gray-400 text-sm">+500-2000 🪙 | -40 ⚡</p>
-                                <p class="text-green-400 text-xs">+100 XP | Риск потери!</p>
-                            </div>
-                            <div class="text-2xl text-purple-400">⚡</div>
-                        </div>
-                    </div>
-                </div>
+                <div class="grid gap-3" id="workList"></div>
             </div>
 
-            <!-- Mine Section -->
+            <!-- Mine Tab -->
             <div id="mineTab" class="tab-content">
                 <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
-                    <span class="text-3xl">⛏️</span>
-                    <span class="text-gradient">Шахта</span>
+                    <span>⛏️</span> <span class="text-gradient">Шахта</span>
                 </h2>
-                <div class="card-game p-6 text-center mb-4">
-                    <div id="mineArea" class="relative inline-block">
-                        <div id="mineRock" class="text-8xl cursor-pointer select-none transition-transform" onclick="mineRock()">🪨</div>
-                        <div id="mineParticles" class="absolute inset-0 pointer-events-none"></div>
+                
+                <!-- Sub Navigation -->
+                <div class="sub-nav mb-4">
+                    <button class="sub-nav-btn active" onclick="showMineSection('mining')">⛏️ Добыча</button>
+                    <button class="sub-nav-btn" onclick="showMineSection('expeditions')">🗺️ Экспедиции</button>
+                    <button class="sub-nav-btn" onclick="showMineSection('craft')">🔨 Крафт</button>
+                    <button class="sub-nav-btn" onclick="showMineSection('boss')">👹 Босс</button>
+                </div>
+
+                <!-- Mining Section -->
+                <div id="miningSection" class="mine-section">
+                    <div class="card-game p-6 text-center mb-4">
+                        <div id="mineArea" class="relative inline-block">
+                            <div id="mineRock" class="text-8xl cursor-pointer select-none transition-transform" onclick="mineRock()">🪨</div>
+                            <div id="mineParticles" class="absolute inset-0 pointer-events-none"></div>
+                        </div>
+                        <div class="mt-4 space-y-2">
+                            <p class="text-gray-400">Тапай чтобы добывать!</p>
+                            <div class="flex justify-center gap-4 text-sm">
+                                <span class="text-cyan-400">-3 ⚡</span>
+                                <span class="text-yellow-400">+5-30 🪙</span>
+                                <span class="text-purple-400">💎 3%</span>
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                Кирка: Ур.<span id="pickaxeLevelDisplay">1</span> (x<span id="pickaxeMultiplier">1.0</span>)
+                            </div>
+                        </div>
                     </div>
-                    <div class="mt-4 space-y-2">
-                        <p class="text-gray-400">Тапай чтобы добывать!</p>
-                        <div class="flex justify-center gap-4 text-sm">
-                            <span class="text-cyan-400">-3 ⚡</span>
-                            <span class="text-yellow-400">+5-30 🪙</span>
-                            <span class="text-purple-400">💎 3%</span>
+                    
+                    <div class="card-game p-4 mb-4">
+                        <h3 class="font-bold mb-3 flex items-center gap-2">📦 Инвентарь руды</h3>
+                        <div class="grid grid-cols-4 gap-2">
+                            <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-gray-700">
+                                <div class="text-xl mb-1">ite</div>
+                                <div class="text-xs text-gray-500">Уголь</div>
+                                <div id="coalCount" class="font-bold text-gray-300">0</div>
+                            </div>
+                            <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-orange-500/30">
+                                <div class="text-xl mb-1">🔶</div>
+                                <div class="text-xs text-gray-500">Железо</div>
+                                <div id="ironCount" class="font-bold text-orange-400">0</div>
+                            </div>
+                            <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-yellow-500/30">
+                                <div class="text-xl mb-1">🥇</div>
+                                <div class="text-xs text-gray-500">Золото</div>
+                                <div id="goldCount" class="font-bold text-yellow-400">0</div>
+                            </div>
+                            <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-purple-500/30">
+                                <div class="text-xl mb-1">💎</div>
+                                <div class="text-xs text-gray-500">Алмазы</div>
+                                <div id="diamondCount" class="font-bold text-purple-400">0</div>
+                            </div>
                         </div>
-                        <div class="text-xs text-gray-500">
-                            Кирка: Ур.<span id="pickaxeLevelDisplay">1</span> (x<span id="pickaxeMultiplier">1.0</span>)
-                        </div>
+                    </div>
+                    
+                    <button onclick="sellOres()" class="w-full btn-game gradient-green text-white font-bold py-4 rounded-2xl shadow-lg shadow-green-500/30">
+                        💰 Продать всю руду
+                    </button>
+                </div>
+
+                <!-- Expeditions Section -->
+                <div id="expeditionsSection" class="mine-section hidden">
+                    <div class="card-game p-4 mb-4">
+                        <h3 class="font-bold mb-3">🗺️ Экспедиции</h3>
+                        <p class="text-gray-400 text-sm mb-4">Отправьте питомца на автоматическую добычу!</p>
+                        <div id="expeditionsList" class="space-y-3"></div>
                     </div>
                 </div>
-                
-                <div class="card-game p-4 mb-4">
-                    <h3 class="font-bold mb-3 flex items-center gap-2">
-                        <span>📦</span> Инвентарь руды
-                    </h3>
-                    <div class="grid grid-cols-4 gap-2">
-                        <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-gray-700">
-                            <div class="text-2xl mb-1">ite</div>
-                            <div class="text-xs text-gray-500">Уголь</div>
-                            <div id="coalCount" class="font-bold text-gray-300">0</div>
-                        </div>
-                        <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-orange-500/30">
-                            <div class="text-2xl mb-1">🔶</div>
-                            <div class="text-xs text-gray-500">Железо</div>
-                            <div id="ironCount" class="font-bold text-orange-400">0</div>
-                        </div>
-                        <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-yellow-500/30">
-                            <div class="text-2xl mb-1">🥇</div>
-                            <div class="text-xs text-gray-500">Золото</div>
-                            <div id="goldCount" class="font-bold text-yellow-400">0</div>
-                        </div>
-                        <div class="bg-gray-800/50 rounded-xl p-3 text-center border border-purple-500/30">
-                            <div class="text-2xl mb-1">💎</div>
-                            <div class="text-xs text-gray-500">Алмазы</div>
-                            <div id="diamondCount" class="font-bold text-purple-400">0</div>
-                        </div>
+
+                <!-- Craft Section -->
+                <div id="craftSection" class="mine-section hidden">
+                    <div class="card-game p-4">
+                        <h3 class="font-bold mb-3">🔨 Крафтинг</h3>
+                        <p class="text-gray-400 text-sm mb-4">Создавайте ценные предметы из руды!</p>
+                        <div id="craftList" class="space-y-3"></div>
                     </div>
                 </div>
-                
-                <button onclick="sellOres()" class="w-full btn-game gradient-green text-white font-bold py-4 rounded-2xl text-lg shadow-lg shadow-green-500/30">
-                    💰 Продать всю руду
-                </button>
+
+                <!-- Boss Section -->
+                <div id="bossSection" class="mine-section hidden">
+                    <div class="card-game p-4 text-center">
+                        <h3 class="font-bold mb-4">👹 Шахтный Босс</h3>
+                        <div id="bossDisplay" class="text-8xl mb-4">🐉</div>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-red-400">❤️ HP</span>
+                                <span id="bossHpText">1000/1000</span>
+                            </div>
+                            <div class="w-full h-4 bg-gray-800 rounded-full overflow-hidden">
+                                <div id="bossHpBar" class="h-full bg-gradient-to-r from-red-600 to-red-400 transition-all duration-300" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <button onclick="attackBoss()" class="btn-game gradient-red px-8 py-3 rounded-xl font-bold text-lg">
+                            ⚔️ Атаковать (10 ⚡)
+                        </button>
+                        <p class="text-gray-500 text-sm mt-3">Урон: <span id="playerDamage">10</span> | Награда: <span id="bossReward">500</span> 🪙</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Shop Section -->
+            <!-- Shop Tab -->
             <div id="shopTab" class="tab-content">
                 <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
-                    <span class="text-3xl">🛒</span>
-                    <span class="text-gradient">Магазин</span>
+                    <span>🛒</span> <span class="text-gradient">Магазин</span>
                 </h2>
-                <div class="grid gap-3">
-                    <div class="card-game p-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center text-3xl border border-cyan-500/30">⚡</div>
-                            <div class="flex-1">
-                                <h3 class="font-bold">Энергетик</h3>
-                                <p class="text-gray-400 text-sm">+50 энергии</p>
+                
+                <div class="sub-nav mb-4">
+                    <button class="sub-nav-btn active" onclick="showShopSection('items')">🎒 Предметы</button>
+                    <button class="sub-nav-btn" onclick="showShopSection('pets')">🐾 Питомцы</button>
+                    <button class="sub-nav-btn" onclick="showShopSection('bank')">🏦 Банк</button>
+                    <button class="sub-nav-btn" onclick="showShopSection('invest')">📈 Инвестиции</button>
+                </div>
+
+                <div id="itemsSection" class="shop-section">
+                    <div id="shopList" class="grid gap-3"></div>
+                </div>
+
+                <div id="petsSection" class="shop-section hidden">
+                    <div id="petsList" class="grid gap-3"></div>
+                </div>
+
+                <div id="bankSection" class="shop-section hidden">
+                    <div class="card-game p-4 mb-4">
+                        <h3 class="font-bold mb-2">🏦 Банковский вклад</h3>
+                        <p class="text-gray-400 text-sm mb-4">Положите монеты под 5% в час!</p>
+                        <div class="bg-gray-800/50 rounded-xl p-4 mb-4">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-400">На счету:</span>
+                                <span class="text-yellow-400 font-bold"><span id="bankBalance">0</span> 🪙</span>
                             </div>
-                            <button onclick="buyItem('energy')" class="btn-game gradient-blue px-4 py-2 rounded-xl font-bold">
-                                150 🪙
-                            </button>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Накоплено %:</span>
+                                <span class="text-green-400 font-bold">+<span id="bankInterest">0</span> 🪙</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-game p-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-cyan-500/20 flex items-center justify-center text-3xl border border-cyan-500/30">🔋</div>
-                            <div class="flex-1">
-                                <h3 class="font-bold">Мега-энергия</h3>
-                                <p class="text-gray-400 text-sm">Полное восстановление</p>
-                            </div>
-                            <button onclick="buyItem('fullEnergy')" class="btn-game gradient-purple px-4 py-2 rounded-xl font-bold">
-                                3 💎
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="bankDeposit()" class="btn-game gradient-blue py-3 rounded-xl font-bold">
+                                📥 Вложить 1000
                             </button>
-                        </div>
-                    </div>
-                    <div class="card-game p-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-yellow-500/20 flex items-center justify-center text-3xl border border-yellow-500/30">⛏️</div>
-                            <div class="flex-1">
-                                <h3 class="font-bold">Улучшить кирку</h3>
-                                <p class="text-gray-400 text-sm">+25% к добыче</p>
-                                <p id="pickaxeLevel" class="text-yellow-400 text-xs">Уровень: 1</p>
-                            </div>
-                            <button onclick="buyItem('pickaxe')" class="btn-game gradient-gold px-4 py-2 rounded-xl font-bold">
-                                <span id="pickaxePrice">300</span> 🪙
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-game p-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-green-500/20 flex items-center justify-center text-3xl border border-green-500/30">🔋</div>
-                            <div class="flex-1">
-                                <h3 class="font-bold">Батарея</h3>
-                                <p class="text-gray-400 text-sm">+25 макс. энергии</p>
-                            </div>
-                            <button onclick="buyItem('battery')" class="btn-game gradient-green px-4 py-2 rounded-xl font-bold">
-                                <span id="batteryPrice">500</span> 🪙
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-game p-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center text-3xl border border-purple-500/30">💎</div>
-                            <div class="flex-1">
-                                <h3 class="font-bold">10 Гемов</h3>
-                                <p class="text-gray-400 text-sm">Премиум валюта</p>
-                            </div>
-                            <button onclick="buyItem('gems')" class="btn-game gradient-purple px-4 py-2 rounded-xl font-bold">
-                                2500 🪙
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-game p-4 neon-border">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-xl prestige-glow flex items-center justify-center text-3xl">🍀</div>
-                            <div class="flex-1">
-                                <h3 class="font-bold text-green-300">Талисман удачи</h3>
-                                <p class="text-gray-400 text-sm">+10% шанс редкой руды</p>
-                                <p id="luckStatus" class="text-xs text-gray-500">Не активен</p>
-                            </div>
-                            <button onclick="buyItem('luck')" class="btn-game gradient-green px-4 py-2 rounded-xl font-bold">
-                                10 💎
+                            <button onclick="bankWithdraw()" class="btn-game gradient-green py-3 rounded-xl font-bold">
+                                📤 Забрать всё
                             </button>
                         </div>
                     </div>
                 </div>
+
+                <div id="investSection" class="shop-section hidden">
+                    <div class="card-game p-4">
+                        <h3 class="font-bold mb-2">📈 Инвестиции</h3>
+                        <p class="text-gray-400 text-sm mb-4">Пассивный доход каждую минуту!</p>
+                        <div id="investList" class="space-y-3"></div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Games Section -->
+            <!-- Games Tab -->
             <div id="gamesTab" class="tab-content">
                 <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
-                    <span class="text-3xl">🎮</span>
-                    <span class="text-gradient">Мини-игры</span>
+                    <span>🎮</span> <span class="text-gradient">Мини-игры</span>
                 </h2>
                 <div class="grid gap-4">
                     <!-- Coin Flip -->
                     <div class="card-game p-5">
-                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                            <span class="text-2xl">🪙</span> Подброс монеты
-                        </h3>
+                        <h3 class="font-bold text-lg mb-3 flex items-center gap-2">🪙 Монетка</h3>
                         <div class="text-center mb-4">
-                            <div id="coinFlipResult" class="text-7xl mb-4 inline-block">🪙</div>
-                            <div class="flex justify-center gap-3 mb-4">
-                                <button onclick="playCoinFlip('heads')" class="btn-game gradient-gold px-8 py-3 rounded-xl font-bold text-lg">
-                                    🦅 Орёл
-                                </button>
-                                <button onclick="playCoinFlip('tails')" class="btn-game gradient-purple px-8 py-3 rounded-xl font-bold text-lg">
-                                    🌟 Решка
-                                </button>
+                            <div id="coinFlipResult" class="text-6xl mb-3 inline-block">🪙</div>
+                            <div class="flex justify-center gap-3">
+                                <button onclick="playCoinFlip('heads')" class="btn-game gradient-gold px-6 py-2 rounded-xl font-bold">🦅 Орёл</button>
+                                <button onclick="playCoinFlip('tails')" class="btn-game gradient-purple px-6 py-2 rounded-xl font-bold">🌟 Решка</button>
                             </div>
-                            <p class="text-gray-500 text-sm">Ставка: 100 🪙 | Выигрыш: x2</p>
                         </div>
+                        <p class="text-gray-500 text-xs text-center">Ставка: 100 🪙 | Выигрыш: x2</p>
                     </div>
                     
-                    <!-- Dice Game -->
+                    <!-- Dice -->
                     <div class="card-game p-5">
-                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                            <span class="text-2xl">🎲</span> Кости
-                        </h3>
+                        <h3 class="font-bold text-lg mb-3 flex items-center gap-2">🎲 Кости</h3>
                         <div class="text-center">
-                            <div class="flex justify-center gap-6 mb-4">
-                                <div id="dice1" class="text-6xl">🎲</div>
-                                <div id="dice2" class="text-6xl">🎲</div>
+                            <div class="flex justify-center gap-4 mb-3">
+                                <div id="dice1" class="text-5xl">🎲</div>
+                                <div id="dice2" class="text-5xl">🎲</div>
                             </div>
-                            <button onclick="playDice()" class="btn-game gradient-blue px-8 py-3 rounded-xl font-bold text-lg">
-                                🎲 Бросить (50 🪙)
-                            </button>
-                            <p class="text-gray-500 text-sm mt-3">Дубль = x3 | Сумма 7 = x2 | 12 = x5</p>
+                            <button onclick="playDice()" class="btn-game gradient-blue px-6 py-2 rounded-xl font-bold">🎲 Бросить (50 🪙)</button>
                         </div>
+                        <p class="text-gray-500 text-xs text-center mt-2">Дубль = x3 | Сумма 7 = x2 | 12 = x5</p>
                     </div>
 
-                    <!-- Lucky Wheel -->
+                    <!-- Roulette -->
                     <div class="card-game p-5">
-                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                            <span class="text-2xl">🎡</span> Колесо фортуны
-                        </h3>
+                        <h3 class="font-bold text-lg mb-3 flex items-center gap-2">🎡 Рулетка</h3>
                         <div class="text-center">
-                            <div id="wheelDisplay" class="text-6xl mb-4">🎡</div>
-                            <button onclick="spinWheel()" class="btn-game prestige-glow px-8 py-3 rounded-xl font-bold text-lg text-white">
-                                🎰 Крутить (200 🪙)
-                            </button>
-                            <p class="text-gray-500 text-sm mt-3">Призы: 50-1000 🪙 или 💎!</p>
+                            <div id="rouletteWheel" class="text-6xl mb-3 inline-block">🎡</div>
+                            <div class="grid grid-cols-3 gap-2 mb-3">
+                                <button onclick="playRoulette('red')" class="bg-red-600 hover:bg-red-500 py-2 rounded-xl font-bold transition-all">🔴 x2</button>
+                                <button onclick="playRoulette('green')" class="bg-green-600 hover:bg-green-500 py-2 rounded-xl font-bold transition-all">🟢 x14</button>
+                                <button onclick="playRoulette('black')" class="bg-gray-800 hover:bg-gray-700 py-2 rounded-xl font-bold transition-all border border-gray-600">⚫ x2</button>
+                            </div>
                         </div>
+                        <p class="text-gray-500 text-xs text-center">Ставка: 100 🪙</p>
                     </div>
 
                     <!-- Number Guess -->
                     <div class="card-game p-5">
-                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                            <span class="text-2xl">🔢</span> Угадай число
-                        </h3>
+                        <h3 class="font-bold text-lg mb-3 flex items-center gap-2">🔢 Угадай число</h3>
                         <div class="text-center">
-                            <div id="guessDisplay" class="text-5xl font-black mb-4 text-cyan-400">?</div>
-                            <div class="grid grid-cols-5 gap-2 mb-4">
-                                <button onclick="guessNumber(1)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">1</button>
-                                <button onclick="guessNumber(2)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">2</button>
-                                <button onclick="guessNumber(3)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">3</button>
-                                <button onclick="guessNumber(4)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">4</button>
-                                <button onclick="guessNumber(5)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">5</button>
-                                <button onclick="guessNumber(6)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">6</button>
-                                <button onclick="guessNumber(7)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">7</button>
-                                <button onclick="guessNumber(8)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">8</button>
-                                <button onclick="guessNumber(9)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">9</button>
-                                <button onclick="guessNumber(10)" class="bg-gray-800 hover:bg-purple-600 py-3 rounded-xl font-bold transition-all">10</button>
+                            <div id="guessDisplay" class="text-5xl font-black mb-3 text-cyan-400">?</div>
+                            <div class="grid grid-cols-5 gap-2 mb-3">
+                                ${[1,2,3,4,5,6,7,8,9,10].map(n => `<button onclick="guessNumber(${n})" class="bg-gray-800 hover:bg-purple-600 py-2 rounded-xl font-bold transition-all">${n}</button>`).join('')}
                             </div>
-                            <p class="text-gray-500 text-sm">Ставка: 100 🪙 | Угадал = x10</p>
                         </div>
+                        <p class="text-gray-500 text-xs text-center">Ставка: 100 🪙 | Угадал = x10</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Casino Section -->
+            <!-- Casino Tab -->
             <div id="casinoTab" class="tab-content">
                 <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
-                    <span class="text-3xl">🎰</span>
-                    <span class="text-gradient">Казино</span>
+                    <span>🎰</span> <span class="text-gradient">Казино</span>
                 </h2>
                 
                 <!-- Slots -->
-                <div class="card-game p-6 mb-4 slot-machine">
-                    <h3 class="font-bold text-xl mb-4 text-center text-yellow-400">🎰 Слот-машина</h3>
-                    <div class="flex justify-center gap-3 mb-6">
-                        <div class="w-20 h-24 bg-gray-900 rounded-xl flex items-center justify-center text-5xl border-2 border-yellow-500/50 overflow-hidden shadow-inner">
+                <div class="card-game p-5 mb-4 slot-machine">
+                    <h3 class="font-bold text-lg mb-4 text-center text-yellow-400">🎰 Слот-машина</h3>
+                    <div class="flex justify-center gap-2 mb-4">
+                        <div class="w-16 h-20 bg-gray-900 rounded-xl flex items-center justify-center text-4xl border-2 border-yellow-500/50">
                             <span id="slot1">🍒</span>
                         </div>
-                        <div class="w-20 h-24 bg-gray-900 rounded-xl flex items-center justify-center text-5xl border-2 border-yellow-500/50 overflow-hidden shadow-inner">
+                        <div class="w-16 h-20 bg-gray-900 rounded-xl flex items-center justify-center text-4xl border-2 border-yellow-500/50">
                             <span id="slot2">🍋</span>
                         </div>
-                        <div class="w-20 h-24 bg-gray-900 rounded-xl flex items-center justify-center text-5xl border-2 border-yellow-500/50 overflow-hidden shadow-inner">
+                        <div class="w-16 h-20 bg-gray-900 rounded-xl flex items-center justify-center text-4xl border-2 border-yellow-500/50">
                             <span id="slot3">🍊</span>
                         </div>
                     </div>
-                    <div class="flex justify-center gap-2 mb-4 flex-wrap">
-                        <button onclick="playSlots(50)" class="btn-game bg-yellow-600 hover:bg-yellow-500 px-5 py-3 rounded-xl font-bold">
-                            50 🪙
-                        </button>
-                        <button onclick="playSlots(100)" class="btn-game bg-purple-600 hover:bg-purple-500 px-5 py-3 rounded-xl font-bold">
-                            100 🪙
-                        </button>
-                        <button onclick="playSlots(500)" class="btn-game bg-pink-600 hover:bg-pink-500 px-5 py-3 rounded-xl font-bold">
-                            500 🪙
-                        </button>
+                    <div class="flex justify-center gap-2 flex-wrap">
+                        <button onclick="playSlots(50)" class="btn-game bg-yellow-600 hover:bg-yellow-500 px-4 py-2 rounded-xl font-bold text-sm">50 🪙</button>
+                        <button onclick="playSlots(100)" class="btn-game bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded-xl font-bold text-sm">100 🪙</button>
+                        <button onclick="playSlots(500)" class="btn-game bg-pink-600 hover:bg-pink-500 px-4 py-2 rounded-xl font-bold text-sm">500 🪙</button>
                     </div>
-                    <div class="text-center text-xs text-gray-400 space-y-1">
-                        <p>🍒🍒🍒 = x3 | 🍋🍋🍋 = x5 | 💎💎💎 = x20</p>
-                        <p>7️⃣7️⃣7️⃣ = x50 | Любые 2 = x1.5</p>
-                    </div>
+                    <p class="text-center text-xs text-gray-400 mt-3">🍒🍒🍒=x3 | 💎💎💎=x20 | 7️⃣7️⃣7️⃣=x50</p>
                 </div>
 
                 <!-- Cases -->
                 <div class="card-game p-4">
-                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
-                        <span class="text-xl">📦</span> Кейсы
-                    </h3>
-                    <div class="grid gap-3">
-                        <div class="bg-gray-800/50 rounded-xl p-4 cursor-pointer border border-gray-600 hover:border-gray-400 transition-all" onclick="openCase('common')">
-                            <div class="flex items-center gap-4">
-                                <div class="text-4xl">📦</div>
-                                <div class="flex-1">
-                                    <h4 class="font-bold text-gray-300">Обычный кейс</h4>
-                                    <p class="text-sm text-gray-500">50-200 🪙</p>
-                                </div>
-                                <div class="text-yellow-400 font-bold">100 🪙</div>
-                            </div>
-                        </div>
-                        <div class="bg-blue-900/30 rounded-xl p-4 cursor-pointer border border-blue-500/50 rarity-rare" onclick="openCase('rare')">
-                            <div class="flex items-center gap-4">
-                                <div class="text-4xl">🎁</div>
-                                <div class="flex-1">
-                                    <h4 class="font-bold text-blue-300">Редкий кейс</h4>
-                                    <p class="text-sm text-blue-400/70">200-800 🪙 + шанс 💎</p>
-                                </div>
-                                <div class="text-yellow-400 font-bold">400 🪙</div>
-                            </div>
-                        </div>
-                        <div class="bg-purple-900/30 rounded-xl p-4 cursor-pointer border border-purple-500/50 rarity-epic" onclick="openCase('epic')">
-                            <div class="flex items-center gap-4">
-                                <div class="text-4xl">💜</div>
-                                <div class="flex-1">
-                                    <h4 class="font-bold text-purple-300">Эпический кейс</h4>
-                                    <p class="text-sm text-purple-400/70">500-2000 🪙 + 💎</p>
-                                </div>
-                                <div class="text-purple-400 font-bold">5 💎</div>
-                            </div>
-                        </div>
-                        <div class="bg-yellow-900/30 rounded-xl p-4 cursor-pointer border-2 border-yellow-500 rarity-legendary" onclick="openCase('legendary')">
-                            <div class="flex items-center gap-4">
-                                <div class="text-4xl streak-fire">👑</div>
-                                <div class="flex-1">
-                                    <h4 class="font-bold text-yellow-300">Легендарный кейс</h4>
-                                    <p class="text-sm text-yellow-400/70">2000-15000 🪙 + много 💎!</p>
-                                </div>
-                                <div class="text-purple-400 font-bold">25 💎</div>
-                            </div>
-                        </div>
-                    </div>
+                    <h3 class="font-bold text-lg mb-3">📦 Кейсы</h3>
+                    <div id="casesList" class="grid gap-3"></div>
                 </div>
             </div>
 
-            <!-- Profile Section -->
+            <!-- Profile Tab -->
             <div id="profileTab" class="tab-content">
                 <h2 class="text-2xl font-black mb-4 flex items-center gap-2">
-                    <span class="text-3xl">👤</span>
-                    <span class="text-gradient">Профиль</span>
+                    <span>👤</span> <span class="text-gradient">Профиль</span>
                 </h2>
-                <div class="card-game p-6 text-center mb-4">
-                    <div class="w-24 h-24 mx-auto rounded-3xl gradient-purple flex items-center justify-center text-5xl mb-4 shadow-lg shadow-purple-500/30">
+                
+                <div class="card-game p-5 text-center mb-4">
+                    <div class="w-20 h-20 mx-auto rounded-3xl gradient-purple flex items-center justify-center text-4xl mb-3 shadow-lg shadow-purple-500/30">
                         <span id="profileAvatar">🎮</span>
                     </div>
-                    <h3 class="text-2xl font-black mb-1" id="playerName">Игрок</h3>
-                    <p class="text-purple-400 mb-4">Уровень <span id="profileLevel">1</span></p>
-                    <div class="bg-gray-800/50 rounded-xl p-3 mb-2">
+                    <h3 class="text-xl font-black mb-1" id="playerName">Игрок</h3>
+                    <p class="text-purple-400 mb-3">Уровень <span id="profileLevel">1</span></p>
+                    <div class="bg-gray-800/50 rounded-xl p-3">
                         <div class="flex justify-between text-sm mb-2">
                             <span class="text-gray-400">Опыт</span>
-                            <span class="text-green-400"><span id="currentXp">0</span> / <span id="neededXp">100</span></span>
+                            <span class="text-green-400"><span id="currentXp">0</span>/<span id="neededXp">100</span></span>
                         </div>
-                        <div class="w-full h-4 bg-gray-900 rounded-full overflow-hidden">
+                        <div class="w-full h-3 bg-gray-900 rounded-full overflow-hidden">
                             <div id="profileXpBar" class="h-full xp-bar-fill progress-bar rounded-full" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Prestige -->
+                <div class="card-game p-4 mb-4 neon-border">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl prestige-glow flex items-center justify-center text-3xl">⭐</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-purple-300">Престиж</h3>
+                            <p class="text-gray-400 text-sm">Уровень <span id="prestigeLevel">0</span></p>
+                            <p class="text-xs text-gray-500">Бонус: +<span id="prestigeBonus">0</span>% ко всему</p>
+                        </div>
+                        <button onclick="doPrestige()" class="btn-game prestige-glow px-4 py-2 rounded-xl font-bold text-sm">
+                            🔄 Престиж
+                        </button>
+                    </div>
+                </div>
                 
                 <div class="card-game p-4 mb-4">
-                    <h3 class="font-bold mb-3 flex items-center gap-2">
-                        <span>📊</span> Статистика
-                    </h3>
+                    <h3 class="font-bold mb-3 flex items-center gap-2">📊 Статистика</h3>
                     <div class="grid grid-cols-2 gap-3">
                         <div class="bg-gray-800/50 rounded-xl p-3 text-center">
-                            <div class="text-2xl mb-1">🪙</div>
-                            <div class="text-xs text-gray-500">Всего заработано</div>
+                            <div class="text-xl mb-1">🪙</div>
+                            <div class="text-xs text-gray-500">Заработано</div>
                             <div id="totalEarned" class="font-bold text-yellow-400">0</div>
                         </div>
                         <div class="bg-gray-800/50 rounded-xl p-3 text-center">
-                            <div class="text-2xl mb-1">🎮</div>
-                            <div class="text-xs text-gray-500">Игр сыграно</div>
+                            <div class="text-xl mb-1">🎮</div>
+                            <div class="text-xs text-gray-500">Игр</div>
                             <div id="gamesPlayed" class="font-bold text-blue-400">0</div>
                         </div>
                         <div class="bg-gray-800/50 rounded-xl p-3 text-center">
-                            <div class="text-2xl mb-1">⛏️</div>
-                            <div class="text-xs text-gray-500">Добыто руды</div>
+                            <div class="text-xl mb-1">⛏️</div>
+                            <div class="text-xs text-gray-500">Добыто</div>
                             <div id="totalMined" class="font-bold text-orange-400">0</div>
                         </div>
                         <div class="bg-gray-800/50 rounded-xl p-3 text-center">
-                            <div class="text-2xl mb-1">🏆</div>
-                            <div class="text-xs text-gray-500">Побед в казино</div>
-                            <div id="casinoWins" class="font-bold text-green-400">0</div>
+                            <div class="text-xl mb-1">👹</div>
+                            <div class="text-xs text-gray-500">Боссов</div>
+                            <div id="bossesKilled" class="font-bold text-red-400">0</div>
                         </div>
                         <div class="bg-gray-800/50 rounded-xl p-3 text-center">
-                            <div class="text-2xl mb-1">🔥</div>
+                            <div class="text-xl mb-1">🔥</div>
                             <div class="text-xs text-gray-500">Серия дней</div>
-                            <div id="profileStreak" class="font-bold text-red-400">0</div>
+                            <div id="profileStreak" class="font-bold text-orange-400">0</div>
                         </div>
                         <div class="bg-gray-800/50 rounded-xl p-3 text-center">
-                            <div class="text-2xl mb-1">⏱️</div>
-                            <div class="text-xs text-gray-500">Время в игре</div>
+                            <div class="text-xl mb-1">⏱️</div>
+                            <div class="text-xs text-gray-500">Время</div>
                             <div id="playTime" class="font-bold text-cyan-400">0м</div>
                         </div>
                     </div>
@@ -943,35 +814,35 @@
         </main>
 
         <!-- Navigation -->
-        <nav class="fixed bottom-0 left-0 right-0 glass-dark border-t border-white/5 px-2 py-3 z-50">
+        <nav class="fixed bottom-0 left-0 right-0 glass-dark border-t border-white/5 px-2 py-2 z-50">
             <div class="flex justify-around max-w-lg mx-auto">
-                <button onclick="showTab('home')" class="nav-item active flex flex-col items-center px-3 py-1" data-tab="home">
-                    <span class="nav-icon text-2xl transition-transform">🏠</span>
-                    <span class="text-xs mt-1">Дом</span>
+                <button onclick="showTab('home')" class="nav-item active flex flex-col items-center px-2 py-1" data-tab="home">
+                    <span class="nav-icon text-xl">🏠</span>
+                    <span class="text-[10px] mt-0.5">Дом</span>
                 </button>
-                <button onclick="showTab('work')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="work">
-                    <span class="nav-icon text-2xl transition-transform">💼</span>
-                    <span class="text-xs mt-1">Работа</span>
+                <button onclick="showTab('work')" class="nav-item flex flex-col items-center px-2 py-1" data-tab="work">
+                    <span class="nav-icon text-xl">💼</span>
+                    <span class="text-[10px] mt-0.5">Работа</span>
                 </button>
-                <button onclick="showTab('mine')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="mine">
-                    <span class="nav-icon text-2xl transition-transform">⛏️</span>
-                    <span class="text-xs mt-1">Шахта</span>
+                <button onclick="showTab('mine')" class="nav-item flex flex-col items-center px-2 py-1" data-tab="mine">
+                    <span class="nav-icon text-xl">⛏️</span>
+                    <span class="text-[10px] mt-0.5">Шахта</span>
                 </button>
-                <button onclick="showTab('shop')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="shop">
-                    <span class="nav-icon text-2xl transition-transform">🛒</span>
-                    <span class="text-xs mt-1">Магазин</span>
+                <button onclick="showTab('shop')" class="nav-item flex flex-col items-center px-2 py-1" data-tab="shop">
+                    <span class="nav-icon text-xl">🛒</span>
+                    <span class="text-[10px] mt-0.5">Магазин</span>
                 </button>
-                <button onclick="showTab('games')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="games">
-                    <span class="nav-icon text-2xl transition-transform">🎮</span>
-                    <span class="text-xs mt-1">Игры</span>
+                <button onclick="showTab('games')" class="nav-item flex flex-col items-center px-2 py-1" data-tab="games">
+                    <span class="nav-icon text-xl">🎮</span>
+                    <span class="text-[10px] mt-0.5">Игры</span>
                 </button>
-                <button onclick="showTab('casino')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="casino">
-                    <span class="nav-icon text-2xl transition-transform">🎰</span>
-                    <span class="text-xs mt-1">Казино</span>
+                <button onclick="showTab('casino')" class="nav-item flex flex-col items-center px-2 py-1" data-tab="casino">
+                    <span class="nav-icon text-xl">🎰</span>
+                    <span class="text-[10px] mt-0.5">Казино</span>
                 </button>
-                <button onclick="showTab('profile')" class="nav-item flex flex-col items-center px-3 py-1" data-tab="profile">
-                    <span class="nav-icon text-2xl transition-transform">👤</span>
-                    <span class="text-xs mt-1">Профиль</span>
+                <button onclick="showTab('profile')" class="nav-item flex flex-col items-center px-2 py-1" data-tab="profile">
+                    <span class="nav-icon text-xl">👤</span>
+                    <span class="text-[10px] mt-0.5">Профиль</span>
                 </button>
             </div>
         </nav>
@@ -979,22 +850,97 @@
         <!-- Modal -->
         <div id="modal" class="fixed inset-0 modal-backdrop z-50 hidden items-center justify-center p-4" style="display: none;">
             <div class="card-game p-6 max-w-sm w-full bounce-in">
-                <div id="modalContent" class="text-center">
-                    <!-- Dynamic content -->
-                </div>
-                <button onclick="closeModal()" class="w-full mt-4 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-bold transition-all">
-                    Закрыть
-                </button>
+                <div id="modalContent" class="text-center"></div>
+                <button onclick="closeModal()" class="w-full mt-4 bg-gray-700 hover:bg-gray-600 py-3 rounded-xl font-bold transition-all">Закрыть</button>
             </div>
         </div>
 
         <!-- Toast -->
-        <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 glass-dark px-6 py-3 rounded-2xl z-50 transition-all duration-300 opacity-0 pointer-events-none border border-white/10">
+        <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 glass-dark px-5 py-2.5 rounded-2xl z-50 transition-all duration-300 opacity-0 pointer-events-none border border-white/10 text-sm">
             <span id="toastText"></span>
         </div>
     </div>
 
     <script>
+        // ============ GAME DATA ============
+        const WORKS = [
+            { id: 'delivery', name: 'Курьер', icon: '🚴', min: 30, max: 80, energy: 5, xp: 10, color: 'from-green-500 to-emerald-600' },
+            { id: 'office', name: 'Офис', icon: '🏢', min: 80, max: 150, energy: 10, xp: 20, color: 'from-blue-500 to-indigo-600' },
+            { id: 'business', name: 'Бизнес', icon: '💼', min: 200, max: 500, energy: 20, xp: 40, color: 'from-purple-500 to-pink-600' },
+            { id: 'crypto', name: 'Криптотрейдинг', icon: '₿', min: -500, max: 2000, energy: 40, xp: 100, risk: 0.3, color: 'from-yellow-500 to-orange-600' },
+            { id: 'hacking', name: 'Хакинг', icon: '💻', min: 500, max: 3000, energy: 60, xp: 150, levelReq: 10, color: 'from-cyan-500 to-blue-600' }
+        ];
+
+        const PETS = [
+            { id: 'cat', name: 'Котик', icon: '🐱', bonus: 5, type: 'coins', price: 500, currency: 'coins' },
+            { id: 'dog', name: 'Пёсик', icon: '🐕', bonus: 10, type: 'xp', price: 800, currency: 'coins' },
+            { id: 'dragon', name: 'Дракон', icon: '🐉', bonus: 15, type: 'coins', price: 10, currency: 'gems' },
+            { id: 'unicorn', name: 'Единорог', icon: '🦄', bonus: 20, type: 'luck', price: 25, currency: 'gems' },
+            { id: 'phoenix', name: 'Феникс', icon: '🔥', bonus: 25, type: 'energy', price: 50, currency: 'gems' },
+            { id: 'robot', name: 'Робот', icon: '🤖', bonus: 30, type: 'all', price: 100, currency: 'gems' }
+        ];
+
+        const SHOP_ITEMS = [
+            { id: 'energy50', name: 'Энергетик', desc: '+50 энергии', icon: '⚡', price: 150, currency: 'coins' },
+            { id: 'energyFull', name: 'Мега-энергия', desc: 'Полное восстановление', icon: '🔋', price: 3, currency: 'gems' },
+            { id: 'pickaxe', name: 'Улучшить кирку', desc: '+25% к добыче', icon: '⛏️', dynamic: true },
+            { id: 'battery', name: 'Батарея', desc: '+25 макс. энергии', icon: '🔋', dynamic: true },
+            { id: 'gems10', name: '10 Гемов', desc: 'Премиум валюта', icon: '💎', price: 2500, currency: 'coins' },
+            { id: 'luck', name: 'Талисман удачи', desc: '+10% редкой руды', icon: '🍀', price: 10, currency: 'gems' },
+            { id: 'sword', name: 'Меч +10 урона', desc: 'Для боссов', icon: '⚔️', price: 1000, currency: 'coins' },
+            { id: 'shield', name: 'Щит +20 урона', desc: 'Для боссов', icon: '🛡️', price: 20, currency: 'gems' }
+        ];
+
+        const INVESTMENTS = [
+            { id: 'farm', name: 'Ферма', icon: '🌾', income: 10, price: 500, currency: 'coins' },
+            { id: 'mine', name: 'Шахта', icon: '⛏️', income: 25, price: 1500, currency: 'coins' },
+            { id: 'factory', name: 'Завод', icon: '🏭', income: 60, price: 5000, currency: 'coins' },
+            { id: 'casino', name: 'Казино', icon: '🎰', income: 150, price: 15000, currency: 'coins' },
+            { id: 'rocket', name: 'Ракета', icon: '🚀', income: 500, price: 100, currency: 'gems' }
+        ];
+
+        const EXPEDITIONS = [
+            { id: 'forest', name: 'Лес', icon: '🌲', duration: 60, rewards: { coins: 100, coal: 5 } },
+            { id: 'cave', name: 'Пещера', icon: '🕳️', duration: 300, rewards: { coins: 300, iron: 3, gold: 1 } },
+            { id: 'volcano', name: 'Вулкан', icon: '🌋', duration: 900, rewards: { coins: 800, gold: 3, diamond: 1 } },
+            { id: 'space', name: 'Космос', icon: '🚀', duration: 1800, rewards: { coins: 2000, diamond: 3, gems: 1 } }
+        ];
+
+        const CRAFTS = [
+            { id: 'ring', name: 'Золотое кольцо', icon: '💍', requires: { gold: 5 }, gives: { coins: 500 } },
+            { id: 'necklace', name: 'Алмазное ожерелье', icon: '📿', requires: { diamond: 3, gold: 2 }, gives: { coins: 1500, gems: 1 } },
+            { id: 'crown', name: 'Корона', icon: '👑', requires: { diamond: 10, gold: 20 }, gives: { coins: 10000, gems: 5 } },
+            { id: 'sword', name: 'Алмазный меч', icon: '🗡️', requires: { diamond: 5, iron: 10 }, gives: { damage: 20 } }
+        ];
+
+        const CASES = [
+            { id: 'common', name: 'Обычный', icon: '📦', price: 100, currency: 'coins', min: 50, max: 200, gemChance: 0.05 },
+            { id: 'rare', name: 'Редкий', icon: '🎁', price: 400, currency: 'coins', min: 200, max: 800, gemChance: 0.15, rarity: 'rare' },
+            { id: 'epic', name: 'Эпический', icon: '💜', price: 5, currency: 'gems', min: 500, max: 2000, gemChance: 0.3, rarity: 'epic' },
+            { id: 'legendary', name: 'Легендарный', icon: '👑', price: 25, currency: 'gems', min: 2000, max: 15000, gemChance: 0.5, rarity: 'legendary' }
+        ];
+
+        const ACHIEVEMENTS = [
+            { id: 'first_coin', name: 'Первые монеты', icon: '🪙', condition: s => s.stats.totalEarned >= 100 },
+            { id: 'rich', name: 'Богач', icon: '💰', condition: s => s.coins >= 10000 },
+            { id: 'miner', name: 'Шахтёр', icon: '⛏️', condition: s => s.stats.totalMined >= 100 },
+            { id: 'gamer', name: 'Игрок', icon: '🎮', condition: s => s.stats.gamesPlayed >= 50 },
+            { id: 'lucky', name: 'Везунчик', icon: '🍀', condition: s => s.stats.casinoWins >= 25 },
+            { id: 'veteran', name: 'Ветеран', icon: '🏅', condition: s => s.level >= 10 },
+            { id: 'dedicated', name: 'Преданный', icon: '🔥', condition: s => s.stats.dailyStreak >= 7 },
+            { id: 'collector', name: 'Коллекционер', icon: '💎', condition: s => s.gems >= 50 },
+            { id: 'boss_slayer', name: 'Убийца боссов', icon: '👹', condition: s => s.stats.bossesKilled >= 10 },
+            { id: 'investor', name: 'Инвестор', icon: '📈', condition: s => Object.keys(s.investments || {}).length >= 3 }
+        ];
+
+        const BOSSES = [
+            { id: 'slime', name: 'Слизень', icon: '🟢', hp: 500, reward: 300 },
+            { id: 'goblin', name: 'Гоблин', icon: '👺', hp: 1000, reward: 700 },
+            { id: 'dragon', name: 'Дракон', icon: '🐉', hp: 2500, reward: 2000 },
+            { id: 'demon', name: 'Демон', icon: '👿', hp: 5000, reward: 5000 },
+            { id: 'titan', name: 'Титан', icon: '🗿', hp: 10000, reward: 15000 }
+        ];
+
         // ============ GAME STATE ============
         const DEFAULT_STATE = {
             coins: 500,
@@ -1006,15 +952,30 @@
             xpNeeded: 100,
             pickaxeLevel: 1,
             batteryLevel: 1,
+            damage: 10,
             hasLuckCharm: false,
             ores: { coal: 0, iron: 0, gold: 0, diamond: 0 },
+            pets: [],
+            activePet: null,
+            investments: {},
+            bank: { balance: 0, lastUpdate: Date.now() },
+            expeditions: {},
+            prestige: 0,
+            currentBoss: 0,
+            bossHp: 500,
             stats: {
                 totalEarned: 0,
                 gamesPlayed: 0,
                 totalMined: 0,
                 casinoWins: 0,
                 dailyStreak: 0,
-                playTimeMinutes: 0
+                playTimeMinutes: 0,
+                bossesKilled: 0
+            },
+            quests: {
+                lastReset: null,
+                progress: { mine: 0, work: 0, games: 0, spend: 0 },
+                claimed: []
             },
             lastDaily: null,
             lastEnergyRegen: Date.now(),
@@ -1024,18 +985,15 @@
 
         let gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
         let isAnimating = false;
-        let playTimeInterval = null;
 
         // ============ STORAGE ============
-        const STORAGE_KEY = 'gemrush_save_v2';
+        const STORAGE_KEY = 'gemrush_save_v3';
 
         function saveGame() {
             try {
                 gameState.lastSave = Date.now();
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
-            } catch (e) {
-                console.error('Save failed:', e);
-            }
+            } catch (e) { console.error('Save failed:', e); }
         }
 
         function loadGame() {
@@ -1043,57 +1001,101 @@
                 const saved = localStorage.getItem(STORAGE_KEY);
                 if (saved) {
                     const parsed = JSON.parse(saved);
-                    // Merge with defaults to handle new properties
                     gameState = { ...JSON.parse(JSON.stringify(DEFAULT_STATE)), ...parsed };
-                    // Ensure nested objects are merged
                     gameState.ores = { ...DEFAULT_STATE.ores, ...parsed.ores };
                     gameState.stats = { ...DEFAULT_STATE.stats, ...parsed.stats };
-                    
-                    // Calculate offline energy regeneration
+                    gameState.quests = { ...DEFAULT_STATE.quests, ...parsed.quests };
+                    gameState.bank = { ...DEFAULT_STATE.bank, ...parsed.bank };
+                    gameState.investments = parsed.investments || {};
+                    gameState.expeditions = parsed.expeditions || {};
+                    gameState.pets = parsed.pets || [];
                     calculateOfflineProgress();
                 }
-                updateAllUI();
-                checkDailyBonus();
             } catch (e) {
                 console.error('Load failed:', e);
                 gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
             }
+            initializeGame();
         }
 
         function calculateOfflineProgress() {
             const now = Date.now();
+            
+            // Energy regen
             const lastRegen = gameState.lastEnergyRegen || now;
             const offlineSeconds = Math.floor((now - lastRegen) / 1000);
-            const energyGained = Math.floor(offlineSeconds / 6); // 1 energy per 6 seconds
-            
+            const energyGained = Math.floor(offlineSeconds / 6);
             if (energyGained > 0) {
                 const oldEnergy = gameState.energy;
                 gameState.energy = Math.min(gameState.energy + energyGained, gameState.maxEnergy);
-                const actualGain = gameState.energy - oldEnergy;
-                
-                if (actualGain > 0) {
-                    setTimeout(() => {
-                        showToast(`⚡ +${actualGain} энергии за время отсутствия!`, 'success');
-                    }, 1000);
+                if (gameState.energy - oldEnergy > 0) {
+                    setTimeout(() => showToast(`⚡ +${gameState.energy - oldEnergy} энергии за отсутствие!`, 'success'), 500);
                 }
             }
             gameState.lastEnergyRegen = now;
+
+            // Bank interest
+            const bankTime = Math.floor((now - gameState.bank.lastUpdate) / 1000 / 60); // minutes
+            if (bankTime > 0 && gameState.bank.balance > 0) {
+                const interest = Math.floor(gameState.bank.balance * 0.05 * (bankTime / 60));
+                if (interest > 0) {
+                    gameState.bank.balance += interest;
+                    setTimeout(() => showToast(`🏦 +${interest} 🪙 банковских процентов!`, 'success'), 1000);
+                }
+            }
+            gameState.bank.lastUpdate = now;
+
+            // Investment income
+            const investTime = Math.floor(offlineSeconds / 60);
+            if (investTime > 0) {
+                let totalIncome = 0;
+                for (const [id, count] of Object.entries(gameState.investments)) {
+                    const inv = INVESTMENTS.find(i => i.id === id);
+                    if (inv) totalIncome += inv.income * count * investTime;
+                }
+                if (totalIncome > 0) {
+                    gameState.coins += totalIncome;
+                    setTimeout(() => showToast(`📈 +${formatNumber(totalIncome)} 🪙 от инвестиций!`, 'success'), 1500);
+                }
+            }
+
+            // Check expeditions
+            for (const [id, exp] of Object.entries(gameState.expeditions)) {
+                if (exp.endTime && now >= exp.endTime) {
+                    const expedition = EXPEDITIONS.find(e => e.id === id);
+                    if (expedition) {
+                        for (const [key, val] of Object.entries(expedition.rewards)) {
+                            if (key === 'coins') gameState.coins += val;
+                            else if (key === 'gems') gameState.gems += val;
+                            else if (gameState.ores[key] !== undefined) gameState.ores[key] += val;
+                        }
+                        setTimeout(() => showToast(`🗺️ Экспедиция "${expedition.name}" завершена!`, 'success'), 2000);
+                    }
+                    delete gameState.expeditions[id];
+                }
+            }
         }
 
         function resetProgress() {
-            if (confirm('Вы уверены? Весь прогресс будет потерян!')) {
+            if (confirm('Весь прогресс будет потерян! Продолжить?')) {
                 localStorage.removeItem(STORAGE_KEY);
                 gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
-                updateAllUI();
+                initializeGame();
                 showToast('Прогресс сброшен', 'info');
             }
         }
 
-        // ============ UI UPDATES ============
+        // ============ UI ============
         function formatNumber(num) {
             if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
             if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
             return Math.floor(num).toString();
+        }
+
+        function formatTime(seconds) {
+            if (seconds < 60) return seconds + 'с';
+            if (seconds < 3600) return Math.floor(seconds / 60) + 'м';
+            return Math.floor(seconds / 3600) + 'ч ' + Math.floor((seconds % 3600) / 60) + 'м';
         }
 
         function updateAllUI() {
@@ -1106,12 +1108,17 @@
             document.getElementById('playerLevel').textContent = gameState.level;
             document.getElementById('headerLevel').textContent = gameState.level;
             document.getElementById('xpBar').style.width = (gameState.xp / gameState.xpNeeded * 100) + '%';
-            
+
             // Home
             document.getElementById('homeCoins').textContent = formatNumber(gameState.coins);
             document.getElementById('homeLevel').textContent = gameState.level;
             document.getElementById('dailyStreak').textContent = gameState.stats.dailyStreak;
-            
+
+            // Active pet
+            const pet = PETS.find(p => p.id === gameState.activePet);
+            document.getElementById('activePetIcon').textContent = pet ? pet.icon : '🐣';
+            document.getElementById('activePetBonus').textContent = pet ? `+${pet.bonus}%` : '+0%';
+
             // Mine
             document.getElementById('coalCount').textContent = gameState.ores.coal;
             document.getElementById('ironCount').textContent = gameState.ores.iron;
@@ -1119,13 +1126,18 @@
             document.getElementById('diamondCount').textContent = gameState.ores.diamond;
             document.getElementById('pickaxeLevelDisplay').textContent = gameState.pickaxeLevel;
             document.getElementById('pickaxeMultiplier').textContent = (1 + (gameState.pickaxeLevel - 1) * 0.25).toFixed(2);
-            
-            // Shop
-            document.getElementById('pickaxeLevel').textContent = 'Уровень: ' + gameState.pickaxeLevel;
-            document.getElementById('pickaxePrice').textContent = 300 * gameState.pickaxeLevel;
-            document.getElementById('batteryPrice').textContent = 500 * gameState.batteryLevel;
-            document.getElementById('luckStatus').textContent = gameState.hasLuckCharm ? '✅ Активен!' : 'Не активен';
-            
+
+            // Boss
+            const boss = BOSSES[gameState.currentBoss];
+            document.getElementById('bossDisplay').textContent = boss.icon;
+            document.getElementById('bossHpText').textContent = `${gameState.bossHp}/${boss.hp}`;
+            document.getElementById('bossHpBar').style.width = (gameState.bossHp / boss.hp * 100) + '%';
+            document.getElementById('playerDamage').textContent = gameState.damage;
+            document.getElementById('bossReward').textContent = boss.reward;
+
+            // Bank
+            document.getElementById('bankBalance').textContent = formatNumber(gameState.bank.balance);
+
             // Profile
             document.getElementById('profileLevel').textContent = gameState.level;
             document.getElementById('currentXp').textContent = gameState.xp;
@@ -1134,22 +1146,18 @@
             document.getElementById('totalEarned').textContent = formatNumber(gameState.stats.totalEarned);
             document.getElementById('gamesPlayed').textContent = gameState.stats.gamesPlayed;
             document.getElementById('totalMined').textContent = gameState.stats.totalMined;
-            document.getElementById('casinoWins').textContent = gameState.stats.casinoWins;
+            document.getElementById('bossesKilled').textContent = gameState.stats.bossesKilled;
             document.getElementById('profileStreak').textContent = gameState.stats.dailyStreak;
-            document.getElementById('playTime').textContent = formatPlayTime(gameState.stats.playTimeMinutes);
-            
+            document.getElementById('playTime').textContent = gameState.stats.playTimeMinutes + 'м';
+            document.getElementById('prestigeLevel').textContent = gameState.prestige;
+            document.getElementById('prestigeBonus').textContent = gameState.prestige * 10;
+
+            updateQuests();
             updateAchievements();
+            checkDailyBonus();
             saveGame();
         }
 
-        function formatPlayTime(minutes) {
-            if (minutes < 60) return minutes + 'м';
-            const hours = Math.floor(minutes / 60);
-            const mins = minutes % 60;
-            return hours + 'ч ' + mins + 'м';
-        }
-
-        // ============ TABS ============
         function showTab(tab) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1158,37 +1166,35 @@
             hapticFeedback('light');
         }
 
-        // ============ NOTIFICATIONS ============
+        function showMineSection(section) {
+            document.querySelectorAll('.mine-section').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('#mineTab .sub-nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(section + 'Section').classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+
+        function showShopSection(section) {
+            document.querySelectorAll('.shop-section').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('#shopTab .sub-nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(section + 'Section').classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+
         function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
             const toastText = document.getElementById('toastText');
             toastText.textContent = message;
-            
-            toast.className = 'fixed top-24 left-1/2 -translate-x-1/2 glass-dark px-6 py-3 rounded-2xl z-50 transition-all duration-300 border';
-            
-            if (type === 'success') {
-                toast.classList.add('border-green-500/50');
-            } else if (type === 'error') {
-                toast.classList.add('border-red-500/50');
-            } else {
-                toast.classList.add('border-white/10');
-            }
-            
+            toast.className = 'fixed top-20 left-1/2 -translate-x-1/2 glass-dark px-5 py-2.5 rounded-2xl z-50 transition-all duration-300 border text-sm';
+            toast.classList.add(type === 'success' ? 'border-green-500/50' : type === 'error' ? 'border-red-500/50' : 'border-white/10');
             toast.style.opacity = '1';
-            toast.style.pointerEvents = 'auto';
-            
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.pointerEvents = 'none';
-            }, 2500);
+            setTimeout(() => toast.style.opacity = '0', 2500);
         }
 
         function showModal(title, message, emoji = '🎉') {
             const modal = document.getElementById('modal');
-            const content = document.getElementById('modalContent');
-            content.innerHTML = `
-                <div class="text-7xl mb-4 reward-text">${emoji}</div>
-                <h3 class="text-2xl font-black mb-2">${title}</h3>
+            document.getElementById('modalContent').innerHTML = `
+                <div class="text-6xl mb-4 reward-text">${emoji}</div>
+                <h3 class="text-xl font-black mb-2">${title}</h3>
                 <p class="text-gray-400">${message}</p>
             `;
             modal.style.display = 'flex';
@@ -1199,320 +1205,544 @@
             document.getElementById('modal').style.display = 'none';
         }
 
-        // ============ XP & LEVELING ============
+        function hapticFeedback(type = 'light') {
+            if (window.Telegram?.WebApp?.HapticFeedback) {
+                if (type === 'success') window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                else if (type === 'error') window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+                else window.Telegram.WebApp.HapticFeedback.impactOccurred(type);
+            }
+        }
+
+        // ============ GAME LOGIC ============
+        function getBonus(type) {
+            let bonus = 1 + gameState.prestige * 0.1;
+            const pet = PETS.find(p => p.id === gameState.activePet);
+            if (pet && (pet.type === type || pet.type === 'all')) {
+                bonus += pet.bonus / 100;
+            }
+            return bonus;
+        }
+
         function addXP(amount) {
-            gameState.xp += amount;
-            
+            gameState.xp += Math.floor(amount * getBonus('xp'));
             while (gameState.xp >= gameState.xpNeeded) {
                 gameState.xp -= gameState.xpNeeded;
                 gameState.level++;
                 gameState.xpNeeded = Math.floor(100 * Math.pow(1.4, gameState.level - 1));
-                
-                // Level up rewards
                 const coinBonus = gameState.level * 100;
                 const gemBonus = gameState.level >= 5 ? Math.floor(gameState.level / 5) : 0;
                 gameState.coins += coinBonus;
                 gameState.gems += gemBonus;
-                
-                let rewardText = `+${coinBonus} 🪙`;
-                if (gemBonus > 0) rewardText += ` +${gemBonus} 💎`;
-                
-                showModal('🎉 Уровень ' + gameState.level + '!', rewardText, '⬆️');
-                hapticFeedback('success');
+                showModal('🎉 Уровень ' + gameState.level + '!', `+${coinBonus} 🪙` + (gemBonus ? ` +${gemBonus} 💎` : ''), '⬆️');
             }
-            
             updateAllUI();
         }
 
-        // ============ DAILY BONUS ============
+        function addQuestProgress(type, amount = 1) {
+            if (!gameState.quests.progress) gameState.quests.progress = { mine: 0, work: 0, games: 0, spend: 0 };
+            gameState.quests.progress[type] = (gameState.quests.progress[type] || 0) + amount;
+            updateQuests();
+        }
+
+        // Daily Bonus
         function checkDailyBonus() {
-            const now = new Date();
-            const today = now.toDateString();
+            const today = new Date().toDateString();
             const card = document.getElementById('dailyBonusCard');
             const status = document.getElementById('dailyBonusStatus');
-            
             if (gameState.lastDaily === today) {
                 card.classList.remove('daily-bonus-available');
                 card.style.opacity = '0.5';
-                status.textContent = 'Уже получено!';
-                status.className = 'text-gray-500 text-xs mt-1';
+                status.textContent = 'Получено ✓';
             } else {
                 card.classList.add('daily-bonus-available');
                 card.style.opacity = '1';
-                status.textContent = 'Забрать награду!';
-                status.className = 'text-green-400 text-xs mt-1';
+                status.textContent = 'Забрать!';
             }
         }
 
         function claimDailyBonus() {
-            const now = new Date();
-            const today = now.toDateString();
-            
+            const today = new Date().toDateString();
             if (gameState.lastDaily === today) {
-                showToast('Бонус уже получен сегодня!', 'error');
+                showToast('Бонус уже получен!', 'error');
                 return;
             }
-            
-            // Check streak
-            const yesterday = new Date(now);
+            const yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
-            
             if (gameState.lastDaily === yesterday.toDateString()) {
                 gameState.stats.dailyStreak++;
-            } else if (gameState.lastDaily !== today) {
+            } else {
                 gameState.stats.dailyStreak = 1;
             }
-            
             gameState.lastDaily = today;
             
-            // Calculate rewards based on streak
+            // Reset quests
+            gameState.quests = { lastReset: today, progress: { mine: 0, work: 0, games: 0, spend: 0 }, claimed: [] };
+            
             const streak = gameState.stats.dailyStreak;
-            const coinReward = 100 * streak;
-            const gemReward = streak >= 7 ? Math.floor(streak / 7) * 2 : 0;
-            const energyReward = 50;
+            const coins = 100 * streak;
+            const gems = streak >= 7 ? Math.floor(streak / 7) * 2 : 0;
+            gameState.coins += coins;
+            gameState.gems += gems;
+            gameState.energy = gameState.maxEnergy;
             
-            gameState.coins += coinReward;
-            gameState.gems += gemReward;
-            gameState.energy = Math.min(gameState.energy + energyReward, gameState.maxEnergy);
-            
-            let msg = `+${coinReward} 🪙 +${energyReward} ⚡`;
-            if (gemReward > 0) msg += ` +${gemReward} 💎`;
-            
-            showModal(`🔥 День ${streak}!`, msg, '🎁');
-            checkDailyBonus();
+            showModal(`🔥 День ${streak}!`, `+${coins} 🪙 +100% ⚡` + (gems ? ` +${gems} 💎` : ''), '🎁');
             updateAllUI();
         }
 
-        // ============ WORK ============
-        function doWork(type) {
-            const works = {
-                delivery: { min: 30, max: 80, energy: 5, xp: 10, risk: 0 },
-                office: { min: 80, max: 150, energy: 10, xp: 20, risk: 0 },
-                business: { min: 200, max: 500, energy: 20, xp: 40, risk: 0 },
-                crypto: { min: -500, max: 2000, energy: 40, xp: 100, risk: 0.3 }
-            };
+        // Quests
+        const QUESTS = [
+            { id: 'mine', name: 'Добыть руду', target: 20, reward: 200, icon: '⛏️' },
+            { id: 'work', name: 'Поработать', target: 5, reward: 150, icon: '💼' },
+            { id: 'games', name: 'Сыграть в игры', target: 10, reward: 300, icon: '🎮' },
+            { id: 'spend', name: 'Потратить монеты', target: 1000, reward: 500, icon: '💸' }
+        ];
+
+        function updateQuests() {
+            const container = document.getElementById('questsPreview');
+            const today = new Date().toDateString();
+            if (gameState.quests.lastReset !== today) {
+                gameState.quests = { lastReset: today, progress: { mine: 0, work: 0, games: 0, spend: 0 }, claimed: [] };
+            }
             
-            const work = works[type];
+            let completed = 0;
+            container.innerHTML = QUESTS.map(q => {
+                const progress = Math.min(gameState.quests.progress[q.id] || 0, q.target);
+                const done = progress >= q.target;
+                const claimed = gameState.quests.claimed.includes(q.id);
+                if (done) completed++;
+                
+                return `
+                    <div class="flex items-center gap-3 bg-gray-800/30 rounded-xl p-2 ${done && !claimed ? 'quest-complete' : ''}" onclick="${done && !claimed ? `claimQuest('${q.id}')` : ''}">
+                        <div class="text-xl">${q.icon}</div>
+                        <div class="flex-1">
+                            <div class="text-sm font-medium ${claimed ? 'text-gray-500 line-through' : ''}">${q.name}</div>
+                            <div class="w-full h-1.5 bg-gray-700 rounded-full mt-1">
+                                <div class="h-full ${done ? 'bg-green-500' : 'bg-purple-500'} rounded-full transition-all" style="width: ${progress / q.target * 100}%"></div>
+                            </div>
+                        </div>
+                        <div class="text-xs ${claimed ? 'text-gray-500' : done ? 'text-green-400' : 'text-gray-400'}">
+                            ${claimed ? '✓' : `${progress}/${q.target}`}
+                        </div>
+                    </div>
+                `;
+            }).join('');
             
+            document.getElementById('questsComplete').textContent = `${completed}/4`;
+        }
+
+        function claimQuest(id) {
+            const quest = QUESTS.find(q => q.id === id);
+            if (!quest || gameState.quests.claimed.includes(id)) return;
+            gameState.quests.claimed.push(id);
+            gameState.coins += quest.reward;
+            gameState.stats.totalEarned += quest.reward;
+            showToast(`+${quest.reward} 🪙 за квест!`, 'success');
+            addXP(50);
+            updateAllUI();
+        }
+
+        // Work
+        function renderWork() {
+            document.getElementById('workList').innerHTML = WORKS.map(w => {
+                const locked = w.levelReq && gameState.level < w.levelReq;
+                return `
+                    <div class="card-game p-4 ${locked ? 'opacity-50' : 'cursor-pointer'}" onclick="${locked ? '' : `doWork('${w.id}')`}">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${w.color} flex items-center justify-center text-2xl float shadow-lg">${w.icon}</div>
+                            <div class="flex-1">
+                                <h3 class="font-bold">${w.name} ${locked ? `🔒 Ур.${w.levelReq}` : ''}</h3>
+                                <p class="text-gray-400 text-sm">+${w.min}-${w.max} 🪙 | -${w.energy} ⚡</p>
+                                <p class="text-green-400 text-xs">+${w.xp} XP ${w.risk ? '| Риск!' : ''}</p>
+                            </div>
+                            <div class="text-xl text-gray-600">▶</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function doWork(id) {
+            const work = WORKS.find(w => w.id === id);
+            if (!work || (work.levelReq && gameState.level < work.levelReq)) return;
             if (gameState.energy < work.energy) {
                 showToast('Недостаточно энергии!', 'error');
-                hapticFeedback('error');
                 return;
             }
             
             gameState.energy -= work.energy;
-            
             let reward;
-            if (type === 'crypto' && Math.random() < work.risk) {
-                // Lost money in crypto
-                reward = Math.floor(Math.random() * 300) * -1;
+            
+            if (work.risk && Math.random() < work.risk) {
+                reward = -Math.floor(Math.random() * 300);
                 gameState.coins = Math.max(0, gameState.coins + reward);
-                showToast(`📉 Крипто упало! ${reward} 🪙`, 'error');
+                showToast(`📉 Потеряно ${Math.abs(reward)} 🪙`, 'error');
             } else {
-                reward = Math.floor(Math.random() * (work.max - work.min + 1)) + work.min;
-                if (reward < 0) reward = 0;
+                reward = Math.floor((Math.random() * (work.max - work.min) + work.min) * getBonus('coins'));
                 gameState.coins += reward;
                 gameState.stats.totalEarned += reward;
                 showToast(`+${reward} 🪙 | +${work.xp} XP`, 'success');
             }
             
+            addQuestProgress('work');
             addXP(work.xp);
             hapticFeedback('medium');
-            updateAllUI();
         }
 
-        // ============ MINING ============
+        // Mining
         function mineRock() {
-            if (isAnimating) return;
-            
-            if (gameState.energy < 3) {
-                showToast('Недостаточно энергии!', 'error');
-                hapticFeedback('error');
+            if (isAnimating || gameState.energy < 3) {
+                if (gameState.energy < 3) showToast('Недостаточно энергии!', 'error');
                 return;
             }
             
             isAnimating = true;
             gameState.energy -= 3;
             gameState.stats.totalMined++;
+            addQuestProgress('mine');
             
             const rock = document.getElementById('mineRock');
             rock.classList.add('mining-hit');
+            createParticles();
+            setTimeout(() => { rock.classList.remove('mining-hit'); isAnimating = false; }, 200);
             
-            // Create particles
-            createMiningParticles();
-            
-            setTimeout(() => {
-                rock.classList.remove('mining-hit');
-                isAnimating = false;
-            }, 200);
-            
-            const bonus = 1 + (gameState.pickaxeLevel - 1) * 0.25;
-            const luckBonus = gameState.hasLuckCharm ? 0.1 : 0;
+            const bonus = (1 + (gameState.pickaxeLevel - 1) * 0.25) * getBonus('coins');
+            const luck = gameState.hasLuckCharm ? 0.1 : 0;
             const roll = Math.random();
             
-            let message = '';
-            
-            if (roll < 0.03 + luckBonus) {
-                // Diamond!
+            if (roll < 0.03 + luck) {
                 gameState.ores.diamond++;
-                gameState.gems += Math.random() < 0.2 ? 1 : 0;
-                message = '💎 Алмаз найден!';
-                hapticFeedback('success');
-            } else if (roll < 0.10 + luckBonus) {
-                const amt = Math.ceil((Math.floor(Math.random() * 2) + 1) * bonus);
-                gameState.ores.gold += amt;
-                message = `+${amt} 🥇 Золото!`;
-                hapticFeedback('medium');
-            } else if (roll < 0.30 + luckBonus) {
-                const amt = Math.ceil((Math.floor(Math.random() * 3) + 1) * bonus);
-                gameState.ores.iron += amt;
-                message = `+${amt} 🔶 Железо`;
-                hapticFeedback('light');
+                if (Math.random() < 0.2) gameState.gems++;
+                showToast('💎 Алмаз!', 'success');
+            } else if (roll < 0.10 + luck) {
+                gameState.ores.gold += Math.ceil(2 * bonus);
+                showToast('+золото!', 'success');
+            } else if (roll < 0.30 + luck) {
+                gameState.ores.iron += Math.ceil(3 * bonus);
             } else {
-                const amt = Math.ceil((Math.floor(Math.random() * 5) + 2) * bonus);
-                gameState.ores.coal += amt;
-                message = `+${amt} ite Уголь`;
-                hapticFeedback('light');
+                gameState.ores.coal += Math.ceil(5 * bonus);
             }
             
-            // Direct coin reward
-            const coinReward = Math.floor((Math.random() * 25 + 5) * bonus);
-            gameState.coins += coinReward;
-            gameState.stats.totalEarned += coinReward;
-            
-            showToast(`${message} +${coinReward} 🪙`, 'success');
+            const coins = Math.floor((Math.random() * 25 + 5) * bonus);
+            gameState.coins += coins;
+            gameState.stats.totalEarned += coins;
             addXP(3);
-            updateAllUI();
+            hapticFeedback('light');
         }
 
-        function createMiningParticles() {
+        function createParticles() {
             const container = document.getElementById('mineParticles');
-            const particles = ['✨', '💫', '⭐', '🪙'];
-            
             for (let i = 0; i < 5; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.textContent = particles[Math.floor(Math.random() * particles.length)];
-                particle.style.left = '50%';
-                particle.style.top = '50%';
-                particle.style.setProperty('--tx', (Math.random() * 100 - 50) + 'px');
-                particle.style.setProperty('--ty', (Math.random() * -80 - 20) + 'px');
-                particle.style.fontSize = '20px';
-                container.appendChild(particle);
-                
-                setTimeout(() => particle.remove(), 1000);
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.textContent = ['✨', '💫', '⭐', '🪙'][Math.floor(Math.random() * 4)];
+                p.style.cssText = `left:50%;top:50%;--tx:${Math.random()*100-50}px;--ty:${Math.random()*-80-20}px;font-size:20px;`;
+                container.appendChild(p);
+                setTimeout(() => p.remove(), 1000);
             }
         }
 
         function sellOres() {
             const prices = { coal: 3, iron: 12, gold: 50, diamond: 150 };
-            let total = 0;
-            
-            for (const [ore, count] of Object.entries(gameState.ores)) {
-                total += count * prices[ore];
-            }
-            
-            if (total === 0) {
-                showToast('Нет руды для продажи!', 'error');
-                return;
-            }
+            let total = Object.entries(gameState.ores).reduce((sum, [k, v]) => sum + v * prices[k], 0);
+            if (total === 0) { showToast('Нет руды!', 'error'); return; }
             
             gameState.coins += total;
             gameState.stats.totalEarned += total;
             gameState.ores = { coal: 0, iron: 0, gold: 0, diamond: 0 };
-            
-            showToast(`+${total} 🪙 от продажи!`, 'success');
-            hapticFeedback('success');
+            showToast(`+${total} 🪙`, 'success');
             addXP(Math.floor(total / 10));
+        }
+
+        // Boss
+        function attackBoss() {
+            if (gameState.energy < 10) { showToast('Недостаточно энергии!', 'error'); return; }
+            
+            gameState.energy -= 10;
+            const damage = Math.floor(gameState.damage * getBonus('coins'));
+            gameState.bossHp -= damage;
+            
+            const bossEl = document.getElementById('bossDisplay');
+            bossEl.classList.add('boss-shake');
+            setTimeout(() => bossEl.classList.remove('boss-shake'), 300);
+            
+            if (gameState.bossHp <= 0) {
+                const boss = BOSSES[gameState.currentBoss];
+                gameState.coins += boss.reward;
+                gameState.stats.totalEarned += boss.reward;
+                gameState.stats.bossesKilled++;
+                
+                if (gameState.currentBoss < BOSSES.length - 1) {
+                    gameState.currentBoss++;
+                }
+                gameState.bossHp = BOSSES[gameState.currentBoss].hp;
+                
+                showModal('👹 Босс повержен!', `+${boss.reward} 🪙`, '⚔️');
+                addXP(200);
+            } else {
+                showToast(`-${damage} урона!`, 'success');
+            }
+            
+            hapticFeedback('heavy');
             updateAllUI();
         }
 
-        // ============ SHOP ============
-        function buyItem(item) {
-            switch(item) {
-                case 'energy':
-                    if (gameState.coins < 150) {
-                        showToast('Недостаточно монет!', 'error');
-                        return;
-                    }
-                    gameState.coins -= 150;
-                    gameState.energy = Math.min(gameState.energy + 50, gameState.maxEnergy);
-                    showToast('+50 ⚡', 'success');
-                    break;
-                    
-                case 'fullEnergy':
-                    if (gameState.gems < 3) {
-                        showToast('Недостаточно гемов!', 'error');
-                        return;
-                    }
-                    gameState.gems -= 3;
-                    gameState.energy = gameState.maxEnergy;
-                    showToast('⚡ Полная энергия!', 'success');
-                    break;
-                    
-                case 'pickaxe':
-                    const pickPrice = 300 * gameState.pickaxeLevel;
-                    if (gameState.coins < pickPrice) {
-                        showToast('Недостаточно монет!', 'error');
-                        return;
-                    }
-                    gameState.coins -= pickPrice;
-                    gameState.pickaxeLevel++;
-                    showToast(`⛏️ Кирка Ур.${gameState.pickaxeLevel}!`, 'success');
-                    break;
-                    
-                case 'battery':
-                    const batPrice = 500 * gameState.batteryLevel;
-                    if (gameState.coins < batPrice) {
-                        showToast('Недостаточно монет!', 'error');
-                        return;
-                    }
-                    gameState.coins -= batPrice;
-                    gameState.maxEnergy += 25;
-                    gameState.batteryLevel++;
-                    showToast(`+25 макс ⚡ (${gameState.maxEnergy})`, 'success');
-                    break;
-                    
-                case 'gems':
-                    if (gameState.coins < 2500) {
-                        showToast('Недостаточно монет!', 'error');
-                        return;
-                    }
-                    gameState.coins -= 2500;
-                    gameState.gems += 10;
-                    showToast('+10 💎', 'success');
-                    break;
-                    
-                case 'luck':
-                    if (gameState.hasLuckCharm) {
-                        showToast('Уже активен!', 'error');
-                        return;
-                    }
-                    if (gameState.gems < 10) {
-                        showToast('Недостаточно гемов!', 'error');
-                        return;
-                    }
-                    gameState.gems -= 10;
-                    gameState.hasLuckCharm = true;
-                    showToast('🍀 Талисман активирован!', 'success');
-                    break;
+        // Shop
+        function renderShop() {
+            document.getElementById('shopList').innerHTML = SHOP_ITEMS.map(item => {
+                let price = item.price;
+                let priceText = '';
+                
+                if (item.id === 'pickaxe') {
+                    price = 300 * gameState.pickaxeLevel;
+                    priceText = `${price} 🪙`;
+                } else if (item.id === 'battery') {
+                    price = 500 * gameState.batteryLevel;
+                    priceText = `${price} 🪙`;
+                } else {
+                    priceText = `${price} ${item.currency === 'gems' ? '💎' : '🪙'}`;
+                }
+                
+                return `
+                    <div class="card-game p-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-gray-800 flex items-center justify-center text-2xl">${item.icon}</div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-sm">${item.name}</h3>
+                                <p class="text-gray-400 text-xs">${item.desc}</p>
+                            </div>
+                            <button onclick="buyItem('${item.id}')" class="btn-game gradient-blue px-3 py-2 rounded-xl font-bold text-sm">${priceText}</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderPets() {
+            document.getElementById('petsList').innerHTML = PETS.map(pet => {
+                const owned = gameState.pets.includes(pet.id);
+                const active = gameState.activePet === pet.id;
+                return `
+                    <div class="card-game p-4 ${active ? 'neon-border' : ''}">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-xl bg-gray-800 flex items-center justify-center text-3xl ${owned ? 'pet-bounce' : 'grayscale opacity-50'}">${pet.icon}</div>
+                            <div class="flex-1">
+                                <h3 class="font-bold">${pet.name} ${active ? '✓' : ''}</h3>
+                                <p class="text-gray-400 text-sm">+${pet.bonus}% ${pet.type === 'coins' ? 'монет' : pet.type === 'xp' ? 'опыта' : pet.type === 'luck' ? 'удачи' : pet.type === 'energy' ? 'энергии' : 'ко всему'}</p>
+                            </div>
+                            ${owned ? 
+                                `<button onclick="activatePet('${pet.id}')" class="btn-game ${active ? 'bg-gray-600' : 'gradient-green'} px-3 py-2 rounded-xl font-bold text-sm">${active ? 'Активен' : 'Выбрать'}</button>` :
+                                `<button onclick="buyPet('${pet.id}')" class="btn-game gradient-purple px-3 py-2 rounded-xl font-bold text-sm">${pet.price} ${pet.currency === 'gems' ? '💎' : '🪙'}</button>`
+                            }
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderInvestments() {
+            document.getElementById('investList').innerHTML = INVESTMENTS.map(inv => {
+                const count = gameState.investments[inv.id] || 0;
+                return `
+                    <div class="bg-gray-800/50 rounded-xl p-3 flex items-center gap-3">
+                        <div class="text-3xl">${inv.icon}</div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-sm">${inv.name}</h4>
+                            <p class="text-xs text-gray-400">+${inv.income}/мин | Куплено: ${count}</p>
+                        </div>
+                        <button onclick="buyInvestment('${inv.id}')" class="btn-game gradient-gold px-3 py-2 rounded-xl font-bold text-xs">
+                            ${inv.price} ${inv.currency === 'gems' ? '💎' : '🪙'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderExpeditions() {
+            const now = Date.now();
+            document.getElementById('expeditionsList').innerHTML = EXPEDITIONS.map(exp => {
+                const active = gameState.expeditions[exp.id];
+                const timeLeft = active ? Math.max(0, Math.floor((active.endTime - now) / 1000)) : 0;
+                
+                return `
+                    <div class="bg-gray-800/50 rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="text-3xl">${exp.icon}</div>
+                            <div class="flex-1">
+                                <h4 class="font-bold">${exp.name}</h4>
+                                <p class="text-xs text-gray-400">${formatTime(exp.duration)}</p>
+                            </div>
+                            ${active ? 
+                                `<span class="text-cyan-400 text-sm">${formatTime(timeLeft)}</span>` :
+                                `<button onclick="startExpedition('${exp.id}')" class="btn-game gradient-blue px-4 py-2 rounded-xl font-bold text-sm">Отправить</button>`
+                            }
+                        </div>
+                        ${active ? `<div class="h-2 bg-gray-700 rounded-full overflow-hidden"><div class="h-full expedition-progress" style="width: ${(1 - timeLeft / exp.duration) * 100}%"></div></div>` : ''}
+                        <p class="text-xs text-gray-500 mt-2">Награда: ${Object.entries(exp.rewards).map(([k,v]) => `${v} ${k === 'coins' ? '🪙' : k === 'gems' ? '💎' : k}`).join(', ')}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCrafts() {
+            document.getElementById('craftList').innerHTML = CRAFTS.map(craft => {
+                const canCraft = Object.entries(craft.requires).every(([k, v]) => gameState.ores[k] >= v);
+                return `
+                    <div class="bg-gray-800/50 rounded-xl p-4 ${canCraft ? '' : 'opacity-50'}">
+                        <div class="flex items-center gap-3">
+                            <div class="text-3xl">${craft.icon}</div>
+                            <div class="flex-1">
+                                <h4 class="font-bold">${craft.name}</h4>
+                                <p class="text-xs text-gray-400">Нужно: ${Object.entries(craft.requires).map(([k,v]) => `${v} ${k}`).join(', ')}</p>
+                                <p class="text-xs text-green-400">Даёт: ${Object.entries(craft.gives).map(([k,v]) => `+${v} ${k === 'coins' ? '🪙' : k === 'gems' ? '💎' : k === 'damage' ? '⚔️' : k}`).join(', ')}</p>
+                            </div>
+                            <button onclick="doCraft('${craft.id}')" class="btn-game gradient-purple px-4 py-2 rounded-xl font-bold text-sm" ${canCraft ? '' : 'disabled'}>Создать</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCases() {
+            document.getElementById('casesList').innerHTML = CASES.map(c => `
+                <div class="bg-gray-800/50 rounded-xl p-4 cursor-pointer ${c.rarity ? 'rarity-' + c.rarity : ''}" onclick="openCase('${c.id}')">
+                    <div class="flex items-center gap-4">
+                        <div class="text-4xl ${c.rarity === 'legendary' ? 'streak-fire' : ''}">${c.icon}</div>
+                        <div class="flex-1">
+                            <h4 class="font-bold">${c.name}</h4>
+                            <p class="text-sm text-gray-400">${c.min}-${c.max} 🪙</p>
+                        </div>
+                        <div class="font-bold">${c.price} ${c.currency === 'gems' ? '💎' : '🪙'}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function buyItem(id) {
+            const item = SHOP_ITEMS.find(i => i.id === id);
+            let price = item.price;
+            let currency = item.currency || 'coins';
+            
+            if (id === 'pickaxe') { price = 300 * gameState.pickaxeLevel; currency = 'coins'; }
+            if (id === 'battery') { price = 500 * gameState.batteryLevel; currency = 'coins'; }
+            
+            if ((currency === 'coins' && gameState.coins < price) || (currency === 'gems' && gameState.gems < price)) {
+                showToast('Недостаточно средств!', 'error'); return;
             }
             
+            if (currency === 'coins') { gameState.coins -= price; addQuestProgress('spend', price); }
+            else gameState.gems -= price;
+            
+            switch(id) {
+                case 'energy50': gameState.energy = Math.min(gameState.energy + 50, gameState.maxEnergy); break;
+                case 'energyFull': gameState.energy = gameState.maxEnergy; break;
+                case 'pickaxe': gameState.pickaxeLevel++; break;
+                case 'battery': gameState.maxEnergy += 25; gameState.batteryLevel++; break;
+                case 'gems10': gameState.gems += 10; break;
+                case 'luck': gameState.hasLuckCharm = true; break;
+                case 'sword': gameState.damage += 10; break;
+                case 'shield': gameState.damage += 20; break;
+            }
+            
+            showToast('Куплено!', 'success');
             hapticFeedback('medium');
             updateAllUI();
+            renderShop();
         }
 
-        // ============ GAMES ============
-        function playCoinFlip(choice) {
-            if (isAnimating) return;
-            if (gameState.coins < 100) {
-                showToast('Недостаточно монет!', 'error');
-                return;
+        function buyPet(id) {
+            const pet = PETS.find(p => p.id === id);
+            if ((pet.currency === 'coins' && gameState.coins < pet.price) || (pet.currency === 'gems' && gameState.gems < pet.price)) {
+                showToast('Недостаточно средств!', 'error'); return;
             }
             
+            if (pet.currency === 'coins') gameState.coins -= pet.price;
+            else gameState.gems -= pet.price;
+            
+            gameState.pets.push(pet.id);
+            gameState.activePet = pet.id;
+            
+            showModal('🐾 Питомец получен!', `${pet.icon} ${pet.name} теперь с вами!`, pet.icon);
+            renderPets();
+            updateAllUI();
+        }
+
+        function activatePet(id) {
+            gameState.activePet = id;
+            showToast('Питомец активирован!', 'success');
+            renderPets();
+            updateAllUI();
+        }
+
+        function buyInvestment(id) {
+            const inv = INVESTMENTS.find(i => i.id === id);
+            if ((inv.currency === 'coins' && gameState.coins < inv.price) || (inv.currency === 'gems' && gameState.gems < inv.price)) {
+                showToast('Недостаточно средств!', 'error'); return;
+            }
+            
+            if (inv.currency === 'coins') { gameState.coins -= inv.price; addQuestProgress('spend', inv.price); }
+            else gameState.gems -= inv.price;
+            
+            gameState.investments[id] = (gameState.investments[id] || 0) + 1;
+            showToast(`${inv.icon} +${inv.income}/мин!`, 'success');
+            renderInvestments();
+            updateAllUI();
+        }
+
+        function startExpedition(id) {
+            if (gameState.expeditions[id]) { showToast('Уже в пути!', 'error'); return; }
+            const exp = EXPEDITIONS.find(e => e.id === id);
+            gameState.expeditions[id] = { endTime: Date.now() + exp.duration * 1000 };
+            showToast(`${exp.icon} Экспедиция началась!`, 'success');
+            renderExpeditions();
+            updateAllUI();
+        }
+
+        function doCraft(id) {
+            const craft = CRAFTS.find(c => c.id === id);
+            if (!Object.entries(craft.requires).every(([k, v]) => gameState.ores[k] >= v)) {
+                showToast('Недостаточно ресурсов!', 'error'); return;
+            }
+            
+            for (const [k, v] of Object.entries(craft.requires)) {
+                gameState.ores[k] -= v;
+            }
+            
+            for (const [k, v] of Object.entries(craft.gives)) {
+                if (k === 'coins') { gameState.coins += v; gameState.stats.totalEarned += v; }
+                else if (k === 'gems') gameState.gems += v;
+                else if (k === 'damage') gameState.damage += v;
+            }
+            
+            showModal('🔨 Создано!', `${craft.icon} ${craft.name}`, craft.icon);
+            addXP(100);
+            renderCrafts();
+        }
+
+        function bankDeposit() {
+            if (gameState.coins < 1000) { showToast('Нужно 1000 🪙!', 'error'); return; }
+            gameState.coins -= 1000;
+            gameState.bank.balance += 1000;
+            addQuestProgress('spend', 1000);
+            showToast('Вложено 1000 🪙', 'success');
+            updateAllUI();
+        }
+
+        function bankWithdraw() {
+            if (gameState.bank.balance <= 0) { showToast('Счёт пуст!', 'error'); return; }
+            gameState.coins += gameState.bank.balance;
+            showToast(`+${gameState.bank.balance} 🪙`, 'success');
+            gameState.bank.balance = 0;
+            updateAllUI();
+        }
+
+        // Games
+        function playCoinFlip(choice) {
+            if (isAnimating || gameState.coins < 100) { showToast('Недостаточно монет!', 'error'); return; }
             isAnimating = true;
             gameState.coins -= 100;
             gameState.stats.gamesPlayed++;
+            addQuestProgress('games');
+            addQuestProgress('spend', 100);
             
             const coin = document.getElementById('coinFlipResult');
             coin.classList.add('coin-flip-anim');
@@ -1523,367 +1753,324 @@
                 coin.textContent = result === 'heads' ? '🦅' : '🌟';
                 
                 if (result === choice) {
-                    gameState.coins += 200;
-                    gameState.stats.totalEarned += 200;
+                    const win = Math.floor(200 * getBonus('coins'));
+                    gameState.coins += win;
+                    gameState.stats.totalEarned += win;
                     gameState.stats.casinoWins++;
-                    showToast('+200 🪙 Победа!', 'success');
-                    hapticFeedback('success');
+                    showToast(`+${win} 🪙!`, 'success');
                 } else {
                     showToast('Не повезло!', 'error');
-                    hapticFeedback('error');
                 }
                 
                 addXP(10);
-                updateAllUI();
                 isAnimating = false;
-                
-                setTimeout(() => coin.textContent = '🪙', 2000);
+                setTimeout(() => coin.textContent = '🪙', 1500);
             }, 800);
+            
+            hapticFeedback('medium');
+            updateAllUI();
         }
 
         const diceEmojis = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
         
         function playDice() {
-            if (isAnimating) return;
-            if (gameState.coins < 50) {
-                showToast('Недостаточно монет!', 'error');
-                return;
-            }
-            
+            if (isAnimating || gameState.coins < 50) { showToast('Недостаточно монет!', 'error'); return; }
             isAnimating = true;
             gameState.coins -= 50;
             gameState.stats.gamesPlayed++;
-            
-            const dice1 = document.getElementById('dice1');
-            const dice2 = document.getElementById('dice2');
+            addQuestProgress('games');
+            addQuestProgress('spend', 50);
             
             let rolls = 0;
-            const rollInterval = setInterval(() => {
-                dice1.textContent = diceEmojis[Math.floor(Math.random() * 6)];
-                dice2.textContent = diceEmojis[Math.floor(Math.random() * 6)];
-                dice1.classList.add('shake');
-                dice2.classList.add('shake');
-                rolls++;
-                
-                if (rolls > 12) {
-                    clearInterval(rollInterval);
-                    dice1.classList.remove('shake');
-                    dice2.classList.remove('shake');
-                    
+            const interval = setInterval(() => {
+                document.getElementById('dice1').textContent = diceEmojis[Math.floor(Math.random() * 6)];
+                document.getElementById('dice2').textContent = diceEmojis[Math.floor(Math.random() * 6)];
+                if (++rolls > 12) {
+                    clearInterval(interval);
                     const r1 = Math.floor(Math.random() * 6) + 1;
                     const r2 = Math.floor(Math.random() * 6) + 1;
-                    dice1.textContent = diceEmojis[r1 - 1];
-                    dice2.textContent = diceEmojis[r2 - 1];
+                    document.getElementById('dice1').textContent = diceEmojis[r1 - 1];
+                    document.getElementById('dice2').textContent = diceEmojis[r2 - 1];
                     
                     let win = 0;
-                    if (r1 === r2) {
-                        win = r1 === 6 ? 250 : 150;
-                    } else if (r1 + r2 === 7) {
-                        win = 100;
-                    } else if (r1 + r2 === 12) {
-                        win = 250;
-                    }
+                    if (r1 === r2) win = 150;
+                    else if (r1 + r2 === 7) win = 100;
+                    else if (r1 + r2 === 12) win = 250;
                     
-                    if (win > 0) {
+                    if (win) {
+                        win = Math.floor(win * getBonus('coins'));
                         gameState.coins += win;
                         gameState.stats.totalEarned += win;
                         gameState.stats.casinoWins++;
-                        showToast(`+${win} 🪙 Победа!`, 'success');
-                        hapticFeedback('success');
+                        showToast(`+${win} 🪙!`, 'success');
                     } else {
-                        showToast(`Сумма: ${r1 + r2}. Не повезло!`, 'error');
-                        hapticFeedback('error');
+                        showToast('Не повезло!', 'error');
                     }
                     
                     addXP(10);
-                    updateAllUI();
                     isAnimating = false;
                 }
             }, 80);
+            
+            hapticFeedback('medium');
+            updateAllUI();
         }
 
-        function spinWheel() {
-            if (isAnimating) return;
-            if (gameState.coins < 200) {
-                showToast('Недостаточно монет!', 'error');
-                return;
-            }
-            
-            isAnimating = true;
-            gameState.coins -= 200;
-            gameState.stats.gamesPlayed++;
-            
-            const wheel = document.getElementById('wheelDisplay');
-            const prizes = [50, 100, 150, 200, 300, 500, 1000];
-            const gemPrize = Math.random() < 0.1;
-            
-            let spins = 0;
-            const spinInterval = setInterval(() => {
-                wheel.textContent = ['🎡', '🎠', '🎪', '🎯'][spins % 4];
-                wheel.style.transform = `rotate(${spins * 30}deg)`;
-                spins++;
-                
-                if (spins > 20) {
-                    clearInterval(spinInterval);
-                    wheel.style.transform = 'rotate(0deg)';
-                    
-                    if (gemPrize) {
-                        const gems = Math.floor(Math.random() * 3) + 1;
-                        gameState.gems += gems;
-                        wheel.textContent = '💎';
-                        showModal('💎 ГЕМЫ!', `+${gems} 💎`, '🎡');
-                    } else {
-                        const prize = prizes[Math.floor(Math.random() * prizes.length)];
-                        gameState.coins += prize;
-                        gameState.stats.totalEarned += prize;
-                        wheel.textContent = '🏆';
-                        
-                        if (prize >= 500) {
-                            showModal('🎉 Большой приз!', `+${prize} 🪙`, '🎡');
-                            gameState.stats.casinoWins++;
-                        } else {
-                            showToast(`+${prize} 🪙`, 'success');
-                        }
-                    }
-                    
-                    hapticFeedback('success');
-                    addXP(20);
-                    updateAllUI();
-                    isAnimating = false;
-                    
-                    setTimeout(() => wheel.textContent = '🎡', 2000);
-                }
-            }, 100);
-        }
-
-        function guessNumber(num) {
-            if (isAnimating) return;
-            if (gameState.coins < 100) {
-                showToast('Недостаточно монет!', 'error');
-                return;
-            }
-            
+        function playRoulette(bet) {
+            if (isAnimating || gameState.coins < 100) { showToast('Недостаточно монет!', 'error'); return; }
             isAnimating = true;
             gameState.coins -= 100;
             gameState.stats.gamesPlayed++;
+            addQuestProgress('games');
+            addQuestProgress('spend', 100);
+            
+            const wheel = document.getElementById('rouletteWheel');
+            wheel.classList.add('roulette-spin');
+            
+            setTimeout(() => {
+                wheel.classList.remove('roulette-spin');
+                const results = ['red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'green'];
+                const result = results[Math.floor(Math.random() * results.length)];
+                wheel.textContent = result === 'red' ? '🔴' : result === 'black' ? '⚫' : '🟢';
+                
+                let win = 0;
+                if (result === bet) {
+                    win = result === 'green' ? 1400 : 200;
+                    win = Math.floor(win * getBonus('coins'));
+                    gameState.coins += win;
+                    gameState.stats.totalEarned += win;
+                    gameState.stats.casinoWins++;
+                    showToast(`+${win} 🪙!`, 'success');
+                } else {
+                    showToast('Не повезло!', 'error');
+                }
+                
+                addXP(15);
+                isAnimating = false;
+                setTimeout(() => wheel.textContent = '🎡', 1500);
+            }, 3000);
+            
+            hapticFeedback('medium');
+            updateAllUI();
+        }
+
+        function guessNumber(num) {
+            if (isAnimating || gameState.coins < 100) { showToast('Недостаточно монет!', 'error'); return; }
+            isAnimating = true;
+            gameState.coins -= 100;
+            gameState.stats.gamesPlayed++;
+            addQuestProgress('games');
+            addQuestProgress('spend', 100);
             
             const display = document.getElementById('guessDisplay');
             let rolls = 0;
-            
-            const rollInterval = setInterval(() => {
+            const interval = setInterval(() => {
                 display.textContent = Math.floor(Math.random() * 10) + 1;
-                rolls++;
-                
-                if (rolls > 15) {
-                    clearInterval(rollInterval);
+                if (++rolls > 15) {
+                    clearInterval(interval);
                     const result = Math.floor(Math.random() * 10) + 1;
                     display.textContent = result;
                     
                     if (result === num) {
-                        gameState.coins += 1000;
-                        gameState.stats.totalEarned += 1000;
-                        gameState.stats.casinoWins++;
-                        showModal('🎉 ДЖЕКПОТ!', '+1000 🪙 Угадал!', '🔢');
-                        hapticFeedback('success');
-                    } else {
-                        showToast(`Было: ${result}. Не повезло!`, 'error');
-                        hapticFeedback('error');
-                    }
-                    
-                    addXP(10);
-                    updateAllUI();
-                    isAnimating = false;
-                    
-                    setTimeout(() => display.textContent = '?', 2000);
-                }
-            }, 80);
-        }
-
-        // ============ CASINO ============
-        const slotSymbols = ['🍒', '🍋', '🍊', '🍇', '⭐', '💎', '7️⃣'];
-        
-        function playSlots(bet) {
-            if (isAnimating) return;
-            if (gameState.coins < bet) {
-                showToast('Недостаточно монет!', 'error');
-                return;
-            }
-            
-            isAnimating = true;
-            gameState.coins -= bet;
-            gameState.stats.gamesPlayed++;
-            
-            const slot1 = document.getElementById('slot1');
-            const slot2 = document.getElementById('slot2');
-            const slot3 = document.getElementById('slot3');
-            
-            let rolls = 0;
-            const rollInterval = setInterval(() => {
-                slot1.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                slot2.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                slot3.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                rolls++;
-                
-                if (rolls > 20) {
-                    clearInterval(rollInterval);
-                    
-                    const r1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                    const r2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                    const r3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-                    
-                    slot1.textContent = r1;
-                    slot2.textContent = r2;
-                    slot3.textContent = r3;
-                    
-                    let multiplier = 0;
-                    
-                    if (r1 === r2 && r2 === r3) {
-                        multiplier = r1 === '7️⃣' ? 50 : r1 === '💎' ? 20 : r1 === '⭐' ? 10 : r1 === '🍇' ? 7 : r1 === '🍋' ? 5 : 3;
-                    } else if (r1 === r2 || r2 === r3 || r1 === r3) {
-                        multiplier = 1.5;
-                    }
-                    
-                    if (multiplier > 0) {
-                        const win = Math.floor(bet * multiplier);
+                        const win = Math.floor(1000 * getBonus('coins'));
                         gameState.coins += win;
                         gameState.stats.totalEarned += win;
                         gameState.stats.casinoWins++;
-                        
-                        if (multiplier >= 10) {
-                            showModal('🎰 ДЖЕКПОТ!', `+${win} 🪙 (x${multiplier})`, '🎉');
-                        } else {
-                            showToast(`+${win} 🪙 (x${multiplier})`, 'success');
-                        }
-                        hapticFeedback('success');
+                        showModal('🎉 ДЖЕКПОТ!', `+${win} 🪙`, '🔢');
                     } else {
-                        showToast('Не повезло!', 'error');
-                        hapticFeedback('error');
+                        showToast(`Было: ${result}`, 'error');
                     }
                     
-                    addXP(15);
-                    updateAllUI();
+                    addXP(10);
                     isAnimating = false;
+                    setTimeout(() => display.textContent = '?', 2000);
                 }
             }, 80);
-        }
-
-        function openCase(type) {
-            const cases = {
-                common: { cost: 100, currency: 'coins', min: 50, max: 200, gemChance: 0.05, gemCount: 1 },
-                rare: { cost: 400, currency: 'coins', min: 200, max: 800, gemChance: 0.15, gemCount: 2 },
-                epic: { cost: 5, currency: 'gems', min: 500, max: 2000, gemChance: 0.3, gemCount: 3 },
-                legendary: { cost: 25, currency: 'gems', min: 2000, max: 15000, gemChance: 0.5, gemCount: 8 }
-            };
             
-            const c = cases[type];
-            
-            if (c.currency === 'coins' && gameState.coins < c.cost) {
-                showToast('Недостаточно монет!', 'error');
-                return;
-            }
-            if (c.currency === 'gems' && gameState.gems < c.cost) {
-                showToast('Недостаточно гемов!', 'error');
-                return;
-            }
-            
-            if (c.currency === 'coins') gameState.coins -= c.cost;
-            else gameState.gems -= c.cost;
-            
-            gameState.stats.gamesPlayed++;
-            
-            const reward = Math.floor(Math.random() * (c.max - c.min + 1)) + c.min;
-            const gotGem = Math.random() < c.gemChance;
-            const gemCount = gotGem ? Math.floor(Math.random() * c.gemCount) + 1 : 0;
-            
-            gameState.coins += reward;
-            gameState.stats.totalEarned += reward;
-            
-            let msg = `+${formatNumber(reward)} 🪙`;
-            if (gotGem) {
-                gameState.gems += gemCount;
-                msg += ` +${gemCount} 💎`;
-            }
-            
-            const names = { common: 'Обычный', rare: 'Редкий', epic: 'Эпический', legendary: 'Легендарный' };
-            const emojis = { common: '📦', rare: '🎁', epic: '💜', legendary: '👑' };
-            
-            showModal(`${emojis[type]} ${names[type]} кейс`, msg, gotGem ? '💎' : '🪙');
-            hapticFeedback('success');
-            
-            addXP(type === 'legendary' ? 100 : type === 'epic' ? 50 : type === 'rare' ? 25 : 10);
+            hapticFeedback('medium');
             updateAllUI();
         }
 
-        // ============ ACHIEVEMENTS ============
-        const ACHIEVEMENTS = [
-            { id: 'first_coin', name: 'Первая монета', icon: '🪙', condition: s => s.stats.totalEarned >= 100 },
-            { id: 'rich', name: 'Богач', icon: '💰', condition: s => s.coins >= 10000 },
-            { id: 'miner', name: 'Шахтёр', icon: '⛏️', condition: s => s.stats.totalMined >= 100 },
-            { id: 'gambler', name: 'Игрок', icon: '🎮', condition: s => s.stats.gamesPlayed >= 50 },
-            { id: 'lucky', name: 'Везунчик', icon: '🍀', condition: s => s.stats.casinoWins >= 25 },
-            { id: 'veteran', name: 'Ветеран', icon: '🏅', condition: s => s.level >= 10 },
-            { id: 'dedicated', name: 'Преданный', icon: '🔥', condition: s => s.stats.dailyStreak >= 7 },
-            { id: 'collector', name: 'Коллекционер', icon: '💎', condition: s => s.gems >= 50 }
-        ];
-
-        function updateAchievements() {
-            const container = document.getElementById('achievementsList');
-            container.innerHTML = '';
+        // Slots
+        const slotSymbols = ['🍒', '🍋', '🍊', '🍇', '⭐', '💎', '7️⃣'];
+        
+        function playSlots(bet) {
+            if (isAnimating || gameState.coins < bet) { showToast('Недостаточно монет!', 'error'); return; }
+            isAnimating = true;
+            gameState.coins -= bet;
+            gameState.stats.gamesPlayed++;
+            addQuestProgress('games');
+            addQuestProgress('spend', bet);
             
-            ACHIEVEMENTS.forEach(ach => {
-                const unlocked = ach.condition(gameState);
-                const div = document.createElement('div');
-                div.className = `bg-gray-800/50 rounded-xl p-3 text-center text-2xl ${unlocked ? '' : 'opacity-30 grayscale'}`;
-                div.textContent = unlocked ? ach.icon : '❓';
-                div.title = ach.name;
-                container.appendChild(div);
+            let rolls = 0;
+            const interval = setInterval(() => {
+                document.getElementById('slot1').textContent = slotSymbols[Math.floor(Math.random() * 7)];
+                document.getElementById('slot2').textContent = slotSymbols[Math.floor(Math.random() * 7)];
+                document.getElementById('slot3').textContent = slotSymbols[Math.floor(Math.random() * 7)];
                 
-                if (unlocked && !gameState.achievements.includes(ach.id)) {
-                    gameState.achievements.push(ach.id);
-                    setTimeout(() => {
-                        showToast(`🏆 Достижение: ${ach.name}!`, 'success');
-                    }, 500);
+                if (++rolls > 20) {
+                    clearInterval(interval);
+                    const r1 = slotSymbols[Math.floor(Math.random() * 7)];
+                    const r2 = slotSymbols[Math.floor(Math.random() * 7)];
+                    const r3 = slotSymbols[Math.floor(Math.random() * 7)];
+                    document.getElementById('slot1').textContent = r1;
+                    document.getElementById('slot2').textContent = r2;
+                    document.getElementById('slot3').textContent = r3;
+                    
+                    let mult = 0;
+                    if (r1 === r2 && r2 === r3) {
+                        mult = r1 === '7️⃣' ? 50 : r1 === '💎' ? 20 : r1 === '⭐' ? 10 : 5;
+                    } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+                        mult = 1.5;
+                    }
+                    
+                    if (mult) {
+                        const win = Math.floor(bet * mult * getBonus('coins'));
+                        gameState.coins += win;
+                        gameState.stats.totalEarned += win;
+                        gameState.stats.casinoWins++;
+                        if (mult >= 10) showModal('🎰 ДЖЕКПОТ!', `+${win} 🪙 (x${mult})`, '🎉');
+                        else showToast(`+${win} 🪙!`, 'success');
+                    } else {
+                        showToast('Не повезло!', 'error');
+                    }
+                    
+                    addXP(15);
+                    isAnimating = false;
                 }
-            });
+            }, 80);
+            
+            hapticFeedback('medium');
+            updateAllUI();
         }
 
-        // ============ HAPTIC FEEDBACK ============
-        function hapticFeedback(type = 'light') {
-            if (window.Telegram?.WebApp?.HapticFeedback) {
-                if (type === 'success') {
-                    window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-                } else if (type === 'error') {
-                    window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
-                } else {
-                    window.Telegram.WebApp.HapticFeedback.impactOccurred(type);
-                }
+        function openCase(id) {
+            const c = CASES.find(x => x.id === id);
+            if ((c.currency === 'coins' && gameState.coins < c.price) || (c.currency === 'gems' && gameState.gems < c.price)) {
+                showToast('Недостаточно средств!', 'error'); return;
+            }
+            
+            if (c.currency === 'coins') { gameState.coins -= c.price; addQuestProgress('spend', c.price); }
+            else gameState.gems -= c.price;
+            
+            gameState.stats.gamesPlayed++;
+            addQuestProgress('games');
+            
+            const reward = Math.floor((Math.random() * (c.max - c.min) + c.min) * getBonus('coins'));
+            const gems = Math.random() < c.gemChance ? Math.floor(Math.random() * 3) + 1 : 0;
+            
+            gameState.coins += reward;
+            gameState.stats.totalEarned += reward;
+            gameState.gems += gems;
+            
+            showModal(`${c.icon} ${c.name}`, `+${reward} 🪙${gems ? ` +${gems} 💎` : ''}`, gems ? '💎' : '🪙');
+            addXP(id === 'legendary' ? 100 : 25);
+        }
+
+        // Prestige
+        function doPrestige() {
+            if (gameState.level < 20) {
+                showToast(`Нужен 20 уровень! (сейчас ${gameState.level})`, 'error');
+                return;
+            }
+            
+            if (confirm(`Престиж сбросит прогресс, но даст +10% ко всему навсегда!\n\nТекущий престиж: ${gameState.prestige}\nНовый престиж: ${gameState.prestige + 1}`)) {
+                gameState.prestige++;
+                const keepGems = gameState.gems;
+                const keepPets = gameState.pets;
+                const keepStats = { ...gameState.stats };
+                const keepPrestige = gameState.prestige;
+                const keepAchievements = gameState.achievements;
+                
+                gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+                gameState.gems = keepGems + 10;
+                gameState.pets = keepPets;
+                gameState.stats = keepStats;
+                gameState.prestige = keepPrestige;
+                gameState.achievements = keepAchievements;
+                
+                showModal('⭐ ПРЕСТИЖ ' + gameState.prestige, `+10% ко всему навсегда!\n+10 💎`, '🌟');
+                initializeGame();
             }
         }
 
-        // ============ ENERGY REGENERATION ============
-        function startEnergyRegen() {
-            setInterval(() => {
-                if (gameState.energy < gameState.maxEnergy) {
-                    gameState.energy = Math.min(gameState.energy + 1, gameState.maxEnergy);
-                    gameState.lastEnergyRegen = Date.now();
+        // Achievements
+        function updateAchievements() {
+            const container = document.getElementById('achievementsList');
+            container.innerHTML = ACHIEVEMENTS.map(ach => {
+                const unlocked = ach.condition(gameState);
+                if (unlocked && !gameState.achievements.includes(ach.id)) {
+                    gameState.achievements.push(ach.id);
+                    setTimeout(() => showToast(`🏆 ${ach.name}!`, 'success'), 500);
+                }
+                return `<div class="bg-gray-800/50 rounded-xl p-2 text-center text-xl ${unlocked ? '' : 'opacity-30 grayscale'}" title="${ach.name}">${unlocked ? ach.icon : '❓'}</div>`;
+            }).join('');
+        }
+
+        // ============ INIT ============
+        function initializeGame() {
+            updateAllUI();
+            renderWork();
+            renderShop();
+            renderPets();
+            renderInvestments();
+            renderExpeditions();
+            renderCrafts();
+            renderCases();
+        }
+
+        // Energy regen
+        setInterval(() => {
+            if (gameState.energy < gameState.maxEnergy) {
+                gameState.energy = Math.min(gameState.energy + 1, gameState.maxEnergy);
+                gameState.lastEnergyRegen = Date.now();
+                updateAllUI();
+            }
+        }, 6000);
+
+        // Investment income
+        setInterval(() => {
+            let income = 0;
+            for (const [id, count] of Object.entries(gameState.investments)) {
+                const inv = INVESTMENTS.find(i => i.id === id);
+                if (inv) income += inv.income * count;
+            }
+            if (income > 0) {
+                gameState.coins += income;
+                gameState.stats.totalEarned += income;
+                updateAllUI();
+            }
+        }, 60000);
+
+        // Expedition checker
+        setInterval(() => {
+            const now = Date.now();
+            for (const [id, exp] of Object.entries(gameState.expeditions)) {
+                if (exp.endTime && now >= exp.endTime) {
+                    const expedition = EXPEDITIONS.find(e => e.id === id);
+                    for (const [key, val] of Object.entries(expedition.rewards)) {
+                        if (key === 'coins') gameState.coins += val;
+                        else if (key === 'gems') gameState.gems += val;
+                        else if (gameState.ores[key] !== undefined) gameState.ores[key] += val;
+                    }
+                    showToast(`🗺️ ${expedition.name} завершена!`, 'success');
+                    delete gameState.expeditions[id];
+                    renderExpeditions();
                     updateAllUI();
                 }
-            }, 6000); // 1 energy per 6 seconds
-        }
+            }
+        }, 1000);
 
-        // ============ PLAY TIME TRACKER ============
-        function startPlayTimeTracker() {
-            playTimeInterval = setInterval(() => {
-                gameState.stats.playTimeMinutes++;
-                saveGame();
-            }, 60000); // Every minute
-        }
+        // Play time
+        setInterval(() => {
+            gameState.stats.playTimeMinutes++;
+            saveGame();
+        }, 60000);
 
-        // ============ TELEGRAM INTEGRATION ============
+        // Telegram
         function initTelegram() {
-            const tg = window.Telegram?.WebApp;
-            
-            if (tg) {
+            if (window.Telegram?.WebApp) {
+                const tg = window.Telegram.WebApp;
                 tg.ready();
                 tg.expand();
                 
@@ -1891,49 +2078,21 @@
                 if (user) {
                     document.getElementById('playerInitial').textContent = (user.first_name || 'G')[0].toUpperCase();
                     document.getElementById('playerName').textContent = user.first_name || 'Игрок';
-                    
-                    // Use user-specific storage key
-                    const userKey = `gemrush_${user.id}_v2`;
-                    const userSave = localStorage.getItem(userKey);
-                    if (userSave) {
-                        try {
-                            const parsed = JSON.parse(userSave);
-                            gameState = { ...JSON.parse(JSON.stringify(DEFAULT_STATE)), ...parsed };
-                            gameState.ores = { ...DEFAULT_STATE.ores, ...parsed.ores };
-                            gameState.stats = { ...DEFAULT_STATE.stats, ...parsed.stats };
-                            calculateOfflineProgress();
-                            updateAllUI();
-                        } catch (e) {}
-                    }
-                    
-                    // Override save function
-                    const originalSave = saveGame;
-                    window.saveGame = function() {
-                        originalSave();
-                        localStorage.setItem(userKey, JSON.stringify(gameState));
-                    };
                 }
                 
                 tg.enableClosingConfirmation();
             }
         }
 
-        // ============ INIT ============
         document.addEventListener('DOMContentLoaded', () => {
             loadGame();
             initTelegram();
-            startEnergyRegen();
-            startPlayTimeTracker();
-            checkDailyBonus();
         });
 
-        // Save on page hide
         document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden') {
-                saveGame();
-            }
+            if (document.visibilityState === 'hidden') saveGame();
         });
-
+        
         window.addEventListener('beforeunload', saveGame);
     </script>
 </body>
